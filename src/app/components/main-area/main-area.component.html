@@ -1,0 +1,38 @@
+<!--
+ *
+ * Copyright (c) 2023 Project CHIP Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<p-toast></p-toast>
+<app-top-nav></app-top-nav>
+<div fxLayout="row" class="container" *mobxAutorun>
+  <div class="side_nav_bar" *ngIf="this.getIsNavBarVisible() > 0">
+    <app-side-nav></app-side-nav>
+  </div>
+  <div fxFlex="1 0 auto" class="mainarea-parent-div">
+    <app-project *ngIf="mainAreaSandbox.fetchCurrentIndex() === 5"></app-project>
+    <app-test *ngIf="mainAreaSandbox.fetchCurrentIndex() === 1"></app-test>
+    <app-project-table *ngIf="mainAreaSandbox.fetchCurrentIndex() === 4"></app-project-table>
+    <app-utility *ngIf="mainAreaSandbox.fetchCurrentIndex() === 6"></app-utility>
+    <app-settings *ngIf="mainAreaSandbox.fetchCurrentIndex() === 3"></app-settings>
+    <div *ngIf="mainAreaSandbox.fetchCurrentIndex() === 0" class="construction">
+      <img src="../../../assets/under_construction.png" alt="under_construction">
+      <span class="construction-span">Page Under Construction</span>
+    </div>
+  </div>
+  <p class="copy-rights"> &copy; Connectivity Standards Alliance</p>
+  <div *ngIf="projectSandbox.getIsNewProjectClicked() === null" class="glass-pane"></div>
+</div>
+<p-confirmDialog class="confirmPopUp" [style]="{width: '50vw'}" [closable]="false" [baseZIndex]="10000">
+</p-confirmDialog>

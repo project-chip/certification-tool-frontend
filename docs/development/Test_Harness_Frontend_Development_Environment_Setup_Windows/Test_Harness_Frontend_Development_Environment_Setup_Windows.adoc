@@ -1,0 +1,133 @@
+////
+ *
+ * Copyright (c) 2023 Project CHIP Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+////
+= Test Harness Frontend Development Environment Setup (Windows)
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+ifndef::env-github[]
+:icons: font
+endif::[]
+:idprefix:
+:idseparator: -
+:sectlinks:
+:sectanchors:
+:sectnumlevels: 4
+:toc-title:
+:toc:
+
+[discrete]
+== *Revision History*
+
+|===
+| *Revision*  | *Date*       | *Author*                            | *Description*                                                                                                       
+| 1           | 20-Jul-2023  | [CSA]Raul Marquez               | * Initial version.
+|===
+
+:sectnums:
+== Pre-requisites
+- GitHub account
+- Access to the Test Harness Frontend repository
+
+== Software Requirements
+=== Visual Studio Code
+
+Download and install Visual Studio Code from https://code.visualstudio.com/Download
+
+=== NodeJs / npm
+Download and install NodeJs / npm (version 12.14.1) from https://nodejs.org/en/blog/release/v12.14.1
+
+Verify NodeJs installation
+
+[source,bash]
+-----------------
+node --version
+-----------------
+
+Verify npm installation
+
+[source,bash]
+-----------------
+npm --version
+-----------------
+
+=== Angular CLI
+Run this command to install Angular CLI version 12.1.4
+
+[source,bash]
+-----------------
+npm install -g @angular/cli@~12.1.4
+-----------------
+
+Verify Angular CLI installation
+
+[source,bash]
+-----------------
+ng version
+-----------------
+
+== Test Harness Frontend repository
+Clone the Test Harness Frontend repository
+
+https://github.com/CHIP-Specifications/chip-certification-tool-frontend/tree/develop
+
+
+== Run Application
+From the cloned repository root folder, run the following commands
+
+Install dependencies
+
+[source,bash]
+-----------------
+npm install
+-----------------
+
+Run development server
+
+[source,bash]
+-----------------
+npm start
+-----------------
+
+Navigate to UI in the browser
+
+`http://localhost:4200/`
+
+== Troubleshooting
+=== [red]#*ng.ps1 cannot be loaded because running scripts is disabled on this system*#
+This error occurs when the system has disabled the running script and can't accept the ng commands.
+
+To solve this problem, run the following:
+
+Update the Execution Policy of the current user
+
+[source,bash]
+-----------------
+set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+-----------------
+
+Verify the updated Execution Policy, it should return '_RemoteSigned_'
+
+[source,bash]
+-----------------
+Get-ExecutionPolicy
+-----------------
+
+You will now be able to run *ng* commands

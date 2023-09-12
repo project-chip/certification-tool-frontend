@@ -1,0 +1,36 @@
+<!--
+ *
+ * Copyright (c) 2023 Project CHIP Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<div fxLayout="row" fxLayoutGap="50px" class="container mt-20">
+   <div fxLayoutAlign="center center">
+      <div>
+         <p class="textbox-label">Settings</p>
+         <p-dropdown [options]="settingsType" [(ngModel)]="addedSetting" optionLabel="name" placeholder="Select Type">
+         </p-dropdown>
+      </div>
+   </div>
+   <div fxLayoutAlign="center center" *ngFor="let item of settingsJson[addedSetting.name] | keyvalue: unsorted">
+      <div>
+         <p class="textbox-label">{{item.key}}</p>
+         <input *ngIf="getType(item.value) === 'textbox'" type="text" pInputText [ngModel]="getValue(item.value)" />
+         <p-password *ngIf="getType(item.value) === 'password'" [ngModel]="getValue(item.value)" [feedback]="false">
+         </p-password>
+         <p-toggleButton *ngIf="getType(item.value) === 'password'" [ngModel]="true" class="toggle-button"
+            [onIcon]="'pi pi-check'" [offIcon]="'pi pi-times'"></p-toggleButton>
+         <i class="pi pi-trash trash-icon" *ngIf="getType(item.value) === 'password'"></i>
+      </div>
+   </div>
+</div>

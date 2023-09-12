@@ -1,0 +1,41 @@
+<!--
+ *
+ * Copyright (c) 2023 Project CHIP Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<div fxLayout="column" class="test-execution-parent">
+  <div fxLayout="row">
+    <div class="heading-text" fxFlex="1 1 auto">Test Execution</div>
+    <div class="abort-button-div">
+      <button *ngIf="sharedAPI.getAppState() === appState[1] && !abortClicked " pButton type="button" label="Abort"
+        (click)="onAbort()" class="p-button-danger button-abort"></button>
+      <button *ngIf="sharedAPI.getAppState() === appState[1] && abortClicked" pButton type="button"
+        class="p-button-danger button-abort aborting" [disabled]="true"><i class="pi pi-spin pi-spinner"></i> Aborting
+      </button>
+      <button *ngIf="sharedAPI.getAppState() === appState[0]" pButton type="button" icon="pi pi-arrow-left"
+        iconPos="left" label="Results" (click)="onFinish()" class="button-finish"></button>
+    </div>
+  </div>
+  <div fxLayout="row" fxFlex="1 1 auto" class="container mb-0 overflowAuto">
+    <div class="test-execution-tree-div">
+      <app-test-execution-tree></app-test-execution-tree>
+    </div>
+    <div fxFlex="1 1 auto" class="test-execution-logs-div">
+      <app-test-logs></app-test-logs>
+    </div>
+  </div>
+  <app-popup-modal popupId="ABORT" header="  " subHeader="Are you sure that you want to abort test?"
+    [buttons]="buttons">
+  </app-popup-modal>
+</div>

@@ -1,0 +1,89 @@
+/**
+ *
+ * Copyright (c) 2023 Project CHIP Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+@import "../../../styles/colors";
+@import "../../../styles/custom.scss";
+
+:host ::ng-deep .p-card-comp {
+  flex: 1 1 auto;
+  & > .p-component {
+    height: 100%;
+    box-shadow: 0px 6px 12px 3px rgb(0 0 0 / 10%);
+  }
+  .sub-heading {
+    font-size: 18px;
+  }
+  /* Override CSS */
+  .p-card-body {
+    padding: 30px;
+  }
+  .p-card-content {
+    padding: 0;
+  }
+  .heading-text {
+    @extend .heading-text;
+  }
+  .sub-heading {
+    font-family: "Roboto-Regular";
+    font-size: 16px;
+    color: $lightBlack;
+  }
+  .textbox-label {
+    font-family: "Roboto-Regular";
+    font-size: 14px;
+    color: $bluishGray;
+  }
+  h3 {
+    padding: 0;
+    margin: 0;
+  }
+  .p-card-body {
+    height: 100%;
+    padding: 0;
+    .p-card-content {
+      height: 100%;
+    }
+  }
+  .test-parent,
+  .app-test-component {
+    height: 100%;
+  }
+  .test-parent {
+    padding: 15px;
+  }
+  p-badge .p-badge.p-component {
+    min-width: 20px;
+    height: 20px;
+    line-height: 20px;
+  }
+  .success {
+    color: $success;
+  }
+  .error {
+    color: $error;
+  }
+  .pi-spinner {
+    color: $warning;
+  }
+}
+.card-comp-parent-div {
+  height: calc(100vh - 97px);
+  width: calc(100vw - 114px);
+  margin: 14px;
+  .p-card-parent {
+    height: 100%;
+  }
+}

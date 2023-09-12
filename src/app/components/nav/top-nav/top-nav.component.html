@@ -1,0 +1,80 @@
+<!--
+ *
+ * Copyright (c) 2023 Project CHIP Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<p-menubar [ngClass]="{'data-loading': dropdownData.length === 0}">
+  <ng-template pTemplate="start">
+    <div class="top-nav-start" *ngIf="this.getProjectDataLen() > 0">
+      <img src="../../../../assets/matter_sym_rgb_day.png" class="matter-logo-icon" alt="">
+      <div class="top-nav-dropdown">
+        <p-dropdown [options]="projectsAPI.getProjectData()" [(ngModel)]="headerName" optionLabel="name"
+          *ngIf="navSandbox.getCurrentIndex()===1 && sharedAPI.getSelectedProjectType() && projectSandbox.getProjectType().tableName ==='Projects' "
+          (onChange)=" projectChanged()">
+        </p-dropdown>
+      </div>
+    </div>
+    <img *ngIf="dropdownData.length === 0" src="../../../../assets/matter_logo_rgb_day.png" alt="matters-logo"
+      class="matter-logo" />
+  </ng-template>
+  <ng-template pTemplate="end">
+    <div class="user-data">
+      <div fxFlex fxLayoutAlign="center center">
+        <div class="sha-version">
+          <span>Version: {{sharedAPI.getShaVersion().version}}</span>
+          <span>Sha: {{sharedAPI.getShaVersion().sha}}</span>
+        </div>
+        <i class="pi pi-bell notification-icon  p-overlay-badge" (click)="onClickNotification()"
+          id="notification-click">
+          <span *ngIf="sharedAPI.getIsNotificationRead()" class="p-badge  p-component p-badge-dot"></span>
+        </i>
+
+        <i *ngIf="sharedAPI.getSelectedTheme() === themesOption[0]" (click)="onThemeSwitch()"
+          class="icon-sun-1 theme-switch-icon" pTooltip="Switch to Dark theme"></i>
+
+        <i *ngIf="sharedAPI.getSelectedTheme() === themesOption[1]" (click)="onThemeSwitch()"
+          class="icon-sun-fog theme-switch-icon" pTooltip="Switch to Dark theme"></i>
+        <i *ngIf="sharedAPI.getSelectedTheme() === themesOption[2]" (click)="onThemeSwitch()"
+          class="icon-moon theme-switch-icon" pTooltip="Switch to Light theme"></i>
+      </div>
+    </div>
+    <div class="notification-overlay" [ngClass]='{"display-drop": notification}' id="notification">
+      <div class="notification-header">
+        <p class="notification-title">Notifications</p>
+
+      </div>
+      <hr>
+      <div class="message-parent">
+        <ng-container *ngFor="let data of sharedAPI.getNotificationMessage().reverse()">
+          <div class="notification-message">
+            <p class="notification-text"><span class="status-circle {{data.state}} "></span> {{data.message}}
+            </p>
+            <span class="notification-time">{{findTime(data.time)}}</span>
+          </div>
+          <hr>
+        </ng-container>
+        <p *ngIf="sharedAPI.getNotificationMessage().length ===0" class="no-notification notification-text">No
+          Notifications</p>
+      </div>
+    </div>
+  </ng-template>
+
+</p-menubar>
+<p-dialog header="Select a Project" class="select-project-dialog" [(visible)]="display" [draggable]="false"
+  [style]="{width:'30vw'}" [closable]=false
+  *ngIf="navSandbox.getCurrentIndex() === 1 && !sharedAPI.getSelectedProjectType()">
+  <p-listbox [options]="dropdownData" class="project-list-overlay" [(ngModel)]="selectedProject" (click)="closePopUp()"
+    optionLabel="name">
+  </p-listbox>
+</p-dialog>
