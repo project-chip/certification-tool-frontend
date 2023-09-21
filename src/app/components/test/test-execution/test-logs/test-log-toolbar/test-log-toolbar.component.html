@@ -1,0 +1,38 @@
+<!--
+ *
+ * Copyright (c) 2023 Project CHIP Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<div class="test-log-toolbar">
+  <div fxLayout="row" class="test-log-toolbar-header">
+    <div fxFlex="1 1 auto" class="table-heading">
+      Logs
+    </div>
+    <div class="download-logs-div" [ngClass]="{'disable-logs-icon': sharedAPI.getAppState() === appState[1] }"
+      (click)="downloadExecHistory()" pTooltip="Download Report"><i class="pi pi-download"></i></div>
+    <div class="pdf-logs-div" [ngClass]="{'disable-logs-icon': sharedAPI.getAppState() === appState[1] }"
+      (click)="downloadTestLogs()" pTooltip="Save Logs"><i class="pi pi-save"></i></div>
+    <div>
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input type="text" [value]="testRunAPI.getLogsFilterKey()" (input)="onLogsFilterKeyChange($event)"
+          (keydown)="onKeydown($event)" class="input-serach-logs" pInputText placeholder="Search">
+      </span>
+    </div>
+    <div fxLayout="column" class="logs-search-arrow">
+      <i class="pi pi-caret-up" (click)="onLogSearchUpAndDown('UP')"></i>
+      <i class="pi pi-caret-down" (click)="onLogSearchUpAndDown('DOWN')"></i>
+    </div>
+  </div>
+</div>

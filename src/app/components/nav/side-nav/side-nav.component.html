@@ -1,0 +1,43 @@
+<!--
+ *
+ * Copyright (c) 2023 Project CHIP Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<div class="content-wrapper">
+  <div class="top-container">
+    <a (click)="sideBarClicked(0)" [ngClass]="{'active-nav': navSandbox.getCurrentIndex() ===0}"
+      class="side_nav_content">
+      <i class="icon-home icon_color"></i> Home
+    </a>
+    <a (click)="sideBarClicked(1)" [ngClass]="{'active-nav': navSandbox.getCurrentIndex() ===1}"
+      class="side_nav_content">
+      <i class="icon-data2 icon_color"></i> Test
+    </a>
+    <a (click)="sideBarClicked(6)" [ngClass]="{'active-nav': navSandbox.getCurrentIndex() ===6}"
+      class="side_nav_content">
+      <i class="icon-data icon_color"></i> Utility
+    </a>
+    <a (click)="sideBarClicked(3)" [ngClass]="{'active-nav': navSandbox.getCurrentIndex() ===3}"
+      class="side_nav_content">
+      <i class="icon-setting-2 icon_color"></i> Settings
+    </a>
+  </div>
+  <div class="bottom-container">
+    <hr>
+    <a (click)="sideBarClicked(4)" [ngClass]="{'active-nav': navSandbox.getCurrentIndex() ===4}"
+      class="side_nav_content">
+      <i class="icon-document-text icon_color"></i>Project
+    </a>
+  </div>
+</div>

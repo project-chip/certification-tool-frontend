@@ -1,0 +1,29 @@
+<!--
+ *
+ * Copyright (c) 2023 Project CHIP Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<div class="utility-upload-parent">
+  <h3 class="utility-title">Utility</h3>
+  <h4 class="utility-title">File Upload</h4>
+  <div class="upload-file" fxLayout fxLayoutAlign="none center">
+    <div class="file-upload">
+      <input type="file" (change)="onUpload($event)" accept=".json" id="file" class="input-file">
+      <label for="file">
+        <i class="pi pi-upload"></i> Browse
+      </label>
+    </div>
+    <p class="file-name" *ngIf="fileName"><i class="icon-document-text-1"></i>{{fileName}}</p>
+  </div>
+</div>
