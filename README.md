@@ -17,10 +17,16 @@
 
 # CSA Certification Tool - Frontend
 
-## Install instructions
+# Instructions
+
+Please refer to the main repository for how to use these tools [here](https://github.com/project-chip/certification-tool-frontend)
+
+https://github.com/project-chip/certification-tool-frontend
+
+## Frontend instructions
 
 Run `npm install` in current directory.
 
-## Development server
+## Development server startup
 
 Run `npm start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
