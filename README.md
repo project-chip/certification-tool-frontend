@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 -->
-Welcome to CHIP test Harness portal.
 
+# CSA Certification Tool - Frontend
 
-## First time users
+## Install instructions
 
 Run `npm install` in current directory.
 
