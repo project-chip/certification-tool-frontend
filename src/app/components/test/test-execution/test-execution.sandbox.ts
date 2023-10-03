@@ -28,22 +28,43 @@ export class TestExecutionSandbox {
 
   showExecutionPrompt(promptData: any) {
     // Converting the prompt BE json to component required JSON format.
-    const buttons = [{ id: 1, label: 'Submit', class: 'buttonYes', callback: this.onYesClick.bind(this) }];
     const popupObject = {
-      'popupId': '', 'subHeader': promptData.payload.prompt, 'header': ' ', 'buttons': buttons, 'inputItems': [] as any,
-      'messageId': promptData.payload.message_id
+      popupId: '',
+      subHeader: promptData.payload.prompt,
+      header: ' ',
+      buttons: [] as any,
+      inputItems: [] as any,
+      messageId: promptData.payload.message_id
     };
-
-    if (promptData.payload.options) {             // Displaying the Radio button popup
-      popupObject.popupId = 'RADIO_' + promptData.payload.message_id;
-      const options = Object.entries(promptData.payload.options).map(([key, value]) => ({ key: value, value: key }));
-      const inputItems = [
-        {
-          id: 1, type: 'radioButton', value: '', groupName: 'group_1',
-          options: options
-        }
-      ];
-      popupObject.inputItems = inputItems;
+    if (promptData.payload.options) {
+      const isOptionsEmpty = Object.keys(promptData.payload.options).length === 0;
+      if (isOptionsEmpty) {
+        // If no options available, only display message
+        popupObject.popupId = 'TEXTBOX_' + promptData.payload.message_id;
+      } else {
+        // Displaying the Radio button popup
+        const options = Object.entries(promptData.payload.options).map(([key, value]) => ({ key: value, value: key }));
+        const inputItems = [
+          {
+            id: 1,
+            type: 'radioButton',
+            value: '',
+            groupName: 'group_1',
+            options: options
+          }
+        ];
+        const buttons = [
+          {
+            id: 1,
+            label: 'Submit',
+            class: 'buttonYes',
+            callback: this.onYesClick.bind(this)
+          }
+        ];
+        popupObject.popupId = 'RADIO_' + promptData.payload.message_id;
+        popupObject.buttons = buttons;
+        popupObject.inputItems = inputItems;
+      }
     } else if (promptData.payload.placeholder_text) {             // Displaying the Textbox popup
       popupObject.popupId = 'TEXTBOX_' + promptData.payload.message_id;
       const inputItems = [
