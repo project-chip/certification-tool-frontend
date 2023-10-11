@@ -112,9 +112,13 @@ export class TestDetailsComponent {
             }
           }
         }
-        const testConfig: any = await this.testSandbox.createTestRunConfig(this.selectedDataFinal);
-        this.testSandbox.createTestRunExecution(this.callbackForStartTestExecution.bind(this),
-          testConfig.id, this.testName, this.testRunAPI.getSelectedOperator().id, this.description);
+        this.testSandbox.createTestRunExecution(
+          this.callbackForStartTestExecution.bind(this),
+          this.selectedDataFinal,
+          this.testName,
+          this.testRunAPI.getSelectedOperator().id,
+          this.description
+        );
       }
     }
   }
