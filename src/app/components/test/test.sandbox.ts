@@ -135,15 +135,14 @@ export class TestSandbox {
   setDefaultSelectedData(selectedData: any) {
     this.testRunStore.setSelectedTestCase(selectedData);
   }
-  // Trigger core_apis function to create new test-run-config
-  async createTestRunConfig(requestJson: any) {
-    const testConfigData = await this.testRunAPI.createTestRunConfig(requestJson);
-    return testConfigData;
-  }
   // Trigger core_apis function to create new test-run-executions
-  createTestRunExecution(callback: any, testConfigId: number, testName: string, operatorId: any, description: any) {
+  createTestRunExecution(callback: any, selectedDataFinal: any, testName: string, operatorId: any, description: any) {
     const selectedProjectId = this.sharedAPI.getSelectedProjectType().id;
-    this.testRunAPI.createTestRunExecution(callback, testConfigId, selectedProjectId, testName, operatorId, description);
+    this.testRunAPI.createTestRunExecution(callback, selectedDataFinal, selectedProjectId, testName, operatorId, description);
+  }
+  // Trigger core_apis function to repeat test-run-executions
+  repeatTestRunExecution(callback: any, testExecutionId: number) {
+    this.testRunAPI.repeatTestRunExecution(callback, testExecutionId);
   }
   // Start test execution and set initial running testcase data
   setRunningTestsDataOnStart(execId: any) {

@@ -37,22 +37,25 @@ export class TestRunService {
   getDefaultTestCases(): Observable<any> {
     return this.http.get(getBaseUrl() + 'test_collections');
   }
-  async createTestRunConfig(requestJson: any) {
-    const testConfigData = await this.http.post(getBaseUrl() + 'test_run_configs', requestJson).toPromise();
-    return testConfigData;
-  }
-  createTestRunExecution(testConfigId: number, selectedProjectId: number, testName: string, operatorId: any,
+  createTestRunExecution(selectedDataFinal: any, selectedProjectId: number, testName: string, operatorId: any,
     description: any): Observable<any> {
     /* eslint-disable @typescript-eslint/naming-convention */
+    const selected_tests = selectedDataFinal.selected_tests;
     const requestJson = {
       'test_run_execution_in':
       {
-        'title': testName + '_' + getTimeStamp(), 'test_run_config_id': testConfigId,
-        'project_id': selectedProjectId, 'description': description, 'operator_id': operatorId
-      }
+        'title': testName + '_' + getTimeStamp(),
+        'project_id': selectedProjectId,
+        'description': description,
+        'operator_id': operatorId
+      },
+      selected_tests
     };
     /* eslint-enable @typescript-eslint/naming-convention */
     return this.http.post(getBaseUrl() + 'test_run_executions', requestJson);
+  }
+  repeatTestRunExecution(testExecutionId: number): Observable<any> {
+    return this.http.post(getBaseUrl() + `test_run_executions/${testExecutionId}/repeat`, {});
   }
   startTestRunExecution(id: number): Observable<any> {
     return this.http.post(getBaseUrl() + 'test_run_executions/' + id + '/start', {});
