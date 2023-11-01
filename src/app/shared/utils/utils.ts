@@ -26,3 +26,21 @@ export function addThemeSwitchClass(value: any) {
   document.getElementsByTagName('body')[0].className = '';
   document.getElementsByTagName('body')[0].classList.add(value.code);
 }
+
+// Custom saveAs function with an approximation of a callback
+export function saveAsWithCallback(blob: Blob, filename: string, callback: () => void): void {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  // Approximate callback after the save dialog is closed
+  window.onfocus = () => {
+    window.onfocus = null;
+    setTimeout(callback, 500); // Wait a bit more to ensure focus event has been processed
+  };
+}

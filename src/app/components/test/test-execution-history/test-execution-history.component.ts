@@ -26,6 +26,7 @@ import { APP_STATE } from 'src/app/shared/utils/constants';
 import { environment } from 'src/environments/environment';
 import { saveAs } from 'file-saver';
 import { SharedService } from 'src/app/shared/core_apis/shared-utils';
+import { saveAsWithCallback } from 'src/app/shared/utils/utils';
 
 @Component({
   selector: 'app-test-execution-history',
@@ -133,11 +134,13 @@ export class TestExecutionHistoryComponent {
       const response: any = responseObj;
       const jsonStr = JSON.stringify(response);
       const file = new Blob([jsonStr], { type: 'application/json;charset=utf-8' });
-      saveAs(file, `${response.test_run_execution.title}.json`);
-      this.sharedService.setToastAndNotification({
-        status: 'success',
-        summary: 'Success!',
-        message: 'Test run exported successfully'
+      // Use the custom saveAsWithCallback function
+      saveAsWithCallback(file, `${response.test_run_execution.title}.json`, () => {
+        this.sharedService.setToastAndNotification({
+          status: 'success',
+          summary: 'Success!',
+          message: 'Test run exported successfully'
+        });
       });
     }, () => {
       this.sharedService.setToastAndNotification({
