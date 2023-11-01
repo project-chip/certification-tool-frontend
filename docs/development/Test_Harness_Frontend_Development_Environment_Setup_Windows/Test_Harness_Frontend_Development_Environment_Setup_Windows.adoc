@@ -86,7 +86,7 @@ ng version
 == Test Harness Frontend repository
 Clone the Test Harness Frontend repository
 
-https://github.com/CHIP-Specifications/chip-certification-tool-frontend/tree/develop
+https://github.com/project-chip/certification-tool-frontend/tree/main
 
 
 == Run Application
