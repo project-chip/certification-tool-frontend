@@ -155,11 +155,12 @@ export class TestExecutionHistoryComponent {
       const response: any = responseObj;
       const fileName = `${arguments[0].title}.zip`;
       const file = new Blob([response], { type: 'application/zip;charset=utf-8' });
-      saveAs(file, fileName);
-      this.sharedService.setToastAndNotification({
-        status: 'success',
-        summary: 'Success!',
-        message: 'Grouped logs downloaded successfully'
+      saveAsWithCallback(file, fileName, () => {
+        this.sharedService.setToastAndNotification({
+          status: 'success',
+          summary: 'Success!',
+          message: 'Grouped logs downloaded successfully'
+        });
       });
     }, (err) => {
       this.sharedService.setToastAndNotification({
