@@ -258,6 +258,12 @@ export class TestExecutionHistoryComponent {
   }
   saveLogs(title: any, data: any) {
     const file = new Blob([data], { type: 'text/plain;charset=utf-8' });
-    saveAs(file, title + '.log');
+    saveAsWithCallback(file, title + '.log', () => {
+      this.sharedService.setToastAndNotification({
+        status: 'success',
+        summary: 'Success!',
+        message: 'Logs downloaded successfully'
+      });
+    });
   }
 }
