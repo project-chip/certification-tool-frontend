@@ -207,7 +207,13 @@ export class TestExecutionHistoryComponent {
     const reportData = this.sharedAPI.getTestReportData();
     const reportDataStr = JSON.stringify(reportData);
     const file = new Blob([reportDataStr], { type: 'text/plain;charset=utf-8' });
-    saveAs(file, reportData.title + '-' + reportData.id.toString() + '.json');
+    saveAsWithCallback(file, reportData.title + '-' + reportData.id.toString() + '.json', () => {
+      this.sharedService.setToastAndNotification({
+        status: 'success',
+        summary: 'Success!',
+        message: 'Test Report downloaded successfully'
+      });
+    });
   }
 
   downloadTestLog(data: any) {

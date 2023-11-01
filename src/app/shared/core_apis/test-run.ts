@@ -234,7 +234,6 @@ export class TestRunAPI {
         this.sharedAPI.setTestReportData(data);
         if (callBack !== 0) {
           callBack();
-          this.sharedService.setToastAndNotification({ status: 'success', summary: 'Success!', message: 'Test Report downloaded sucessfully' });
         }
         return data;
       }, err => {
