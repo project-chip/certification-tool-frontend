@@ -109,11 +109,13 @@
     <div class="settings-pics">
       <div class="pics-upload-settings">
         <p class="textbox-label">PICS</p>
-        <div class="pics-upload">
+        <div class="pics-upload" appDnd (fileDrop)="onUpload($event,updateProjectData.id)">
           <input type="file" #picsInput (change)="onUpload($event,updateProjectData.id)" (click)="picsInput.value=''"
             multiple="true" accept=".xml" id="file" class="input-file">
           <label for="file">
-            <i class="pi pi-upload"></i> Upload PICS
+            <span> Drop files here</span>
+            <span>or</span>
+            <span> Click to upload PICS<i class="pi pi-upload"></i></span>
           </label>
         </div>
       </div>
