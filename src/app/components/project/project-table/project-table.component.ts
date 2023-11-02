@@ -36,6 +36,7 @@ export class ProjectTableComponent {
   isUpdateClicked = false;
   multiplePics = 0;
   allowedCharacter = /[^A-Za-z0-9 _-]/;
+  dropAreaClass = '';
   constructor(public projectSandbox: ProjectSandbox, public projectsAPI: ProjectsAPI,
     public sharedAPI: SharedAPI, public testSandbox: TestSandbox, public sharedService: SharedService) { }
   addNewProject() {
@@ -86,6 +87,7 @@ export class ProjectTableComponent {
     } else {
       this.multiplePics = 0;
     }
+    this.dropAreaClass = '';
   }
   deletePICS(data: any, id: any) {
     this.projectsAPI.deletePics(data, id, this.updatedPICS.bind(this));
@@ -96,5 +98,23 @@ export class ProjectTableComponent {
   }
   chagePicsType(data: any) {
     return Object.keys(data);
+  }
+  // Add two new methods to handle dragover and dragleave events
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    // Check if dataTransfer is not null
+    if (event.dataTransfer) {
+      // Set the dropEffect to 'move' when the file is over the drop area
+      event.dataTransfer.dropEffect = 'move';
+    }
+    // Add the 'drag-over' class to the drop area
+    this.dropAreaClass = 'drag-over';
+  }
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    // Remove the 'drag-over' class from the drop area
+    this.dropAreaClass = '';
   }
 }

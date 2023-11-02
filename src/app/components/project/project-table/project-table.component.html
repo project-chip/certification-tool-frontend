@@ -109,15 +109,14 @@
     <div class="settings-pics">
       <div class="pics-upload-settings">
         <p class="textbox-label">PICS</p>
-        <div class="pics-upload" appDnd (fileDrop)="onUpload($event,updateProjectData.id)">
-          <input type="file" #picsInput (change)="onUpload($event,updateProjectData.id)" (click)="picsInput.value=''"
-            multiple="true" accept=".xml" id="file" class="input-file">
+        <div class="pics-upload" appDnd (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (fileDrop)="onUpload($event,updateProjectData.id)" [ngClass]="dropAreaClass">
+          <input type="file" #picsInput (change)="onUpload($event,updateProjectData.id)" (click)="picsInput.value=''" multiple="true" accept=".xml" id="file" class="input-file">
           <label for="file">
             <span> Drop files here</span>
             <span>or</span>
             <span> Click to upload PICS<i class="pi pi-upload"></i></span>
           </label>
-        </div>
+        </div>        
       </div>
       <p-listbox *ngIf="updateProjectData.pics" [listStyle]="{'max-height':'227px','height':'227px'}"
         [options]="chagePicsType(updateProjectData.pics.clusters)">
