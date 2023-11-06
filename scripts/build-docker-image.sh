@@ -57,10 +57,11 @@ DIRTY=`git status --porcelain --untracked-files=no`
   Options:
    --no-cache   passed as a docker build argument
    --latest     update latest to the current built version (\"$VERSION\")
-   --push       push image(s) to ghcr.io (requires docker login for \"$ORG\")
+   --push       push image(s) to $GHCR_ORG (requires docker login for \"$ORG\")
    --skip-build skip the build/prune step
    --help       get this message
-   --squash     squash docker layers before push them to docker.io (requires docker-squash python module)
+   --squash     squash docker layers before push them to $GHCR_ORG (requires docker-squash python module)
+   --clear      remove images after after publishing them
 
 "
     exit 0
@@ -82,17 +83,21 @@ fi
 
 # Don't run `docker build` and `docker image prune` when `--skip-build` in arguments
 [[ ${*/--skip-build//} != "${*}" ]] || {
-    docker build "${BUILD_ARGS[@]}" --build-arg GIT_SHA="$GIT_REV" --build-arg VERSION="$VERSION" -t "$GHCR_ORG/$ORG/$IMAGE:$VERSION" .
+    docker build "${BUILD_ARGS[@]}" --build-arg TARGETPLATFORM="$TARGET_PLATFORM_TYPE"  --build-arg GIT_SHA="$GIT_REV" --build-arg VERSION="$VERSION" -t "$GHCR_ORG"/"$ORG"/"$IMAGE":"$VERSION" .
     docker image prune --force
-}
-
-[[ ${*/--latest//} != "${*}" ]] && {
-    docker tag "$GHCR_ORG"/"$ORG"/"$IMAGE":"$VERSION" "$GHCR_ORG"/"$ORG"/"$IMAGE":latest
 }
 
 [[ ${*/--squash//} != "${*}" ]] && {
     command -v docker-squash >/dev/null &&
-        docker-squash "$GHCR_ORG"/"$ORG"/"$IMAGE":"$VERSION" -t "$GHCR_ORG"/"$ORG"/"$IMAGE":latest
+        docker-squash "$GHCR_ORG"/"$ORG"/"$IMAGE":"$VERSION" -t "$GHCR_ORG"/"$ORG"/"$IMAGE":squashed
+}
+
+[[ ${*/--latest//} != "${*}" ]] && {
+    if [[ ${*/--squash//} != "${*}" ]]; then
+        docker tag "$GHCR_ORG"/"$ORG"/"$IMAGE":squashed "$GHCR_ORG"/"$ORG"/"$IMAGE":latest
+    else
+        docker tag "$GHCR_ORG"/"$ORG"/"$IMAGE":"$VERSION" "$GHCR_ORG"/"$ORG"/"$IMAGE":latest
+    fi
 }
 
 [[ ${*/--push//} != "${*}" ]] && {
@@ -109,6 +114,9 @@ fi
     docker rmi -f "$GHCR_ORG"/"$ORG"/"$IMAGE":"$VERSION"
     [[ ${*/--latest//} != "${*}" ]] && {
         docker rmi -f "$GHCR_ORG"/"$ORG"/"$IMAGE":latest
+    }
+    [[ ${*/--squash//} != "${*}" ]] && {
+        docker rmi -f "$GHCR_ORG"/"$ORG"/"$IMAGE":squashed
     }
 }
 
