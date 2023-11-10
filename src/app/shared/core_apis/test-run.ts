@@ -243,15 +243,20 @@ export class TestRunAPI {
     );
   }
 
-  // Create new test run config
-  async createTestRunConfig(requestJson: any) {
-    const testConfigData = await this.testRunService.createTestRunConfig(requestJson);
-    return testConfigData;
+  // Create new test run execution
+  createTestRunExecution(callback: any, selectedDataFinal: any, selectedProjectId: number, testName: string, operatorId: any, description: any) {
+    return this.testRunService.createTestRunExecution(selectedDataFinal, selectedProjectId, testName, operatorId, description).subscribe(
+      (data) => {
+        callback(data.id);
+        return data;
+      }, err => {
+        this.sharedService.showPopUp();
+      });
   }
 
-  // Create new test run execution
-  createTestRunExecution(callback: any, testConfigId: number, selectedProjectId: number, testName: string, operatorId: any, description: any) {
-    return this.testRunService.createTestRunExecution(testConfigId, selectedProjectId, testName, operatorId, description).subscribe(
+  // Repeats a test run execution
+  repeatTestRunExecution(callback: any, testExecutionId: number) {
+    return this.testRunService.repeatTestRunExecution(testExecutionId).subscribe(
       (data) => {
         callback(data.id);
         return data;

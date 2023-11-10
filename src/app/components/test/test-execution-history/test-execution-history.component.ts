@@ -229,8 +229,7 @@ export class TestExecutionHistoryComponent {
       const title: any = executionData.title.slice(0, executionData.title.length - 20);
       this.sharedAPI.setAppState(APP_STATE[1]);
       this.sharedAPI.setWebSocketLoader(true);
-      this.testSandbox.createTestRunExecution(this.repeatExecution.bind(this), executionData.test_run_config_id,
-        title, executionData.operator.id, executionData.description);
+      this.testSandbox.repeatTestRunExecution(this.repeatExecution.bind(this), executionData.id);
     }
   }
   repeatExecution(execId: any) {
