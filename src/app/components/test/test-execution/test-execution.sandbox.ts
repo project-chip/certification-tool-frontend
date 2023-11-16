@@ -28,6 +28,7 @@ export class TestExecutionSandbox {
 
   showExecutionPrompt(promptData: any) {
     // Converting the prompt BE json to component required JSON format.
+    const promptType = promptData.type;
     const popupObject = {
       popupId: '',
       subHeader: promptData.payload.prompt,
@@ -36,45 +37,49 @@ export class TestExecutionSandbox {
       inputItems: [] as any,
       messageId: promptData.payload.message_id
     };
-    if (promptData.payload.options) {
-      const isOptionsEmpty = Object.keys(promptData.payload.options).length === 0;
-      if (isOptionsEmpty) {
-        // If no options available, only display message
-        popupObject.popupId = 'TEXTBOX_' + promptData.payload.message_id;
-      } else {
-        // Displaying the Radio button popup
-        const options = Object.entries(promptData.payload.options).map(([key, value]) => ({ key: value, value: key }));
-        const inputItems = [
-          {
-            id: 1,
-            type: 'radioButton',
-            value: '',
-            groupName: 'group_1',
-            options: options
-          }
-        ];
-        const buttons = [
-          {
-            id: 1,
-            label: 'Submit',
-            class: 'buttonYes',
-            callback: this.onYesClick.bind(this)
-          }
-        ];
-        popupObject.popupId = 'RADIO_' + promptData.payload.message_id;
-        popupObject.buttons = buttons;
-        popupObject.inputItems = inputItems;
+    const buttons = [
+      {
+        id: 1,
+        label: 'Submit',
+        class: 'buttonYes',
+        callback: this.onYesClick.bind(this)
       }
-    } else if (promptData.payload.placeholder_text) {             // Displaying the Textbox popup
+    ];
+
+    if (promptType === 'message_request') { // Displaying the message popup
+      popupObject.popupId = 'TEXTBOX_' + promptData.payload.message_id;
+    } else if (promptType === 'options_request') { // Displaying the radio buttons popup
+      const options = Object.entries(promptData.payload.options).map(([key, value]) => ({ key: value, value: key }));
+      const inputItems = [
+        {
+          id: 1,
+          type: 'radioButton',
+          value: '',
+          groupName: 'group_1',
+          options: options
+        }
+      ];
+      popupObject.popupId = 'RADIO_' + promptData.payload.message_id;
+      popupObject.inputItems = inputItems;
+      popupObject.buttons = buttons;
+    } else if (promptData.payload.placeholder_text) { // Displaying the text field popup
       popupObject.popupId = 'TEXTBOX_' + promptData.payload.message_id;
       const inputItems = [
-        { id: 1, type: 'inputbox', value: promptData.payload.default_value, placeHolder: promptData.payload.placeholder_text }
+        { id: 1,
+          type: 'inputbox',
+          value: promptData.payload.default_value,
+          placeHolder: promptData.payload.placeholder_text
+        }
       ];
       popupObject.inputItems = inputItems;
-    } else if (promptData.payload.path) {             // Displaying the File-upload popup
+      popupObject.buttons = buttons;
+    } else if (promptData.payload.path) { // Displaying the file upload popup
       popupObject.popupId = 'FILE_UPLOAD_' + promptData.payload.message_id;
       const inputItems = [
-        { id: 1, type: 'file_upload', value: '' }
+        { id: 1,
+          type: 'file_upload',
+          value: ''
+        }
       ];
       popupObject.inputItems = inputItems;
     }

@@ -43,7 +43,10 @@ export class WebSocketAPI {
             const updated = this.testExecutionSandbox.updateJSONBasedOnWebSocketData(runningTestcase, dataObject);
             this.testRunAPI.setRunningTestCases(updated);
             this.checkExecutionEnded(dataObject);
-          } else if (dataObject.type === 'prompt_request' || dataObject.type === 'custom_upload') {
+          } else if (dataObject.type === 'prompt_request' ||
+          dataObject.type === 'options_request' ||
+          dataObject.type === 'message_request' ||
+          dataObject.type === 'custom_upload') {
             this.testExecutionSandbox.showExecutionPrompt(dataObject);
           } else if (dataObject.type === 'time_out_notification') {
             this.sharedService.setToastAndNotification({ status: 'error', summary: 'Error!', message: 'Failed to give input' });
