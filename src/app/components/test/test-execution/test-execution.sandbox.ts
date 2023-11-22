@@ -73,7 +73,7 @@ export class TestExecutionSandbox {
       ];
       popupObject.inputItems = inputItems;
       popupObject.buttons = buttons;
-    } else if (promptData.payload.path) { // Displaying the file upload popup
+    } else if (promptType === 'file_upload_request') { // Displaying the file upload popup
       popupObject.popupId = 'FILE_UPLOAD_' + promptData.payload.message_id;
       const inputItems = [
         { id: 1,
@@ -82,6 +82,7 @@ export class TestExecutionSandbox {
         }
       ];
       popupObject.inputItems = inputItems;
+      popupObject.buttons = buttons;
     }
     this.sharedAPI.setCustomPopupData(popupObject);
     this.sharedAPI.setShowCustomPopup(popupObject.popupId);
