@@ -74,7 +74,6 @@ export class TestExecutionSandbox {
       popupObject.inputItems = inputItems;
       popupObject.buttons = buttons;
     } else if (promptType === 'file_upload_request') { // Displaying the file upload popup
-
       popupObject.popupId = 'FILE_UPLOAD_' + promptData.payload.message_id;
       const inputItems = [
         { id: 1,
