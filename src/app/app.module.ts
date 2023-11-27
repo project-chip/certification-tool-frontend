@@ -100,6 +100,7 @@ import { HighlightSearchPipe } from './components/shared/pipes/highlight-search.
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DividerModule } from 'primeng/divider';
+import { DndDirective } from './shared/dnd.directive';
 @NgModule({
   imports: [
     BrowserModule,
@@ -173,7 +174,8 @@ import { DividerModule } from 'primeng/divider';
     UploadFileComponent,
     SettingsComponent,
     TestOperatorComponent,
-    HighlightSearchPipe
+    HighlightSearchPipe,
+    DndDirective
   ],
   bootstrap: [AppComponent],
   providers: [ProjectService, SharedService, ProjectsAPI, SharedAPI, TestRunService,
