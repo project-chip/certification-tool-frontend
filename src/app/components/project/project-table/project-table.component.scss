@@ -199,20 +199,34 @@
     height: 0.1px;
     position: absolute;
   }
-  .pics-upload label {
-    display: flex;
-    position: relative;
-    width: 130px;
-    height: 25px;
-    border-radius: 4px;
-    background: var(--blue-500);
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    .pi-upload {
-      padding-right: 8px;
+  .pics-upload { 
+    position: absolute;
+    top: 3em;
+    width: 44%;
+    label {
+      display: flex;
+      height: 7em;
+      border-radius: 4px;
+      align-items: center;
+      justify-content: center;
+      border: 1px dashed;
+      flex-direction: column;
+      gap: 5px;
+      .pi-upload {
+        margin-left: 8px;
+      }
     }
   }
+  .drag-over {
+    border-color: #4caf50; /* Green border */
+    background-color: #e8f5e9; /* Light green background */
+    label {
+      color: #4caf50; /* Green text */
+    }
+    .pi-upload {
+      color: #4caf50; /* Green icon */
+    }
+  }  
   .text-area {
     height: unset !important;
     overflow: auto !important;
