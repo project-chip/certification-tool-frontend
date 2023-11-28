@@ -90,66 +90,78 @@ export class TestDetailsComponent {
         this.testRunAPI.setTestLogs([]);
         this.testSandbox.setTestScreen(1);
 
-        /* eslint-disable @typescript-eslint/naming-convention */
-        const selectedCollections = this.testSandbox.getSelectedData();
-        const testSuiteCategories = this.testSandbox.getTestSuiteCategory();
-        const collections: Collection[] = [];
-        const selectedDataFinal = {
-          name: 'test',
-          dut_name: 'test_dut',
-          selected_tests: {
-            collections
-          }
-        };
-
-        for (let collectionIndex = 0; collectionIndex < selectedCollections.length; collectionIndex++) {
-          // Add collections
-          const collectionData = selectedCollections[collectionIndex];
-          const collectionId = testSuiteCategories[collectionIndex];
-          const test_suites: TestSuite[] = [];
-          const collection: Collection = {
-            public_id: collectionId,
-            test_suites
-          };
-          selectedDataFinal.selected_tests.collections.push(collection);
-
-          for (let testSuiteIndex = 0; testSuiteIndex < collectionData.length; testSuiteIndex++) {
-            const testSuiteTest = collectionData[testSuiteIndex];
-            if (testSuiteTest) {
-              // Add test suites
-              const testSuiteId = testSuiteTest.public_id;
-              const test_cases: TestCase[] = [];
-              const testSuite: TestSuite = {
-                public_id: testSuiteId,
-                test_cases
-              };
-              selectedDataFinal.selected_tests.collections[collectionIndex]
-              .test_suites.push(testSuite);
-
-              testSuiteTest.children.forEach((testCaseData: any) => {
-                // Add test cases
-                const testCaseId = testCaseData.public_id;
-                const testCaseIterations = testCaseData.count;
-                const testCase: TestCase = {
-                  public_id: testCaseId,
-                  iterations: testCaseIterations
-                };
-                selectedDataFinal.selected_tests.collections[collectionIndex]
-                .test_suites[testSuiteIndex].test_cases.push(testCase);
-              });
-            }
-          }
-        }
-
         this.testSandbox.createTestRunExecution(
           this.callbackForStartTestExecution.bind(this),
-          selectedDataFinal,
+          this.getTestRunData(),
           this.testName,
           this.testRunAPI.getSelectedOperator().id,
           this.description
         );
       }
     }
+  }
+
+  getTestRunData() {
+    /* eslint-disable @typescript-eslint/naming-convention */
+    const selectedCollections = this.testSandbox.getSelectedData();
+    const testSuiteCategories = this.testSandbox.getTestSuiteCategory();
+    const collections: Collection[] = [];
+    const selectedDataFinal = {
+      name: 'test',
+      dut_name: 'test_dut',
+      selected_tests: {
+        collections
+      }
+    };
+
+    // Build test run data object
+    for (let collectionIndex = 0; collectionIndex < selectedCollections.length; collectionIndex++) {
+      const collectionData = selectedCollections[collectionIndex];
+      if (collectionData.length > 0) {
+        // Add collection
+        const collectionId = testSuiteCategories[collectionIndex];
+        const test_suites: TestSuite[] = [];
+        const collection: Collection = {
+          public_id: collectionId,
+          test_suites
+        };
+        const collectionsLength = selectedDataFinal.selected_tests.collections.push(collection);
+        const collectionInsertIndex = collectionsLength - 1;
+
+        for (let testSuiteIndex = 0; testSuiteIndex < collectionData.length; testSuiteIndex++) {
+          const testSuiteData = collectionData[testSuiteIndex];
+          if (testSuiteData) {
+            // Add test suite
+            const testSuiteId = testSuiteData.public_id;
+            const test_cases: TestCase[] = [];
+            const testSuite: TestSuite = {
+              public_id: testSuiteId,
+              test_cases
+            };
+            const testSuitesLength = selectedDataFinal.selected_tests.collections[collectionInsertIndex]
+            .test_suites.push(testSuite);
+            const testSuiteInsertIndex = testSuitesLength - 1;
+
+            for (let testCaseIndex = 0; testCaseIndex < testSuiteData.children.length; testCaseIndex++) {
+              const testCaseData = testSuiteData.children[testCaseIndex];
+              if (testCaseData) {
+                // Add test case
+                const testCaseId = testCaseData.public_id;
+                const testCaseIterations = testCaseData.count;
+                const testCase: TestCase = {
+                    public_id: testCaseId,
+                    iterations: testCaseIterations
+                };
+                selectedDataFinal.selected_tests.collections[collectionInsertIndex]
+                .test_suites[testSuiteInsertIndex].test_cases.push(testCase);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return selectedDataFinal;
   }
 
   // call back for test execution
