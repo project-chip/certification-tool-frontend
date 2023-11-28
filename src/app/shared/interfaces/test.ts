@@ -13,3 +13,7 @@ export interface Collection {
   public_id: string;
   test_suites: TestSuite[];
 }
+
+export interface SelectedTests {
+  collections: Collection[];
+}

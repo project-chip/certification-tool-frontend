@@ -24,7 +24,7 @@ import { TestSandbox } from '../test.sandbox';
 import { environment } from 'src/environments/environment';
 import { SharedService } from 'src/app/shared/core_apis/shared-utils';
 import { TestRunStore } from 'src/app/store/test-run-store';
-import { Collection, TestSuite, TestCase } from 'src/app/shared/interfaces/test';
+import { Collection, TestSuite, TestCase, SelectedTests } from 'src/app/shared/interfaces/test';
 import * as _ from 'lodash';
 
 @Component({
@@ -92,7 +92,7 @@ export class TestDetailsComponent {
 
         this.testSandbox.createTestRunExecution(
           this.callbackForStartTestExecution.bind(this),
-          this.getTestRunData(),
+          this.getTestRunExecutionSelection(),
           this.testName,
           this.testRunAPI.getSelectedOperator().id,
           this.description
@@ -101,17 +101,12 @@ export class TestDetailsComponent {
     }
   }
 
-  getTestRunData() {
+  getTestRunExecutionSelection() {
     /* eslint-disable @typescript-eslint/naming-convention */
     const selectedCollections = this.testSandbox.getSelectedData();
     const testSuiteCategories = this.testSandbox.getTestSuiteCategory();
-    const collections: Collection[] = [];
-    const selectedDataFinal = {
-      name: 'test',
-      dut_name: 'test_dut',
-      selected_tests: {
-        collections
-      }
+    const selected_tests: SelectedTests = {
+      collections: []
     };
 
     // Build test run data object
@@ -120,12 +115,11 @@ export class TestDetailsComponent {
       if (collectionData.length > 0) {
         // Add collection
         const collectionId = testSuiteCategories[collectionIndex];
-        const test_suites: TestSuite[] = [];
         const collection: Collection = {
           public_id: collectionId,
-          test_suites
+          test_suites: []
         };
-        const collectionsLength = selectedDataFinal.selected_tests.collections.push(collection);
+        const collectionsLength = selected_tests.collections.push(collection);
         const collectionInsertIndex = collectionsLength - 1;
 
         for (let testSuiteIndex = 0; testSuiteIndex < collectionData.length; testSuiteIndex++) {
@@ -133,12 +127,11 @@ export class TestDetailsComponent {
           if (testSuiteData) {
             // Add test suite
             const testSuiteId = testSuiteData.public_id;
-            const test_cases: TestCase[] = [];
             const testSuite: TestSuite = {
               public_id: testSuiteId,
-              test_cases
+              test_cases: []
             };
-            const testSuitesLength = selectedDataFinal.selected_tests.collections[collectionInsertIndex]
+            const testSuitesLength = selected_tests.collections[collectionInsertIndex]
             .test_suites.push(testSuite);
             const testSuiteInsertIndex = testSuitesLength - 1;
 
@@ -152,7 +145,7 @@ export class TestDetailsComponent {
                     public_id: testCaseId,
                     iterations: testCaseIterations
                 };
-                selectedDataFinal.selected_tests.collections[collectionInsertIndex]
+                selected_tests.collections[collectionInsertIndex]
                 .test_suites[testSuiteInsertIndex].test_cases.push(testCase);
               }
             }
@@ -161,7 +154,7 @@ export class TestDetailsComponent {
       }
     }
 
-    return selectedDataFinal;
+    return { selected_tests };
   }
 
   // call back for test execution
