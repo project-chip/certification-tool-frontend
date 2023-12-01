@@ -234,7 +234,6 @@ export class TestRunAPI {
         this.sharedAPI.setTestReportData(data);
         if (callBack !== 0) {
           callBack();
-          this.sharedService.setToastAndNotification({ status: 'success', summary: 'Success!', message: 'Test Report downloaded sucessfully' });
         }
         return data;
       }, err => {
@@ -415,7 +414,6 @@ export class TestRunAPI {
   getLogs(logId: any, callBack: any, json: any) {
     this.testRunService.getLogs(logId, json).subscribe(data => {
       callBack(data);
-      this.sharedService.setToastAndNotification({ status: 'success', summary: 'Success!', message: 'Logs downloaded sucessfully' });
     }, err => {
       this.sharedService.cursorBusy(false);
       this.sharedService.setToastAndNotification({ status: 'error', summary: 'Error!', message: 'Error in Logs download' });
