@@ -16,9 +16,11 @@
 -->
 <div class="utility-parent">
 
-  <app-upload-file *ngIf="mainAreaSandbox.fetchCurrentIndex() ===6"></app-upload-file>
+  <!-- <app-upload-file *ngIf="mainAreaSandbox.fetchCurrentIndex() ===6"></app-upload-file> -->
 
-  <div *ngIf="!sharedAPI.getTestReportData() && mainAreaSandbox.fetchCurrentIndex() !== 6" class="loader-div">
+  <utility-category *ngIf="mainAreaSandbox.fetchCurrentIndex() ===6"></utility-category>
+
+  <!-- <div *ngIf="!sharedAPI.getTestReportData() && mainAreaSandbox.fetchCurrentIndex() !== 6" class="loader-div">
     <p-progressSpinner [style]="{width: '100px', height: '100px'}" styleClass="custom-spinner" strokeWidth="6"
       animationDuration=".5s"></p-progressSpinner>
   </div>
@@ -156,5 +158,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>

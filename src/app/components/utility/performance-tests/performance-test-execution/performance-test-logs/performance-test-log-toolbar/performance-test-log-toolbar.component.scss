@@ -1,0 +1,90 @@
+/**
+ *
+ * Copyright (c) 2023 Project CHIP Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+@import "../../../../../../../styles/colors";
+@import "../../../../../../../styles/custom.scss";
+
+:host ::ng-deep .test-log-toolbar {
+
+  .button-container {
+    display: flex;        /* Enable Flexbox */
+    justify-content: center; /* Center horizontally */
+    height: 100vh;        /* Full height of the viewport */
+    margin: 0 10px; /* Adds horizontal space between buttons */
+    padding: 10px 20px;
+  }
+  .test-log-toolbar-header {
+    height: 100%;
+    background-color: $execTableHeader;
+    .table-heading {
+      @extend .table-heading;
+      padding: 14px;
+    }
+    .input-serach-logs {
+      height: 28px;
+      font-size: 14px;
+      box-shadow: unset;
+    }
+    .p-input-icon-left {
+      padding: 8px 14px;
+      padding-right: 0;
+      .pi-search {
+        padding-left: 14px;
+        left: 12px;
+        font-size: 14px;
+        top: 24px;
+      }
+    }
+  }
+  .buttons-download {
+  
+    height: 28px;
+
+  }
+  .download-logs-div,
+  .pdf-logs-div {
+    width: 28px;
+    height: 28px;
+    margin: 8px 4px;
+    padding: 6px;
+    border-radius: 3px;
+  }
+  .download-logs-div {
+    background-color: $warning;
+    color: $lightGray;
+  }
+  .pdf-logs-div {
+    background-color: $ceruleanBlue;
+    color: $white;
+  }
+  .disable-logs-icon * {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  .logs-search-arrow {
+    margin-top: 8px;
+    margin-right: 10px;
+    height: 28px;
+    border: 1px solid $creamWhite;
+    .pi {
+      font-size: 14px;
+      color: $color1;
+      &:hover {
+        color: $color2;
+      }
+    }
+  }
+}

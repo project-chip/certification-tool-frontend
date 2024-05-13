@@ -1,0 +1,80 @@
+<ng-container>
+    <div class="performance-details" style="padding-top: 10px;">
+        <span>Iteration 01</span>
+    </div>
+    <hr class="solid">
+    <div fxLayout="row" fx-flex fx-layout-align="end" class="performance-progress">
+        <div fxFlex="1 1 auto" >
+            <span>{{ executedIterations }}/{{ totalIterations }}</span>
+        </div>
+        <div class="progression">
+            <p-progressBar [value]="executedIterations/totalIterations*100" mode="determinate" [showValue]="false" [style]="{height: '6px', margin: '6px auto'}">
+            </p-progressBar>
+        </div>
+    </div>
+    <hr class="solid">
+    <div fxLayout="row" class="performance-passed">
+        <div fxFlex>
+            <i class="pi pi-check success" style="padding-right: 10px;"></i>
+            <span>Passed </span>
+        </div>
+        <div class="performance-value">
+            <span>{{ passedIterations }}</span>
+        </div>
+    </div>
+    <hr class="solid">
+    <div fxLayout="row" class="performance-failed">
+        <div fxFlex>
+            <i class="pi pi-times error" style="padding-right: 10px;"></i>
+        <span>Failed </span>
+        </div>
+        <div class="performance-value">
+            <span>{{ failedIterations }}</span>
+        </div>
+    </div>
+    <hr class="solid">
+    <div class="performance-details">
+        <span>Stats</span>
+    </div>
+    <hr class="solid">
+    <div fxLayout="row" class="performance-success-rate">
+        <div fxFlex>
+            <span>Success Rate </span>
+        </div>
+        <div class="performance-value">
+            <span>{{ successRate }}</span>
+            <span class="unit">%</span>
+        </div>
+    </div>
+    <hr class="solid">
+    <div fxLayout="row" class="performance-p50">
+        <div fxFlex>
+            <span>P50 </span>
+        </div>
+        <div class="performance-value">
+            <span>{{ p50 }}</span>
+            <span class="unit">ms</span>
+        </div>
+    </div>
+    <hr class="solid">
+    <div fxLayout="row" class="performance-p95">
+        <div fxFlex>
+            <span>P95 </span>
+        </div>
+        <div class="performance-value">
+            <span>{{ p95 }}</span>
+            <span class="unit">ms</span>
+        </div>
+    </div>
+    <hr class="solid">
+    <div fxLayout="row" class="performance-p99">
+        <div fxFlex>
+            <span>P99 </span>
+        </div>
+        <div class="performance-value">
+            <span>{{ p99 }}</span>
+            <span class="unit">ms</span>
+        </div>
+    </div>
+    <hr class="solid">
+</ng-container>

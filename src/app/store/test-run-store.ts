@@ -58,6 +58,10 @@ export class TestRunStore {
   @action setTestScreen(value: any) {
     this.testScreen = value;
   }
+  @observable performanceTestScreen = 0;
+  @action setPerformanceTestScreen(value: any) {
+    this.performanceTestScreen = value;
+  }
   @observable testSuiteCategory: any = [];
   @action setTestSuiteCategory(data: any) {
     this.testSuiteCategory = data;

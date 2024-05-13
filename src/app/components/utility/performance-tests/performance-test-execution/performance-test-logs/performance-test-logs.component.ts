@@ -1,4 +1,4 @@
-<!--
+/**
  *
  * Copyright (c) 2023 Project CHIP Authors
  *
@@ -13,15 +13,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
--->
-<div class="utility-upload-parent">
-  <div class="upload-file" fxLayout fxLayoutAlign="none center">
-    <div class="file-upload">
-      <input type="file" (change)="onUpload($event)" accept=".json" id="file" class="input-file">
-      <label for="file">
-        <i class="pi pi-upload"></i> Browse
-      </label>
-    </div>
-    <p class="file-name" *ngIf="fileName"><i class="icon-document-text-1"></i>{{fileName}}</p>
-  </div>
-</div>
+ */
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'performance-test-logs',
+  templateUrl: './performance-test-logs.component.html',
+  styleUrls: ['./performance-test-logs.component.scss']
+})
+export class PerformanceTestLogsComponent {
+
+}

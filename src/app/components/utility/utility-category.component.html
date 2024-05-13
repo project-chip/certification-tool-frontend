@@ -1,0 +1,75 @@
+<!--
+ *
+ * Copyright (c) 2023 Project CHIP Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<!-- <div class="split-utility-entries" fxLayout="row" fxFlex="1 1 auto" fxLayoutGap="20px"> -->
+ 
+    <p-tabView  fxFlex="1 1 auto">
+        <!-- Tab 1 -->
+        <p-tabPanel header="File Upload">
+            <app-upload-file></app-upload-file>
+        </p-tabPanel>
+        
+        <!-- Tab 2 -->
+        <p-tabPanel header="Stress and Stability Test"> 
+            <p-card class="p-card-comp" *ngIf="this.sharedAPI.getSelectedProjectType()">
+                <create-new-performance-test-run
+                  *ngIf="this.sharedAPI.getIsPerformanceTypeSelected()===0 && this.testSandBox.getPerformanceTestScreen() ===0">
+                </create-new-performance-test-run>
+                <performance-tests *ngIf="this.sharedAPI.getIsPerformanceTypeSelected()==1 && this.testSandBox.getPerformanceTestScreen() ===0">
+                </performance-tests>
+                <performance-test-execution *ngIf="this.testSandBox.getPerformanceTestScreen() ===1"></performance-test-execution>
+                <performance-test-execution-history *ngIf="this.testSandBox.getPerformanceTestScreen() ===2"></performance-test-execution-history>
+            </p-card>
+            
+            <!-- <p-card class="p-card-comp" *ngIf="this.sharedAPI.getSelectedProjectType()"></p-card> -->
+            <!-- <performance-tests></performance-tests> -->
+            <!-- <p-card class="p-card-comp" *ngIf="this.sharedAPI.getSelectedProjectType()">
+                <div class="test-parent" fxLayout="column" fxLayoutGap="10px">
+                  <performance-tests *ngIf="this.testSandBox.getTestScreen() ===3"></performance-tests>
+                </div>
+                <performance-test-execution *ngIf="this.testSandBox.getTestScreen() ===4"></performance-test-execution>
+                <performance-test-execution-history *ngIf="this.testSandBox.getTestScreen() ===0"></performance-test-execution-history>
+              </p-card> -->
+
+
+            <!-- <div class="card-comp-parent-div">
+                <div class="p-card-parent">
+                  <p-card class="p-card-comp" *ngIf="this.sharedAPI.getSelectedProjectType()">
+                    <app-create-new-test-run
+                      *ngIf="this.sharedAPI.getIsProjectTypeSelected()===0 && this.testSandBox.getTestScreen() ===0">
+                    </app-create-new-test-run>
+                    <div class="test-parent" fxLayout="column" fxLayoutGap="10px">
+                      <h3 class="heading-text" *ngIf="!sharedAPI.getTestCaseLoader()">New Test Run</h3>
+                      <performance-tests *ngIf="this.testSandBox.getTestScreen() ===0"></performance-tests>
+                    </div>
+                    <app-test-execution *ngIf="this.testSandBox.getTestScreen() ===3"></app-test-execution>
+                  </p-card>
+                </div> -->
+                <!-- <app-popup-modal *ngIf="this.sharedAPI.getCustomPopupData().popupId"
+                  [popupId]="this.sharedAPI.getCustomPopupData().popupId" [header]="this.sharedAPI.getCustomPopupData().header"
+                  [subHeader]="this.sharedAPI.getCustomPopupData().subHeader" [buttons]="this.sharedAPI.getCustomPopupData().buttons"
+                  [inputItems]="this.sharedAPI.getCustomPopupData().inputItems"
+                  [messageId]="this.sharedAPI.getCustomPopupData().messageId">
+                </app-popup-modal> -->
+              <!-- </div> -->
+
+
+
+        </p-tabPanel>
+    </p-tabView>
+    
+
+  

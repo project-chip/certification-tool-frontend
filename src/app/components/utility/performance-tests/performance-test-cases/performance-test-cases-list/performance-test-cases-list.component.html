@@ -1,0 +1,59 @@
+<!--
+ *
+ * Copyright (c) 2023 Project CHIP Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<div class="test-name-master" fxLayout fxLayoutAlign="space-between center">
+  <div class="master-text" fxLayout fxLayoutAlign="center">
+    <p-checkbox class="test-name-checkbox" [ngClass]="{'custom-icon': isPartiallySelected(this.testSandbox.getLastChecked()),
+      'isDisabled':this.testSandbox.getRunTestCaseData()[this.testSandbox.getCurrentTestCategory()].length===0 
+      || this.testSandbox.getTestCaseQuery()!=='' }" (click)="checkAndUncheckAll(); onClickChanges()"
+      [(ngModel)]="masterCheckBox" [binary]=true>
+    </p-checkbox>
+    <label class="master-label">Test Cases</label>
+  </div>
+  <!-- <ng-container *ngIf="this.testSandbox.getSelectedData()[this.testSandbox.getCurrentTestCategory()].length>0">
+    <span class="test-count"
+      *ngIf="selectedCategories[this.testSandbox.getCurrentTestCategory()][this.testSandbox.getLastChecked()].length>0">
+      {{selectedCategories[this.testSandbox.getCurrentTestCategory()][this.testSandbox.getLastChecked()].length |
+      number:'2.0'}}
+    </span>
+  </ng-container> -->
+  <ng-container>
+    <span>
+      <label class="master-label" class="interation-count" >Interation Count</label>
+    </span>
+  </ng-container>
+</div>
+
+<div class="test-name mb-10">
+  <ng-container *ngIf="this.testSandbox.getRunTestCaseData()[this.testSandbox.getCurrentTestCategory()].length!==0">
+    <div
+      *ngFor="let children of this.testSandbox.getRunTestCaseData()[this.testSandbox.getCurrentTestCategory()][this.testSandbox.getLastChecked()].children"
+      class="p-field-checkbox" fxLayout fxLayoutAlign="space-between baseline" (click)="onClickChanges()"
+      [ngClass]='{"d-none": children.filtered===false}'>
+      <div pTooltip={{children.description}} tooltipPosition="bottom" (click)="isMasterChecked();">
+        <p-checkbox class="test-name-checkbox" [value]="children"
+          [(ngModel)]="selectedCategories[this.testSandbox.getCurrentTestCategory()][children.parentKey]">
+        </p-checkbox>
+        <label class="label-text">{{children.title}}</label>
+      </div>
+      <span class="span-input-number" *ngIf="childrenSelected(+children.parentKey, children.key)===true">
+        <p-inputNumber mode="decimal" [showButtons]="true" inputId="minmax-buttons" [min]="1" [max]="99"
+          (onInput)="onSelectedChildren()" [(ngModel)]="children.count">
+        </p-inputNumber>
+      </span>
+    </div>
+  </ng-container>
+</div>

@@ -1,4 +1,4 @@
-<!--
+/**
  *
  * Copyright (c) 2023 Project CHIP Authors
  *
@@ -13,15 +13,23 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
--->
-<div class="utility-upload-parent">
-  <div class="upload-file" fxLayout fxLayoutAlign="none center">
-    <div class="file-upload">
-      <input type="file" (change)="onUpload($event)" accept=".json" id="file" class="input-file">
-      <label for="file">
-        <i class="pi pi-upload"></i> Browse
-      </label>
-    </div>
-    <p class="file-name" *ngIf="fileName"><i class="icon-document-text-1"></i>{{fileName}}</p>
-  </div>
-</div>
+ */
+@import "../../../../../styles/colors";
+
+:host ::ng-deep {
+  .new-project-main {
+    height: calc(100vh - 150px);
+    user-select: none;
+    cursor: pointer;
+    color: $lightBlack;
+
+    i {
+      font-size: 90px;
+      padding-bottom: 15px;
+    }
+    .create-new-project-label {
+      font-family: "Roboto-Regular";
+      font-size: 38px;
+    }
+  }
+}

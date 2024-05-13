@@ -14,14 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 -->
-<div class="utility-upload-parent">
-  <div class="upload-file" fxLayout fxLayoutAlign="none center">
-    <div class="file-upload">
-      <input type="file" (change)="onUpload($event)" accept=".json" id="file" class="input-file">
-      <label for="file">
-        <i class="pi pi-upload"></i> Browse
-      </label>
-    </div>
-    <p class="file-name" *ngIf="fileName"><i class="icon-document-text-1"></i>{{fileName}}</p>
+<div fxLayout="column" class="test-logs-parent">
+  <div>
+    <performance-test-log-toolbar></performance-test-log-toolbar>
+  </div>
+  <div fxFlex="1 1 auto" class="overflowAuto log-console-wrapper">
+    <app-test-log-console></app-test-log-console>
   </div>
 </div>

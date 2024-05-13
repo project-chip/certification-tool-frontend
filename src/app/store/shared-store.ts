@@ -44,6 +44,10 @@ export class SharedStore {
   @action setSelectedProjectType(selectedProjectType: any) {
     this.selectedProjectType = selectedProjectType;
   }
+  @observable isPerformanceTypeSelected = 0;
+  @action setIsPerformanceTypeSelected(isPerformanceTypeSelected: number) {
+    this.isPerformanceTypeSelected = isPerformanceTypeSelected;
+  }
   @observable testReportData: any = '';
   @action setTestReportData(report: any) {
     this.testReportData = report;

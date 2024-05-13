@@ -1,4 +1,5 @@
-<!--
+
+/**
  *
  * Copyright (c) 2023 Project CHIP Authors
  *
@@ -13,15 +14,33 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
--->
-<div class="utility-upload-parent">
-  <div class="upload-file" fxLayout fxLayoutAlign="none center">
-    <div class="file-upload">
-      <input type="file" (change)="onUpload($event)" accept=".json" id="file" class="input-file">
-      <label for="file">
-        <i class="pi pi-upload"></i> Browse
-      </label>
-    </div>
-    <p class="file-name" *ngIf="fileName"><i class="icon-document-text-1"></i>{{fileName}}</p>
-  </div>
-</div>
+ */
+:host ::ng-deep {
+  .test-details,
+  .app-test-case-component {
+    height: 100%;
+  }
+  .test-name-parent {
+    position: relative;
+  }
+  .test-name-warning {
+    position: absolute;
+    bottom: -15px;
+    color: red;
+    left: 0px;
+  }
+  .test-loader {
+    display: flex;
+    height: 100%;
+    align-items: center;
+  } 
+  .test-buttons {
+    display: flex;
+    gap: 15px;
+    .clear-test, .start-button  {
+      width: fit-content;
+    }
+  }
+}
+
+  

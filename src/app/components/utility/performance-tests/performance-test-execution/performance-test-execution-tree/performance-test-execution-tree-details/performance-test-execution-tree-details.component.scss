@@ -1,0 +1,49 @@
+.solid {
+    margin-left: 20px;
+    color: white;
+}
+
+.progression {
+    padding-right: 15px;
+    width: 85%;
+}
+
+.bar .p-progressbar {
+    height: 6px;
+    width: 100px;
+    top: 10px;
+}
+
+.performance-value {
+    padding-right: 15px;
+}
+
+.unit {
+    padding-left: 5px;
+}
+
+.unit,
+.performance-details {
+    color: gray;
+}
+
+.performance-details span {
+    font-size: 12px;
+    font-style: italic;
+}
+
+.performance-details,
+.performance-progress {
+    padding-left: 20px;
+    white-space: nowrap;
+}
+
+.performance-passed,
+.performance-failed,
+.performance-success-rate,
+.performance-p50,
+.performance-p95,
+.performance-p99 {
+    padding-left: 35px;
+    white-space: nowrap;
+}

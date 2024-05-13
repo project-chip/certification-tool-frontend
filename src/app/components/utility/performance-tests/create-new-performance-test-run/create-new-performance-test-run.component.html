@@ -14,14 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 -->
-<div class="utility-upload-parent">
-  <div class="upload-file" fxLayout fxLayoutAlign="none center">
-    <div class="file-upload">
-      <input type="file" (change)="onUpload($event)" accept=".json" id="file" class="input-file">
-      <label for="file">
-        <i class="pi pi-upload"></i> Browse
-      </label>
+<div class="new-project-main" fxLayout="column" fxLayoutAlign="center center">
+    <div fxLayout="column" fxLayoutAlign="center center" (click)="createNewProject()">
+        <i class="icon-add-square"></i>
+        <p class="create-new-project-label">Create New Stress and Stability Test Run</p>
     </div>
-    <p class="file-name" *ngIf="fileName"><i class="icon-document-text-1"></i>{{fileName}}</p>
-  </div>
 </div>
