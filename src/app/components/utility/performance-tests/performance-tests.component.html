@@ -14,11 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 -->
-<div fxLayout="column">
-<!-- <div fxLayout="column"  *ngIf="!sharedAPI.getTestCaseLoader()"> -->
-
-     <div fxLayout="row"  fxLayoutGap="50px" fxLayoutAlign="space-between center" class="container mt-12">
-  
+<div fxLayout="column" fxLayoutGap="10px" fxFlex="98" fxFlexOffset="1">
+    <div fxLayout="row"  fxLayoutGap="50px" fxLayoutAlign="space-between center" class="container mt-12">
       <div fxLayoutAlign="center center" class="box" fxLayoutGap="30px">
         <div class="test-name-parent" fxLayoutAlign="center center" fxLayout="column">
           <div>
@@ -43,12 +40,9 @@
     </div>
 
     <div fxLayout="column"  fxLayoutGap="50px" class="test-case-view">
-        <div fxLayout fxFlex="1 1 auto" class="parent-test-cases box">
-            <!-- <app-test-suites-list fxFlex="50%"></app-test-suites-list> -->
-            <!-- <app-test-cases-list fxFlex="50%"></app-test-cases-list> -->
-            
-            <performance-test-suites-list fxFlex="50%"></performance-test-suites-list>
-            <performance-test-cases-list fxFlex="50%"></performance-test-cases-list>
+        <div fxLayout fxFlex="1 1 auto" class="parent-test-cases box">            
+            <performance-test-suites-list fxFlex="40%"></performance-test-suites-list>
+            <performance-test-cases-list fxFlex></performance-test-cases-list>
             
           </div>
     </div>  

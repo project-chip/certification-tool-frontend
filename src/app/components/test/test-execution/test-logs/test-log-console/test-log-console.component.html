@@ -15,9 +15,7 @@
  * limitations under the License.
 -->
 <div class="log-console-parent" #logsParentDiv (wheel)="onUserScroll()">
-  <p-table [columns]="cols" [value]="getFilteredLogs()" [scrollable]="true" [rows]="100" scrollHeight="flex"
-    [virtualScroll]="true" [virtualRowHeight]="27">
-
+  <p-table [columns]="cols" [value]="getFilteredLogs()" [showLoader]="true" [scrollable]="true" scrollHeight="500px" [virtualScroll]="true" [virtualRowHeight]="10">
     <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-columns="columns">
       <tr *ngIf="rowData.message.toLowerCase().includes(testRunAPI.getLogsFilterKey().toLowerCase())"
         [ngClass]="rowIndex !== '' ? 'logs_tr_index_' + rowIndex : ''">
