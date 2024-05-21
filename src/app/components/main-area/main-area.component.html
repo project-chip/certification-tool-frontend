@@ -20,7 +20,7 @@
   <div class="side_nav_bar" *ngIf="this.getIsNavBarVisible() > 0">
     <app-side-nav></app-side-nav>
   </div>
-  <div fxFlex="1 0 auto" class="mainarea-parent-div">
+  <div fxFlex="1 1 auto" class="mainarea-parent-div">
     <app-project *ngIf="mainAreaSandbox.fetchCurrentIndex() === 5"></app-project>
     <app-test *ngIf="mainAreaSandbox.fetchCurrentIndex() === 1"></app-test>
     <app-project-table *ngIf="mainAreaSandbox.fetchCurrentIndex() === 4"></app-project-table>

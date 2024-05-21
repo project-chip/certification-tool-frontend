@@ -22,11 +22,11 @@ import { TestRunStore } from 'src/app/store/test-run-store';
 import { TestSandbox } from '../../../../test/test.sandbox';
 
 @Component({
-  selector: 'performance-test-cases-list',
+  selector: 'app-performance-test-cases-list',
   templateUrl: './performance-test-cases-list.component.html',
   styleUrls: ['./performance-test-cases-list.component.scss']
 })
-export class PerformanceTestCasesListComponent { //implements DoCheck {
+export class PerformanceTestCasesListComponent { // implements DoCheck {
   selectedCategories: any[] = [];
   masterCheckBox = false;
   // lastChanges = true;
@@ -40,33 +40,6 @@ export class PerformanceTestCasesListComponent { //implements DoCheck {
       });
     });
   }
-  // // it is a hook, get triggered when value changes
-  // ngDoCheck() {
-  //   if (this.lastChanges !== this.testSandbox.getOnClickChanges()) {
-  //     for (let index = 0; index < this.runTestCaseData().length; index++) {
-  //       if (this.testSandbox.getSelectedData()[this.testSandbox.getCurrentTestCategory()][index]) {
-  //         if (this.testSandbox.getSelectedData()[this.testSandbox.getCurrentTestCategory()][index].children.length ===
-  //           this.runTestCaseData()[index].children.length) {
-  //           this.selectedCategories[this.testSandbox.getCurrentTestCategory()][index] =
-  //             this.runTestCaseData()[index].children;
-  //         }
-  //       } else {
-  //         this.selectedCategories[this.testSandbox.getCurrentTestCategory()][index] = [];
-  //       }
-  //     }
-  //     this.lastChanges = this.testSandbox.getOnClickChanges();
-  //   }
-  //   if (this.runTestCaseData().length !== 0 && this.runTestCaseData()[this.testSandbox.getLastChecked()].children.length ===
-  //     this.selectedCategories[this.testSandbox.getCurrentTestCategory()][this.testSandbox.getLastChecked()].length) {
-  //     this.masterCheckBox = true;
-  //   } else {
-  //     this.masterCheckBox = false;
-  //   }
-  //   if (this.testSandbox.getDetectPicsChanges()[this.testSandbox.getCurrentTestCategory()] === true) {
-  //     setTimeout(() => this.checkPicsData(), 200);
-  //   }
-  // }
-  // check and uncheck mastercheckbox
   checkAndUncheckAll() {
     if (this.runTestCaseData()[this.testSandbox.getLastChecked()].children.length ===
       this.selectedCategories[this.testSandbox.getCurrentTestCategory()][this.testSandbox.getLastChecked()].length) {
@@ -130,21 +103,5 @@ export class PerformanceTestCasesListComponent { //implements DoCheck {
   runTestCaseData() {
     return this.testSandbox.getRunTestCaseData()[this.testSandbox.getCurrentTestCategory()];
   }
-  // checkPicsData() {
-  //   const detectPicsData = _.cloneDeep(this.testSandbox.getDetectPicsChanges());
-  //   for (let index = 0; index < this.runTestCaseData().length; index++) {
-  //     if (this.getSelectedTestCases()[index]) {
-  //       const selectedPics = this.getSelectedTestCases()[index].children.map((data: any) =>
-  //         this.runTestCaseData()[index].children[data.picsKey]
-  //       );
-  //       this.selectedCategories[this.testSandbox.getCurrentTestCategory()][index] = selectedPics;
-  //     }
-  //   }
-  //   detectPicsData[this.testSandbox.getCurrentTestCategory()] = false;
-  //   this.testSandbox.setDetectPicsChanges(detectPicsData);
-  // }
-  // getSelectedTestCases() {
-  //   return this.testSandbox.getSelectedData()[this.testSandbox.getCurrentTestCategory()];
-  // }
 }
 

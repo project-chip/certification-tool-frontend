@@ -48,6 +48,10 @@ export class SharedStore {
   @action setIsPerformanceTypeSelected(isPerformanceTypeSelected: number) {
     this.isPerformanceTypeSelected = isPerformanceTypeSelected;
   }
+  @observable utilityTabIndex = 0;
+  @action setUtilityTabIndex(utilityTabIndex: number) {
+    this.utilityTabIndex = utilityTabIndex;
+  }
   @observable testReportData: any = '';
   @action setTestReportData(report: any) {
     this.testReportData = report;

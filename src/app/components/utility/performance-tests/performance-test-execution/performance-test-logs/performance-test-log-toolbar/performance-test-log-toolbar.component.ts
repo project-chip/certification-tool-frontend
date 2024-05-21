@@ -22,7 +22,7 @@ import { APP_STATE } from 'src/app/shared/utils/constants';
 import { SharedService } from 'src/app/shared/core_apis/shared-utils';
 
 @Component({
-  selector: 'performance-test-log-toolbar',
+  selector: 'app-performance-test-log-toolbar',
   templateUrl: './performance-test-log-toolbar.component.html',
   styleUrls: ['./performance-test-log-toolbar.component.scss']
 })

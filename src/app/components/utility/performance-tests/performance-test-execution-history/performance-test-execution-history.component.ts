@@ -19,7 +19,7 @@
 
 
 // @Component({
-//   selector: 'performance-test-execution-history',
+//   selector: 'app-performance-test-execution-history',
 //   templateUrl: './performance-test-execution-history.component.html',
 //   styleUrls: ['./performance-test-execution-history.component.scss'],
 // })
@@ -48,7 +48,7 @@ import { saveAs } from 'file-saver';
 import { SharedService } from 'src/app/shared/core_apis/shared-utils';
 
 @Component({
-  selector: 'performance-test-execution-history',
+  selector: 'app-performance-test-execution-history',
   templateUrl: './performance-test-execution-history.component.html',
   styleUrls: ['./performance-test-execution-history.component.scss'],
 })

@@ -27,7 +27,7 @@ import { TestRunStore } from 'src/app/store/test-run-store';
 import * as _ from 'lodash';
 
 @Component({
-    selector: 'performance-tests',
+    selector: 'app-performance-tests',
     templateUrl: './performance-tests.component.html',
     styleUrls: ['./performance-tests.component.scss']
   })

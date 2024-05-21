@@ -14,9 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 -->
-<!-- <div fxLayout="column">
-    <p-button label="Add Stress Test" icon="pi pi-plus" iconPos="left" (click)="newTestRun()"></p-button>
-</div> -->
 <div *ngIf="sharedAPI.getTestExecutionLoader() === true">
     <p-table #test [value]="filterProjectId()" [rows]="5" [paginator]="true" [rowHover]="true"
       [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
@@ -27,20 +24,6 @@
             <p-dropdown [options]="testExecutionDropDown" [(ngModel)]="selectedDropdownData" optionLabel="tableName">
             </p-dropdown>
             <p-button label="Add Test" icon="pi pi-plus" iconPos="left" (click)="newTestRun()"></p-button>
-            <!-- <div *ngIf="this.selectedDropdownData.tableName == 'Test'">
-              <div fxFlex="16px"></div>
-              <p-button label="Import Test Run" icon="icon-import-2" iconPos="left" (click)="fileInput.click()">
-              </p-button>
-              <input type="file" multiple style="display: none;" #fileInput (change)="importTestRun($event)">
-            </div> -->
-            <!-- <div fxFlex="16px"></div>
-            <div *ngIf="isImportingTestRuns" class="import-loader-container">
-              <div class="import-loader-items">
-                <p-progressSpinner [style]="{width: '24px', height: '24px'}" styleClass="custom-spinner" strokeWidth="6"
-                  animationDuration=".5s"></p-progressSpinner>
-              </div>
-              <span style="padding-left: 8px;">Importing Test Runs...</span>
-            </div> -->
           </div>
           <div>
             <span class="p-input-icon-left">
@@ -107,8 +90,6 @@
                 tooltipPosition="bottom"></i>
               <i class="icon-arrow-down-2" (click)="downloadGroupedLogs(data)" pTooltip="Download Grouped Logs"
               tooltipPosition="bottom"></i>
-              <!-- <i class="icon-export-3" (click)="exportTestRun(data)" pTooltip="Export Test Run"
-              tooltipPosition="bottom"></i> -->
               <i [ngClass]="{'icon-archive-tick':selectedDropdownData.tableName ==='Test', 'icon-archive-minus': selectedDropdownData.tableName ==='Archived Test'}"
                 [pTooltip]='selectedDropdownData.toolTip' (click)="archiveTestRun(data.id)" tooltipPosition="bottom"></i>
               <i class="icon-trash" pTooltip="Delete" (click)="deleteTestRun(data.id)" tooltipPosition="bottom"></i>
