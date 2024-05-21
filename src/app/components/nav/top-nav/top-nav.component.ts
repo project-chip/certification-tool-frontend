@@ -62,7 +62,8 @@ export class TopNavComponent implements DoCheck {
       this.headerName = this.sharedAPI.getSelectedProjectType();
     }
 
-    if (!this.sharedAPI.getSelectedProjectType() && this.navSandbox.getCurrentIndex() === 1) {
+    if (!this.sharedAPI.getSelectedProjectType() && (
+      this.navSandbox.getCurrentIndex() === 1 || (this.navSandbox.getCurrentIndex() === 6 && this.sharedAPI.getUtilityIndex() === 1) )) {
       this.display = true;
     }
   }

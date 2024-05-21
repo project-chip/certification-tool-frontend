@@ -23,7 +23,7 @@ import { APP_STATE } from 'src/app/shared/utils/constants';
 import { TestSandbox } from '../../../test/test.sandbox';
 
 @Component({
-  selector: 'performance-test-execution',
+  selector: 'app-performance-test-execution',
   templateUrl: './performance-test-execution.component.html',
   styleUrls: ['./performance-test-execution.component.scss']
 })

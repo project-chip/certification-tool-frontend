@@ -73,7 +73,8 @@
 </p-menubar>
 <p-dialog header="Select a Project" class="select-project-dialog" [(visible)]="display" [draggable]="false"
   [style]="{width:'30vw'}" [closable]=false
-  *ngIf="navSandbox.getCurrentIndex() === 1 && !sharedAPI.getSelectedProjectType()">
+  *ngIf="!sharedAPI.getSelectedProjectType() && (
+    navSandbox.getCurrentIndex() === 1 || (navSandbox.getCurrentIndex() === 6 && sharedAPI.getUtilityIndex() === 1) )">
   <p-listbox [options]="dropdownData" class="project-list-overlay" [(ngModel)]="selectedProject" (click)="closePopUp()"
     optionLabel="name">
   </p-listbox>

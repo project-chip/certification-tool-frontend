@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 -->
-<div fxLayout="column" class="test-execution-parent" fxFlex="98" fxFlexOffset="1">
+<div fxLayout="column" fxLayoutGap="10px" fxFlex="98" fxFlexOffset="1" class="test-execution-parent"> 
   <div fxLayout="row">
     <div class="heading-text" fxFlex="1 1 auto">Test Execution</div>
     <div class="abort-button-div">
@@ -29,10 +29,10 @@
   </div>
   <div fxLayout="row" fxFlex="1 1 auto" class="container mb-0 overflowAuto">
     <div class="test-execution-tree-div">
-      <performance-test-execution-tree></performance-test-execution-tree>
+      <app-performance-test-execution-tree></app-performance-test-execution-tree>
     </div>
-    <div fxFlex="1 1 auto" class="test-execution-logs-div">
-      <performance-test-logs></performance-test-logs>
+    <div fxFlex class="test-execution-logs-div">
+      <app-performance-test-logs></app-performance-test-logs>
     </div>
   </div>
   <app-popup-modal popupId="ABORT" header="  " subHeader="Are you sure that you want to abort test?"

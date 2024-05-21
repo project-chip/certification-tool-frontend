@@ -17,7 +17,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'performance-test-logs',
+  selector: 'app-performance-test-logs',
   templateUrl: './performance-test-logs.component.html',
   styleUrls: ['./performance-test-logs.component.scss']
 })

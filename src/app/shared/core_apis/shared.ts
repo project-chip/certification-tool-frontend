@@ -53,6 +53,12 @@ export class SharedAPI {
   getIsPerformanceTypeSelected() {
     return this.sharedStore.isPerformanceTypeSelected;
   }
+  setUtilityIndex(data: number) {
+    this.sharedStore.setUtilityTabIndex(data);
+  }
+  getUtilityIndex() {
+    return this.sharedStore.utilityTabIndex;
+  }
   setSelectedProjectType(selectedType: any) {
     this.sharedStore.setSelectedProjectType(selectedType);
 

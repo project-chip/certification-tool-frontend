@@ -14,22 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { AfterViewInit, ChangeDetectorRef, Component, Injectable, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Injectable, OnInit , ViewChild } from '@angular/core';
+import { TabView } from 'primeng/tabview';
 import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
 import { ProjectsAPI } from 'src/app/shared/core_apis/project';
 import { TestSandbox } from '../test/test.sandbox';
 import { SharedAPI } from 'src/app/shared/core_apis/shared';
 
 @Component({
-    selector: 'utility-category',
-    templateUrl: './utility-category.component.html',
-    styleUrls: ['./utility-category.component.scss']
+  selector: 'app-utility-category',
+  templateUrl: './utility-category.component.html',
+  styleUrls: ['./utility-category.component.scss']
 })
 
 @Injectable()
 export class UtilityCategoryComponent implements AfterViewInit, OnInit {
   constructor(public testRunAPI: TestRunAPI, public projectsAPI: ProjectsAPI, public testSandBox: TestSandbox,
     public sharedAPI: SharedAPI, public changeDetectorRef: ChangeDetectorRef) { }
+
+  tabViewChange(event: any, tabView: TabView) {
+    this.sharedAPI.setUtilityIndex(event.index);
+    console.log(event.index);
+  }
 
   ngOnInit() {
     // this.testSandBox.setPerformanceTestScreen(0);
@@ -39,13 +45,3 @@ export class UtilityCategoryComponent implements AfterViewInit, OnInit {
     this.changeDetectorRef.detectChanges();
   }
 }
-
-
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'utility-category',
-//   templateUrl: './utility-category.component.html',
-//   styleUrls: ['./utility-category.component.scss']
-// })
-// export class UtilityCategoryComponent { }

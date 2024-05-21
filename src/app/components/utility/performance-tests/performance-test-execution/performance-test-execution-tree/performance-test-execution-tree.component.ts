@@ -17,15 +17,17 @@
 import { Component } from '@angular/core';
 import { SharedAPI } from 'src/app/shared/core_apis/shared';
 import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
+import { TestSandbox } from 'src/app/components/test/test.sandbox';
 import * as _ from 'lodash';
 @Component({
-  selector: 'performance-test-execution-tree',
+  selector: 'app-performance-test-execution-tree',
   templateUrl: './performance-test-execution-tree.component.html',
   styleUrls: ['./performance-test-execution-tree.component.scss']
 })
 export class PerformanceTestExecutionTreeComponent {
   activeBlock: any;
-  constructor(public testRunAPI: TestRunAPI, public sharedAPI: SharedAPI) { }
+  constructor(public testRunAPI: TestRunAPI, public sharedAPI: SharedAPI,
+    public testSandbox: TestSandbox,) { }
 
   expandClick(data: any) {
     if (data.children.length) {
@@ -102,5 +104,10 @@ export class PerformanceTestExecutionTreeComponent {
       className = 'pi pi-times error';
     }
     return className;
+  }
+
+  // get current test case data
+  runTestCaseData() {
+    return this.testSandbox.getRunTestCaseData()[this.testSandbox.getCurrentTestCategory()];
   }
 }

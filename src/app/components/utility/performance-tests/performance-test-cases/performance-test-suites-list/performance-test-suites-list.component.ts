@@ -18,7 +18,7 @@ import { Component, DoCheck, OnInit } from '@angular/core';
 import { TestSandbox } from '../../../../test/test.sandbox';
 
 @Component({
-  selector: 'performance-test-suites-list',
+  selector: 'app-performance-test-suites-list',
   templateUrl: './performance-test-suites-list.component.html',
   styleUrls: ['./performance-test-suites-list.component.scss']
 })
