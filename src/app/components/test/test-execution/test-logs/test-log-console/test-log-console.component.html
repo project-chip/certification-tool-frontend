@@ -16,7 +16,7 @@
 -->
 <div class="log-console-parent" #logsParentDiv (wheel)="onUserScroll()">
   <p-table [columns]="cols" [value]="getFilteredLogs()" [scrollable]="true" [rows]="100" scrollHeight="flex"
-    [virtualScroll]="true" [virtualRowHeight]="27">
+    [virtualScroll]="true" [virtualRowHeight]="15">
 
     <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-columns="columns">
       <tr *ngIf="rowData.message.toLowerCase().includes(testRunAPI.getLogsFilterKey().toLowerCase())"

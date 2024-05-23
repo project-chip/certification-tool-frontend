@@ -34,7 +34,7 @@ import * as _ from 'lodash';
 export class PerformanceTestsComponent implements OnDestroy {
     searchQuery: any = '';
     selectedDataFinal: any = {};
-    testName = 'UI_Test_Run';
+    testName = 'Stress_Stability_Test_Run';
     description = '';
     allowedCharacter = /[^A-Za-z0-9 _-]/;
 

@@ -30,7 +30,9 @@ import { SharedAPI } from 'src/app/shared/core_apis/shared';
 @Injectable()
 export class UtilityCategoryComponent implements AfterViewInit, OnInit {
   constructor(public testRunAPI: TestRunAPI, public projectsAPI: ProjectsAPI, public testSandBox: TestSandbox,
-    public sharedAPI: SharedAPI, public changeDetectorRef: ChangeDetectorRef) { }
+    public sharedAPI: SharedAPI, public changeDetectorRef: ChangeDetectorRef) {
+    this.sharedAPI.setUtilityIndex(0); // Pre-select File Upload tab
+  }
 
   tabViewChange(event: any, tabView: TabView) {
     this.sharedAPI.setUtilityIndex(event.index);
