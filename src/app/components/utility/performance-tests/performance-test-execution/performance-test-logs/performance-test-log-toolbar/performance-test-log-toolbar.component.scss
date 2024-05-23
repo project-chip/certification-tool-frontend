@@ -18,14 +18,6 @@
 @import "../../../../../../../styles/custom.scss";
 
 :host ::ng-deep .test-log-toolbar {
-
-  .button-container {
-    display: flex;        /* Enable Flexbox */
-    justify-content: center; /* Center horizontally */
-    height: 100vh;        /* Full height of the viewport */
-    margin: 0 10px; /* Adds horizontal space between buttons */
-    padding: 10px 20px;
-  }
   .test-log-toolbar-header {
     height: 100%;
     background-color: $execTableHeader;
@@ -48,11 +40,6 @@
         top: 24px;
       }
     }
-  }
-  .buttons-download {
-    padding-top: 5px;
-    margin-right: 10px;
-    height: 25px;
   }
   .download-logs-div,
   .pdf-logs-div {
@@ -87,4 +74,16 @@
       }
     }
   }
+  .buttons-download {
+    padding-top: 5px;
+    margin-right: 10px;
+    height: 25px;
+  }
+  // .button-container {
+  //   display: flex;        /* Enable Flexbox */
+  //   justify-content: center; /* Center horizontally */
+  //   height: 100vh;        /* Full height of the viewport */
+  //   margin: 0 10px; /* Adds horizontal space between buttons */
+  //   padding: 10px 20px;
+  // }
 }

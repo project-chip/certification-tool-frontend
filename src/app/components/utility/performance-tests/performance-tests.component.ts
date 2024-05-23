@@ -33,6 +33,11 @@ import * as _ from 'lodash';
   })
 export class PerformanceTestsComponent implements OnDestroy {
     searchQuery: any = '';
+    selectedDataFinal: any = {};
+    testName = 'UI_Test_Run';
+    description = '';
+    allowedCharacter = /[^A-Za-z0-9 _-]/;
+
     constructor(public testSandbox: TestSandbox, public sharedAPI: SharedAPI,
         public testRunAPI: TestRunAPI, public sharedService: SharedService, public testRunStore: TestRunStore) {
         testRunAPI.getApplicableTestCases(this.sharedAPI.getSelectedProjectType().id, this.setDefaultPicsData.bind(this));
@@ -65,16 +70,16 @@ export class PerformanceTestsComponent implements OnDestroy {
               filteredData[index][testSuiteIndex].children[testCaseIndex]['filtered'] = true;
             }
           });
-  
+
         });
       });
       this.testSandbox.setTestCaseQuery(this.searchQuery);
       this.testSandbox.setFilteredData(filteredData);
     }
-  
+
     scrollNavbar(data: any) {
       const ele = document.querySelector('.testcase-custom-view ul');
-  
+
       if (ele && data === 'R') {
         ele.scrollLeft += 20;
       } else if (ele && data === 'L') {
@@ -84,7 +89,7 @@ export class PerformanceTestsComponent implements OnDestroy {
     isNavbar(data: any) {
       const ele = document.querySelector('.testcase-custom-view ul');
       let isScroll = false;
-  
+
       if (ele?.scrollLeft === 0 && data === 'RC') {
         ele.scrollLeft += 1;
         if (ele.scrollLeft > 0) {
@@ -99,10 +104,6 @@ export class PerformanceTestsComponent implements OnDestroy {
     ngOnDestroy() {
       this.testSandbox.setCurrentTestCategory(0);
     }
-  selectedDataFinal: any = {};
-  testName = 'UI_Test_Run';
-  description = '';
-  allowedCharacter = /[^A-Za-z0-9 _-]/;
 
   setDefaultPicsData(data: any) {
     const selectedData = _.cloneDeep(this.testRunStore.selectedTestCase);
