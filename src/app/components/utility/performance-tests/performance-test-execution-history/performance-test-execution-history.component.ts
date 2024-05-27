@@ -14,26 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// import { Component, Injectable } from '@angular/core';
-// import { TestSandbox } from '../../../test/test.sandbox';
-
-
-// @Component({
-//   selector: 'app-performance-test-execution-history',
-//   templateUrl: './performance-test-execution-history.component.html',
-//   styleUrls: ['./performance-test-execution-history.component.scss'],
-// })
-
-// @Injectable()
-// export class PerformanceTestExecutionHistoryComponent {
-
-//   constructor(public testSandbox: TestSandbox) {
-//   }
-
-//   newTestRun() {
-//     this.testSandbox.setPerformanceTestScreen(1);
-//   }
-// }
 import { Component, Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -41,11 +21,11 @@ import { SharedAPI } from 'src/app/shared/core_apis/shared';
 import { testExecutionTable, TestRunAPI } from 'src/app/shared/core_apis/test-run';
 import { TestSandbox } from '../../../test/test.sandbox';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { UtilityComponent } from '../../utility.component';
 import { APP_STATE } from 'src/app/shared/utils/constants';
 import { environment } from 'src/environments/environment';
 import { saveAs } from 'file-saver';
 import { SharedService } from 'src/app/shared/core_apis/shared-utils';
+import { UploadFileComponent } from '../../upload-file/upload-file.component';
 
 @Component({
   selector: 'app-performance-test-execution-history',
@@ -211,7 +191,7 @@ export class PerformanceTestExecutionHistoryComponent {
     } else {
       this.testRunAPI.getTestReportData(reportId, 0);
     }
-    this.ref = this.dialogService.open(UtilityComponent, {
+    this.ref = this.dialogService.open(UploadFileComponent, {
       width: '100%',
       baseZIndex: 10000,
       styleClass: 'report-dialog'
