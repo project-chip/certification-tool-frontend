@@ -1,4 +1,7 @@
+import { NONE_TYPE } from '@angular/compiler';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
+
 
 @Component ({
   selector: 'app-performance-test-execution-tree-details',
@@ -7,16 +10,20 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 })
 export class PerformanceTestExecutionTreeDetailsComponent implements OnChanges {
   @Input() testItem: any;
-  p50 = 10.000.toFixed(3); // TODO: Placeholder. Change accordingly to the percentile
-  p95 = 25.000.toFixed(3); // TODO: Placeholder. Change accordingly to the percentile
-  p99 = 80.000.toFixed(3); // TODO: Placeholder. Change accordingly to the percentile
+  @Input() item: any;
+  // p50 = 10.000.toFixed(3); // TODO: Placeholder. Change accordingly to the percentile
+  // p95 = 25.000.toFixed(3); // TODO: Placeholder. Change accordingly to the percentile
+  // p99 = 80.000.toFixed(3); // TODO: Placeholder. Change accordingly to the percentile
 
+  constructor(public testRunAPI: TestRunAPI,) { }
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes.testItem.currentValue);
+    console.log(changes.item);
+    const data = this.testRunAPI.getRunningTestCasesRawData()
+    console.log(data)
   }
 
   get totalIterations() {
-    return this.testItem.length;
+    return this.testItem.length - 2;
   }
 
   get progress() {
@@ -24,17 +31,48 @@ export class PerformanceTestExecutionTreeDetailsComponent implements OnChanges {
   }
 
   get passedIterations() {
-    return this.testItem.filter((i: any) => i.status === 'passed').length;
+    return this.testItem.filter((i: any) => i.status === 'passed' && i.name !== "Start Performance test" && i.name !== "Show test logs").length;
   }
 
   get failedIterations() {
-    return this.testItem.filter((i: any) => i.status === 'failed').length;
+    return this.testItem.filter((i: any) => i.status === 'failed' && i.name !== "Start Performance test" && i.name !== "Show test logs").length;
   }
 
   get executedIterations() {
-    return this.testItem.filter((i: any) => i.status !== 'pending').length;
+    return this.testItem.filter((i: any) => i.status !== 'pending' && i.name !== "Start Performance test" && i.name !== "Show test logs").length;
   }
 
+  get p50() {
+    if (this.item.analytics !== NONE_TYPE) {
+      return  this.item.analytics['p50']
+    } else {
+      return "0"
+    }
+  }
+
+  get p95() {
+    if (this.item.analytics) {
+      return  this.item.analytics['p95']
+    } else {
+      return "0"
+    }
+  }
+
+  get p99() {
+    if (this.item.analytics) {
+      return  this.item.analytics['p99']
+    } else {
+      return "0"
+    }
+  }
+
+  get unit() {
+    if (this.item.analytics) {
+      return  this.item.analytics['unit']
+    } else {
+      return "us"
+    }
+  }
   get successRate() {
     return ((this.passedIterations/(this.passedIterations + this.failedIterations) || 0) * 100).toFixed(0);
   }

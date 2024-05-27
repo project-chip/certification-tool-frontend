@@ -21,6 +21,7 @@ import { EXECUTION_STATUS_COMPLETED } from '../utils/constants';
 import { SharedAPI } from './shared';
 import * as _ from 'lodash';
 import { SharedService } from './shared-utils';
+import { createJsxExpression } from 'typescript';
 
 @Injectable()
 export class TestRunAPI {
@@ -132,7 +133,7 @@ export class TestRunAPI {
           const newObject3 = { 'key': 'test_step_execution_' + eleStep.id, 'testStepIndex': index + '' + '' + caseIndex + '' + stepIndex, 'name': eleStep.title, 'status': eleStep.state, 'children': [] };
           return newObject3;
         });
-        const newObject2 = { 'key': 'test_case_execution_' + eleExec.id, 'name': eleExec.test_case_metadata.title, 'expanded': true, 'count': '1', 'status': eleExec.state, 'children': stepExec };
+        const newObject2 = { 'key': 'test_case_execution_' + eleExec.id, 'name': eleExec.test_case_metadata.title, 'expanded': true, 'count': '1', 'status': eleExec.state, 'analytics': eleExec.analytics, 'children': stepExec };
         return newObject2;
       });
 
