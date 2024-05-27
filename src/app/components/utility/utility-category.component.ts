@@ -14,8 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { AfterViewInit, ChangeDetectorRef, Component, Injectable, OnInit , ViewChild } from '@angular/core';
-import { TabView } from 'primeng/tabview';
+import { AfterViewInit, ChangeDetectorRef, Component, Injectable, OnInit } from '@angular/core';
 import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
 import { ProjectsAPI } from 'src/app/shared/core_apis/project';
 import { TestSandbox } from '../test/test.sandbox';
@@ -30,15 +29,18 @@ import { SharedAPI } from 'src/app/shared/core_apis/shared';
 @Injectable()
 export class UtilityCategoryComponent implements AfterViewInit, OnInit {
   constructor(public testRunAPI: TestRunAPI, public projectsAPI: ProjectsAPI, public testSandBox: TestSandbox,
-    public sharedAPI: SharedAPI, public changeDetectorRef: ChangeDetectorRef) { }
+    public sharedAPI: SharedAPI, public changeDetectorRef: ChangeDetectorRef) {
+    this.sharedAPI.setUtilityIndex(0); // Pre-select File Upload tab
+  }
 
-  tabViewChange(event: any, tabView: TabView) {
+  tabViewChange(event: any) {
     this.sharedAPI.setUtilityIndex(event.index);
-    console.log(event.index);
+    if (event.index === 0) {
+      this.sharedAPI.setTestReportData('');
+    }
   }
 
   ngOnInit() {
-    // this.testSandBox.setPerformanceTestScreen(0);
   }
 
   ngAfterViewInit() {

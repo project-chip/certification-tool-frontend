@@ -21,7 +21,7 @@ import { SharedService } from 'src/app/shared/core_apis/shared-utils';
 import { TestSandbox } from '../../../test/test.sandbox';
 
 @Component({
-  selector: 'create-new-performance-test-run',
+  selector: 'app-create-new-performance-test-run',
   templateUrl: './create-new-performance-test-run.component.html',
   styleUrls: ['./create-new-performance-test-run.component.scss']
 })

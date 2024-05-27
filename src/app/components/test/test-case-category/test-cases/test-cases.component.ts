@@ -24,6 +24,8 @@ import { TestSandbox } from '../../test.sandbox';
 })
 export class TestCasesComponent implements OnDestroy {
   searchQuery: any = '';
+  filteredCategories = ['SDK Performance Tests'];
+
   constructor(public testSandbox: TestSandbox) {
     this.onTestSearch();
   }
@@ -87,5 +89,9 @@ export class TestCasesComponent implements OnDestroy {
   }
   ngOnDestroy() {
     this.testSandbox.setCurrentTestCategory(0);
+  }
+
+  shouldShowTests(category: string) {
+    return !this.filteredCategories.includes(category);
   }
 }

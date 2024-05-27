@@ -21,7 +21,7 @@ import { SharedAPI } from 'src/app/shared/core_apis/shared';
 import { testExecutionTable, TestRunAPI } from 'src/app/shared/core_apis/test-run';
 import { TestSandbox } from '../test.sandbox';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { UtilityComponent } from '../../utility/utility.component';
+import { UploadFileComponent } from '../../utility/upload-file/upload-file.component';
 import { APP_STATE } from 'src/app/shared/utils/constants';
 import { environment } from 'src/environments/environment';
 import { saveAs } from 'file-saver';
@@ -190,7 +190,7 @@ export class TestExecutionHistoryComponent {
     } else {
       this.testRunAPI.getTestReportData(reportId, 0);
     }
-    this.ref = this.dialogService.open(UtilityComponent, {
+    this.ref = this.dialogService.open(UploadFileComponent, {
       width: '100%',
       baseZIndex: 10000,
       styleClass: 'report-dialog'

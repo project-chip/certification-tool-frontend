@@ -206,3 +206,4 @@ import { DndDirective } from './shared/dnd.directive';
     TestExecutionSandbox, WebSocketAPI, DialogService, DatePipe]
 })
 export class AppModule { }
+

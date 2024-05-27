@@ -67,6 +67,22 @@ export class TopNavComponent implements DoCheck {
       this.display = true;
     }
   }
+
+  shouldShowProjectDropDown() {
+    const isProjectSelected = this.sharedAPI.getSelectedProjectType();
+    const isTestScreen = this.navSandbox.getCurrentIndex() === 1;
+    const isStressStabilityTestScreen = this.navSandbox.getCurrentIndex() === 6 && this.sharedAPI.getUtilityIndex() === 1;
+    const isProjectTable = this.projectSandbox.getProjectType().tableName ==='Projects';
+    return isProjectSelected && (isTestScreen || isStressStabilityTestScreen) && isProjectTable;
+  }
+
+  shouldShowProjectSelectPopup() {
+    const isProjectSelected = this.sharedAPI.getSelectedProjectType();
+    const isTestScreen = this.navSandbox.getCurrentIndex() === 1;
+    const isStressStabilityTestScreen = this.navSandbox.getCurrentIndex() === 6 && this.sharedAPI.getUtilityIndex() === 1;
+    return !isProjectSelected && (isTestScreen || isStressStabilityTestScreen);
+  }
+
   getProjectDataLen() {
     this.dropdownData = this.projectSandbox.getAllProjectData();
     if (this.dropdownData.length === 0) {
@@ -88,6 +104,7 @@ export class TopNavComponent implements DoCheck {
     this.sharedAPI.setSelectedProjectType(this.headerName);
     this.testSandbox.getTestExecutionResults(this.headerName?.id);
     this.testSandbox.setTestScreen(2);
+    this.testSandbox.setPerformanceTestScreen(2);
   }
   onThemeSwitch() {
     let newTheme;

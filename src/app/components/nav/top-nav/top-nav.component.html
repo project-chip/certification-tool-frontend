@@ -20,8 +20,7 @@
       <img src="../../../../assets/matter_sym_rgb_day.png" class="matter-logo-icon" alt="">
       <div class="top-nav-dropdown">
         <p-dropdown [options]="projectsAPI.getProjectData()" [(ngModel)]="headerName" optionLabel="name"
-          *ngIf="navSandbox.getCurrentIndex()===1 && sharedAPI.getSelectedProjectType() && projectSandbox.getProjectType().tableName ==='Projects' "
-          (onChange)=" projectChanged()">
+          *ngIf="shouldShowProjectDropDown()" (onChange)=" projectChanged()">
         </p-dropdown>
       </div>
     </div>
@@ -72,9 +71,7 @@
 
 </p-menubar>
 <p-dialog header="Select a Project" class="select-project-dialog" [(visible)]="display" [draggable]="false"
-  [style]="{width:'30vw'}" [closable]=false
-  *ngIf="!sharedAPI.getSelectedProjectType() && (
-    navSandbox.getCurrentIndex() === 1 || (navSandbox.getCurrentIndex() === 6 && sharedAPI.getUtilityIndex() === 1) )">
+  [style]="{width:'30vw'}" [closable]=false *ngIf="shouldShowProjectSelectPopup()">
   <p-listbox [options]="dropdownData" class="project-list-overlay" [(ngModel)]="selectedProject" (click)="closePopUp()"
     optionLabel="name">
   </p-listbox>
