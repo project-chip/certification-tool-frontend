@@ -244,6 +244,11 @@ export class PerformanceTestExecutionHistoryComponent {
     }
   }
 
+  // Open External Tool
+  openExternalTool(executionData: any) {
+    console.log('Open External Tool')
+  }
+
   deleteTestRun(id: any) {
     this.testSandbox.deleteTestRun(id);
   }

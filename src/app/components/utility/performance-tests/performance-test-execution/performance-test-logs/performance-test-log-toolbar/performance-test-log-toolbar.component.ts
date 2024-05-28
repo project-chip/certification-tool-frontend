@@ -38,6 +38,12 @@ export class PerformanceTestLogToolbarComponent {
     saveAs(file, newTestRun.title + '-' + newTestRun.id.toString() + '.json');
     this.sharedService.cursorBusy(false);
   }
+  
+  // Open External Tool
+  openExternalTool() {
+    console.log('Open External Tool')
+  }
+  
 
   // Take latest execution data and download as file
   downloadExecHistory() {
