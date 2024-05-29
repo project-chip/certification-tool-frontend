@@ -445,7 +445,10 @@ export class TestRunAPI {
 
   generate_performance_summary(id: number, projectId: number) {
     this.testRunService.generate_performance_summary(id, projectId).subscribe(data => {
+      console.log("Info from data: "+ data)
       this.sharedService.setToastAndNotification({ status: 'success', summary: 'Success!', message: 'Performance summary generated!' });
+      const newTab = window.open("http://192.168.64.26:60500/home", "_blank");
+      newTab?.location.reload();
     }, err => {
       this.sharedService.showPopUp();
     });
