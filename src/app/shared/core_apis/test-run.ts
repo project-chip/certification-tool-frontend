@@ -445,10 +445,12 @@ export class TestRunAPI {
 
   generate_performance_summary(id: number, projectId: number) {
     this.testRunService.generate_performance_summary(id, projectId).subscribe(data => {
-      console.log("Info from data: "+ data)
+      const response = JSON.stringify(data)
+      console.log("Response from generate_performance_summary: "+ response)
+      const obj = JSON.parse(response);    
       this.sharedService.setToastAndNotification({ status: 'success', summary: 'Success!', message: 'Performance summary generated!' });
-      const newTab = window.open("http://192.168.64.26:60500/home", "_blank");
-      newTab?.location.reload();
+      // const newTab = window.open("http://192.168.64.26:60500/home", "_blank");
+      const newTab = window.open(obj.url, "_blank");
     }, err => {
       this.sharedService.showPopUp();
     });
