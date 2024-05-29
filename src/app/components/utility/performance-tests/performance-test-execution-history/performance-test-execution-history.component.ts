@@ -244,9 +244,25 @@ export class PerformanceTestExecutionHistoryComponent {
     }
   }
 
+  delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+  }
+
   // Open External Tool
   openExternalTool(executionData: any) {
-    console.log('Open External Tool')
+    const projectId:number = this.sharedAPI.getSelectedProjectType().id;
+
+    this.testSandbox.generate_performance_summary(executionData.id, projectId);
+    console.log("Fim do processamento");
+
+    // Wait 1s in order to summary generation be completed 
+    (async () => { 
+      await this.delay(2000);
+      const newTab = window.open("http://192.168.64.26:60500/home", "_blank");
+      newTab?.location.reload();
+  })();
+
+   
   }
 
   deleteTestRun(id: any) {

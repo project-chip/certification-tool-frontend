@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
 import { saveAs } from 'file-saver';
 import { SharedAPI } from 'src/app/shared/core_apis/shared';
@@ -28,7 +28,12 @@ import { SharedService } from 'src/app/shared/core_apis/shared-utils';
 })
 export class PerformanceTestLogToolbarComponent {
   appState = APP_STATE;
-  constructor(public testRunAPI: TestRunAPI, public sharedAPI: SharedAPI, public sharedService: SharedService) { }
+
+  constructor(public testRunAPI: TestRunAPI, public sharedAPI: SharedAPI, public sharedService: SharedService) {}
+  
+  get currentAppState(): string {
+    return this.sharedAPI.getAppState();
+  }
 
   // Using Blob save the execution data as file
   saveExecHistoryAsFile() {
@@ -39,15 +44,32 @@ export class PerformanceTestLogToolbarComponent {
     this.sharedService.cursorBusy(false);
   }
   
+  delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+  }
+
   // Open External Tool
   openExternalTool() {
-    console.log('Open External Tool')
+    const newTestRunId:number = this.testRunAPI.getRunningTestCasesRawData().id;
+    const projectId:number = this.sharedAPI.getSelectedProjectType().id;
+
+
+    this.testRunAPI.generate_performance_summary(newTestRunId, projectId);
+    console.log("Fim do processamento");
+
+       // Wait 1s in order to summary generation be completed 
+       (async () => { 
+        await this.delay(2000);
+        const newTab = window.open("http://192.168.64.26:60500/home", "_blank");
+        newTab?.location.reload();
+    })();
+
   }
   
 
   // Take latest execution data and download as file
   downloadExecHistory() {
-    if (this.sharedAPI.getAppState() === APP_STATE[0]) {
+    if (this.currentAppState === APP_STATE[0]) {
       this.sharedService.cursorBusy(true);
       const newTestRun: any = this.testRunAPI.getRunningTestCasesRawData();
       this.testRunAPI.getTestReportData(newTestRun.id, this.saveExecHistoryAsFile.bind(this));
@@ -56,7 +78,7 @@ export class PerformanceTestLogToolbarComponent {
 
   // Download the logs as file
   downloadTestLogs() {
-    if (this.sharedAPI.getAppState() === APP_STATE[0]) {
+    if (this.currentAppState === APP_STATE[0]) {
       this.sharedService.cursorBusy(true);
       this.testRunAPI.getLogs(this.testRunAPI.getRunningTestCasesRawData().id, this.saveLogs.bind(this), false);
     }

@@ -19,8 +19,8 @@
     <div fxFlex="1 1 auto" class="table-heading">
       Logs
     </div>
-    <div class="buttons-download" >
-      <p-button  label="External Tool" icon="pi pi-eye" iconPos="left" (click)="openExternalTool()" style="margin-right: 20px;">
+    <div class="buttons-external-tool" >
+      <p-button [disabled]="currentAppState === 'BUSY'" label="External Tool" icon="pi pi-eye" iconPos="left" (onClick)="openExternalTool()" style="margin-right: 20px;">
       </p-button>
     </div>
     <div class="buttons-download" >

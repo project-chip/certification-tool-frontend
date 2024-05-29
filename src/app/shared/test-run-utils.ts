@@ -122,4 +122,8 @@ export class TestRunService {
   downloadGroupedLogs(data: any) {
     return this.http.get(getBaseUrl() + `test_run_executions/${data.id}/grouped-log`, { responseType: 'blob' });
   }
+
+  generate_performance_summary(id: number, projectId: number) {
+    return this.http.post(getBaseUrl() + `test_run_executions/${id}/performance_summary?project_id=${projectId}`, {});
+  }
 }

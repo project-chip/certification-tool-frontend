@@ -442,6 +442,14 @@ export class TestRunAPI {
   downloadGroupedLogs(data: any) {
     return this.testRunService.downloadGroupedLogs(data);
   }
+
+  generate_performance_summary(id: number, projectId: number) {
+    this.testRunService.generate_performance_summary(id, projectId).subscribe(data => {
+      this.sharedService.setToastAndNotification({ status: 'success', summary: 'Success!', message: 'Performance summary generated!' });
+    }, err => {
+      this.sharedService.showPopUp();
+    });
+  }
 }
 
 export function testExecutionTable() {

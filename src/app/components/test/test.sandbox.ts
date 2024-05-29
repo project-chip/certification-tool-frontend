@@ -209,4 +209,8 @@ export class TestSandbox {
   setDetectPicsChanges(data: any) {
     this.testRunStore.setDetectPicsChanges(data);
   }
+
+  generate_performance_summary(id: number, projectId: number) {
+    this.testRunAPI.generate_performance_summary(id, projectId);
+  }
 }
