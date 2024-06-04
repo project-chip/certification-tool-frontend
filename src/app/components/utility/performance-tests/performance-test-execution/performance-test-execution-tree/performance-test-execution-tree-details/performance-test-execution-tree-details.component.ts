@@ -1,5 +1,5 @@
 import { NONE_TYPE } from '@angular/compiler';
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
 
 
@@ -8,19 +8,11 @@ import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
   templateUrl: './performance-test-execution-tree-details.component.html',
   styleUrls: ['./performance-test-execution-tree-details.component.scss']
 })
-export class PerformanceTestExecutionTreeDetailsComponent implements OnChanges {
+export class PerformanceTestExecutionTreeDetailsComponent {
   @Input() testItem: any;
   @Input() item: any;
-  // p50 = 10.000.toFixed(3); // TODO: Placeholder. Change accordingly to the percentile
-  // p95 = 25.000.toFixed(3); // TODO: Placeholder. Change accordingly to the percentile
-  // p99 = 80.000.toFixed(3); // TODO: Placeholder. Change accordingly to the percentile
 
   constructor(public testRunAPI: TestRunAPI,) { }
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes.item);
-    const data = this.testRunAPI.getRunningTestCasesRawData()
-    console.log(data)
-  }
 
   get totalIterations() {
     return this.testItem.length - 2;

@@ -19,15 +19,15 @@
     <div fxFlex="1 1 auto" class="table-heading">
       Logs
     </div>
-    <div class="buttons-external-tool" >
-      <p-button [disabled]="currentAppState === 'BUSY'" label="External Tool" icon="pi pi-eye" iconPos="left" (onClick)="openExternalTool()" style="margin-right: 20px;">
+    <div class="log-toolbar-buttons" >
+      <p-button [disabled]="currentAppState === 'BUSY'" label="External Tool" icon="pi pi-eye" iconPos="left" (onClick)="openExternalTool()">
       </p-button>
     </div>
-    <div class="buttons-download" >
-      <p-button  label="Download Logs" icon="pi pi-download" iconPos="left" (click)="downloadTestLogs()" style="margin-right: 20px;">
+    <div class="log-toolbar-buttons" >
+      <p-button  label="Download Logs" icon="pi pi-download" iconPos="left" (click)="downloadTestLogs()">
       </p-button>
     </div>
-    <div  class="buttons-download" >
+    <div  class="log-toolbar-buttons" >
       <p-button  label="Save Test Report" icon="pi pi-save" iconPos="left" (click)="downloadExecHistory()">
       </p-button>
     </div>
