@@ -14,6 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 -->
-<div>
-  <app-utility-category *ngIf="mainAreaSandbox.fetchCurrentIndex()===6"></app-utility-category>
-</div>
+<ng-container *ngIf="mainAreaSandbox.fetchCurrentIndex()===6">
+  <div class="card-comp-parent-div">
+    <div class="p-card-parent">
+      <p-card class="p-card-comp">
+        <p-tabView #tabView (onChange)="tabViewChange($event)">
+
+          <p-tabPanel header="File Upload">
+            <ng-template pTemplate="content">
+              <app-upload-file></app-upload-file>
+            </ng-template>
+          </p-tabPanel>
+
+          <p-tabPanel header="Stress and Stability Test">
+            <ng-template pTemplate="content">
+              <app-utility-performance></app-utility-performance>
+            </ng-template>
+          </p-tabPanel>
+
+        </p-tabView>
+      </p-card>
+    </div>
+  </div>
+</ng-container>

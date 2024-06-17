@@ -14,14 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Component } from '@angular/core';
 import { MainAreaSandbox } from '../main-area/main-area.sandbox';
+import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
+import { SharedAPI } from 'src/app/shared/core_apis/shared';
 
 @Component({
   selector: 'app-utility',
   templateUrl: './utility.component.html',
   styleUrls: ['./utility.component.scss']
 })
-export class UtilityComponent {
-  constructor(public mainAreaSandbox: MainAreaSandbox) { }
+
+export class UtilityComponent implements AfterViewInit {
+  constructor(public mainAreaSandbox: MainAreaSandbox, public sharedAPI: SharedAPI, public changeDetectorRef: ChangeDetectorRef) {
+    this.sharedAPI.setUtilityIndex(0); // Pre-select File Upload tab
+  }
+
+  tabViewChange(event: any) {
+    this.sharedAPI.setUtilityIndex(event.index);
+    if (event.index === 0) {
+      this.sharedAPI.setTestReportData('');
+    }
+  }
+
+  ngAfterViewInit() {
+    this.changeDetectorRef.detectChanges();
+  }
 }

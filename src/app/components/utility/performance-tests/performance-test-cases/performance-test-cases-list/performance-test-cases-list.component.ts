@@ -19,7 +19,7 @@ import * as _ from 'lodash';
 import { SharedAPI } from 'src/app/shared/core_apis/shared';
 import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
 import { TestRunStore } from 'src/app/store/test-run-store';
-import { TestSandbox } from '../../../../test/test.sandbox';
+import { TestSandbox } from 'src/app/components/test/test.sandbox';
 
 @Component({
   selector: 'app-performance-test-cases-list',

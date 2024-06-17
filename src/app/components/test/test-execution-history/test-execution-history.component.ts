@@ -21,11 +21,12 @@ import { SharedAPI } from 'src/app/shared/core_apis/shared';
 import { testExecutionTable, TestRunAPI } from 'src/app/shared/core_apis/test-run';
 import { TestSandbox } from '../test.sandbox';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { UploadFileComponent } from '../../utility/upload-file/upload-file.component';
+import { UploadFileComponent } from '../../utility/utility-upload-file-tab/upload-file.component';
 import { APP_STATE } from 'src/app/shared/utils/constants';
 import { environment } from 'src/environments/environment';
 import { saveAs } from 'file-saver';
 import { SharedService } from 'src/app/shared/core_apis/shared-utils';
+import { MainAreaSandbox } from '../../main-area/main-area.sandbox';
 
 @Component({
   selector: 'app-test-execution-history',
@@ -42,7 +43,8 @@ export class TestExecutionHistoryComponent {
   searchQuery = '';
   isImportingTestRuns = false;
   constructor(public testSandbox: TestSandbox, public sanitizer: DomSanitizer, public sharedService: SharedService,
-    public sharedAPI: SharedAPI, public dialogService: DialogService, private testRunAPI: TestRunAPI) {
+    public sharedAPI: SharedAPI, public dialogService: DialogService, private testRunAPI: TestRunAPI,
+    public mainAreaSandbox: MainAreaSandbox) {
     sanitizer.bypassSecurityTrustStyle('--bper');
   }
   mystyle(data: any): string {
@@ -87,7 +89,12 @@ export class TestExecutionHistoryComponent {
     }
   }
   newTestRun() {
-    this.testSandbox.setTestScreen(0);
+    if (this.mainAreaSandbox.fetchCurrentIndex() === 1) {
+      this.testSandbox.setTestScreen(0);
+    } else if (this.mainAreaSandbox.fetchCurrentIndex() === 6) {
+      this.sharedAPI.setIsPerformanceTypeSelected(1);
+      this.testSandbox.setPerformanceTestScreen(0);
+    }
   }
   importTestRun(event: any) {
     const projectId = this.sharedAPI.getSelectedProjectType().id;
@@ -214,7 +221,11 @@ export class TestExecutionHistoryComponent {
     this.testRunAPI.setRunningTestCasesRawData([]);
     this.testRunAPI.setRunningTestCases([]);
     this.testRunAPI.setTestLogs([]);
-    this.testSandbox.setTestScreen(1);
+    if (this.mainAreaSandbox.fetchCurrentIndex() === 1) {
+      this.testSandbox.setTestScreen(1);
+    } else if (this.mainAreaSandbox.fetchCurrentIndex() === 6) {
+      this.testSandbox.setPerformanceTestScreen(1);
+    }
     if (environment.isMockActive) {
       this.testRunAPI.getRunningTestsData();
     } else {
@@ -222,7 +233,11 @@ export class TestExecutionHistoryComponent {
     }
   }
   repeatTestRun(executionData: any) {
-    this.testSandbox.setTestScreen(1);
+    if (this.mainAreaSandbox.fetchCurrentIndex() === 1) {
+      this.testSandbox.setTestScreen(1);
+    } else if (this.mainAreaSandbox.fetchCurrentIndex() === 6) {
+      this.testSandbox.setPerformanceTestScreen(1);
+    }
     if (environment.isMockActive) {
       this.testRunAPI.getRunningTestsData();
     } else {
@@ -241,6 +256,11 @@ export class TestExecutionHistoryComponent {
     } else {
       this.testSandbox.unarchiveTestRun(id);
     }
+  }
+
+  openExternalTool(executionData: any) {
+    const projectId: number = this.sharedAPI.getSelectedProjectType().id;
+    this.testSandbox.generate_performance_summary(executionData.id, projectId);
   }
 
   deleteTestRun(id: any) {

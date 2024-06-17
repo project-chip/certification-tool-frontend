@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 import { Component, DoCheck, OnInit } from '@angular/core';
-import { TestSandbox } from '../../../../test/test.sandbox';
+import { TestSandbox } from 'src/app/components/test/test.sandbox';
 
 @Component({
   selector: 'app-performance-test-suites-list',

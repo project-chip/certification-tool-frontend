@@ -20,7 +20,7 @@ import { SharedService } from 'src/app/shared/core_apis/shared-utils';
 import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
 import { WebSocketAPI } from 'src/app/shared/core_apis/websocket';
 import { APP_STATE } from 'src/app/shared/utils/constants';
-import { TestSandbox } from '../../../test/test.sandbox';
+import { TestSandbox } from 'src/app/components/test/test.sandbox';
 
 @Component({
   selector: 'app-performance-test-execution',

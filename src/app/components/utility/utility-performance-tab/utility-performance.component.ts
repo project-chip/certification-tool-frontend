@@ -16,24 +16,14 @@
  */
 import { Component } from '@angular/core';
 import { SharedAPI } from 'src/app/shared/core_apis/shared';
-import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
-import { SharedService } from 'src/app/shared/core_apis/shared-utils';
-import { TestSandbox } from 'src/app/components/test/test.sandbox';
+import { TestSandbox } from '../../test/test.sandbox';
 
 @Component({
-  selector: 'app-create-new-performance-test-run',
-  templateUrl: './create-new-performance-test-run.component.html',
-  styleUrls: ['./create-new-performance-test-run.component.scss']
+  selector: 'app-utility-performance',
+  templateUrl: './utility-performance.component.html',
+  styleUrls: ['./utility-performance.component.scss']
 })
-export class CreateNewPerformanceTestRunComponent {
-  isImportingTestRuns = false;
 
-  constructor(public sharedAPI: SharedAPI,
-    private testRunAPI: TestRunAPI,
-    public sharedService: SharedService,
-    public testSandbox: TestSandbox) { }
-
-  createNewProject() {
-    this.sharedAPI.setIsPerformanceTypeSelected(1);
-  }
+export class UtilityPerformanceComponent {
+  constructor(public sharedAPI: SharedAPI, public testSandBox: TestSandbox) {}
 }
