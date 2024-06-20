@@ -91,7 +91,6 @@ import { SharedService } from './shared/core_apis/shared-utils';
 import { FileUploadModule } from 'primeng/fileupload';
 import { UploadFileComponent } from './components/utility/utility-upload-file-tab/upload-file.component';
 import { UtilityPerformanceComponent } from './components/utility/utility-performance-tab/utility-performance.component';
-import { PerformanceTestsComponent } from './components/utility/performance-tests/performance-tests.component';
 import { PerformanceTestCasesListComponent } from './components/utility/performance-tests/performance-test-cases/performance-test-cases-list/performance-test-cases-list.component';
 import { CreateNewPerformanceTestRunComponent } from './components/utility/performance-tests/create-new-performance-test-run/create-new-performance-test-run.component';
 import { PerformanceTestSuitesListComponent } from './components/utility/performance-tests/performance-test-cases/performance-test-suites-list/performance-test-suites-list.component';
@@ -178,7 +177,6 @@ import { DndDirective } from './shared/dnd.directive';
     CreateNewTestRunComponent,
     UtilityComponent,
     UploadFileComponent,
-    PerformanceTestsComponent,
     UtilityPerformanceComponent,
     PerformanceTestCasesListComponent,
     CreateNewPerformanceTestRunComponent,
