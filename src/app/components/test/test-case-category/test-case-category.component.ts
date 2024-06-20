@@ -23,5 +23,5 @@ import { MainAreaSandbox } from '../../main-area/main-area.sandbox';
   styleUrls: ['./test-case-category.component.scss']
 })
 export class TestCaseCategoryComponent {
-  constructor(public mainAreaSandbox: MainAreaSandbox) {}
+  constructor(public mainAreaSandbox: MainAreaSandbox) { }
 }

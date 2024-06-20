@@ -93,13 +93,9 @@ import { UploadFileComponent } from './components/utility/utility-upload-file-ta
 import { UtilityPerformanceComponent } from './components/utility/utility-performance-tab/utility-performance.component';
 import { PerformanceTestsComponent } from './components/utility/performance-tests/performance-tests.component';
 import { PerformanceTestCasesListComponent } from './components/utility/performance-tests/performance-test-cases/performance-test-cases-list/performance-test-cases-list.component';
-import { PerformanceTestExecutionComponent } from './components/utility/performance-tests/performance-test-execution/performance-test-execution.component';
-import { PerformanceTestLogsComponent } from './components/utility/performance-tests/performance-test-execution/performance-test-logs/performance-test-logs.component';
-import { PerformanceTestLogToolbarComponent } from './components/utility/performance-tests/performance-test-execution/performance-test-logs/performance-test-log-toolbar/performance-test-log-toolbar.component';
 import { CreateNewPerformanceTestRunComponent } from './components/utility/performance-tests/create-new-performance-test-run/create-new-performance-test-run.component';
 import { PerformanceTestSuitesListComponent } from './components/utility/performance-tests/performance-test-cases/performance-test-suites-list/performance-test-suites-list.component';
-import { PerformanceTestExecutionTreeComponent } from './components/utility/performance-tests/performance-test-execution/performance-test-execution-tree/performance-test-execution-tree.component';
-import { PerformanceTestExecutionTreeDetailsComponent } from './components/utility/performance-tests/performance-test-execution/performance-test-execution-tree/performance-test-execution-tree-details/performance-test-execution-tree-details.component';
+import { PerformanceTestExecutionTreeDetailsComponent } from './components/utility/performance-tests/performance-test-execution-tree-details/performance-test-execution-tree-details.component';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { SettingsComponent } from './components/settings/settings.component';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
@@ -185,12 +181,8 @@ import { DndDirective } from './shared/dnd.directive';
     PerformanceTestsComponent,
     UtilityPerformanceComponent,
     PerformanceTestCasesListComponent,
-    PerformanceTestExecutionComponent,
-    PerformanceTestLogsComponent,
-    PerformanceTestLogToolbarComponent,
     CreateNewPerformanceTestRunComponent,
     PerformanceTestSuitesListComponent,
-    PerformanceTestExecutionTreeComponent,
     PerformanceTestExecutionTreeDetailsComponent,
     SettingsComponent,
     TestOperatorComponent,
