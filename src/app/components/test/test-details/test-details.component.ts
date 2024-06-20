@@ -24,6 +24,7 @@ import { TestSandbox } from '../test.sandbox';
 import { environment } from 'src/environments/environment';
 import { SharedService } from 'src/app/shared/core_apis/shared-utils';
 import { TestRunStore } from 'src/app/store/test-run-store';
+import { MainAreaSandbox } from '../../main-area/main-area.sandbox';
 import * as _ from 'lodash';
 
 @Component({
@@ -32,11 +33,12 @@ import * as _ from 'lodash';
   styleUrls: ['./test-details.component.scss']
 })
 export class TestDetailsComponent {
+  searchQuery: any = '';
   selectedDataFinal: any = {};
-  testName = 'UI_Test_Run';
+  testName = this.mainAreaSandbox.fetchCurrentIndex() === 1 ? 'UI_Test_Run' : 'Stress_Stability_Test_Run';
   description = '';
   allowedCharacter = /[^A-Za-z0-9 _-]/;
-  constructor(public testSandbox: TestSandbox, public sharedAPI: SharedAPI,
+  constructor(public testSandbox: TestSandbox, public sharedAPI: SharedAPI, public mainAreaSandbox: MainAreaSandbox,
     public testRunAPI: TestRunAPI, public sharedService: SharedService, public testRunStore: TestRunStore) {
     testRunAPI.getApplicableTestCases(this.sharedAPI.getSelectedProjectType().id, this.setDefaultPicsData.bind(this));
   }
@@ -75,7 +77,11 @@ export class TestDetailsComponent {
       if (!this.testRunAPI.getSelectedOperator()) {
         this.sharedService.setToastAndNotification({ status: 'error', summary: 'Error!', message: 'Select a operator' });
       } else {
-        this.testSandbox.setTestScreen(1);
+        if (this.mainAreaSandbox.fetchCurrentIndex() === 1) {
+          this.testSandbox.setTestScreen(1);
+        } else if (this.mainAreaSandbox.fetchCurrentIndex() === 6) {
+          this.testSandbox.setPerformanceTestScreen(1);
+        }
         this.testRunAPI.getRunningTestsData();
       }
     } else {
@@ -88,7 +94,11 @@ export class TestDetailsComponent {
         this.testRunAPI.setRunningTestCasesRawData([]);
         this.testRunAPI.setRunningTestCases([]);
         this.testRunAPI.setTestLogs([]);
-        this.testSandbox.setTestScreen(1);
+        if (this.mainAreaSandbox.fetchCurrentIndex() === 1) {
+          this.testSandbox.setTestScreen(1);
+        } else if (this.mainAreaSandbox.fetchCurrentIndex() === 6) {
+          this.testSandbox.setPerformanceTestScreen(1);
+        }
         /* eslint-disable @typescript-eslint/naming-convention */
         this.selectedDataFinal = {
           'name': 'test',
@@ -162,5 +172,25 @@ export class TestDetailsComponent {
     }
     this.testRunStore.setSelectedTestCase(emptySelection);
     this.testSandbox.setOnClickChanges();
+  }
+
+  // search
+  onTestSearch() {
+    const filteredData = this.testSandbox.getRunTestCaseData();
+    this.searchQuery = (this.searchQuery).toLowerCase();
+    this.testSandbox.getRunTestCaseData().forEach((data: any, index: any) => {
+      data.forEach((testSuite: any, testSuiteIndex: any) => {
+        testSuite.children.forEach((testCase: any, testCaseIndex: any) => {
+          const title = testCase.title.toLowerCase();
+          filteredData[index][testSuiteIndex].children[testCaseIndex]['filtered'] = false;
+          if (title.includes(this.searchQuery)) {
+            filteredData[index][testSuiteIndex].children[testCaseIndex]['filtered'] = true;
+          }
+        });
+
+      });
+    });
+    this.testSandbox.setTestCaseQuery(this.searchQuery);
+    this.testSandbox.setFilteredData(filteredData);
   }
 }

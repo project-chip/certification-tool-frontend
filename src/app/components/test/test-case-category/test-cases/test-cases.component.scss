@@ -19,13 +19,17 @@
     position: absolute;
     right: 0;
     top: 53px;
+
     input {
-      width: 11vw ;
+      width: 11vw;
     }
   }
+
   .p-tabview-panels {
     padding: 1rem 0;
+    height: 88%;
   }
+
   .test-name {
     display: flex;
     flex-direction: column;
@@ -37,6 +41,7 @@
     position: relative;
     padding-bottom: 10px;
   }
+
   .test-name-master {
     background-color: #f8f9fa;
     height: 45px;
@@ -47,36 +52,45 @@
       margin-bottom: 15px;
     }
   }
+
   .test-name-checkbox {
     margin: 15px 15px 0;
   }
+
   .master-label {
     margin-top: 14px;
     font-weight: bold;
     font-size: 14px;
   }
+
   .custom-icon {
     .p-checkbox .p-checkbox-box {
       border-color: #2196f3;
       background: #2196f3;
+
       .p-checkbox-icon {
         margin-bottom: 4px;
         font-size: larger;
       }
+
       .p-checkbox-icon::before {
         content: "\2212";
         font-weight: bolder;
       }
     }
   }
+
   .label-text {
     font-size: 14px;
   }
+
   .test-case-view {
     height: 100%;
+
     .sub-heading {
       margin: 30px 1px 0 1px;
     }
+
     .scroll-test {
       color: black;
       background: #238f83;
@@ -84,49 +98,52 @@
       /* height: 26px; */
       padding: 11px 0;
       position: absolute;
-     
-     }
-     .pi-angle-right {
+
+    }
+
+    .pi-angle-right {
       right: 23%;
       top: 62px;
       z-index: 9999;
-     }
-     .pi-angle-left {
+    }
+
+    .pi-angle-left {
       position: absolute;
       top: 64px;
       z-index: 9999;
-     }
+    }
   }
+
   .testcase-custom-view {
     font-size: 14px;
+
     ul {
       width: 77%;
-    /* line-break: anywhere; */
-    /* white-space: nowrap; */
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    height: 58px;
-    border: none;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      height: 58px;
+      border: none;
     }
+
     .parent-test-cases {
       ::-webkit-scrollbar {
         display: block !important;
       }
     }
+
     ::-webkit-scrollbar {
       display: none;
     }
   }
+
   .testcase-custom-view,
   .p-tabview-panel,
   .parent-test-cases {
     height: 100%;
   }
-  .p-tabview-panels {
-    height: 88%;
-  }
+
   .isDisabled {
     pointer-events: none;
     opacity: 0.59;

@@ -18,13 +18,11 @@
     <app-create-new-performance-test-run
         *ngIf="sharedAPI.getIsPerformanceTypeSelected()===0 && testSandBox.getPerformanceTestScreen() ===0">
     </app-create-new-performance-test-run>
-    <app-performance-tests
+    <app-test-details
         *ngIf="sharedAPI.getIsPerformanceTypeSelected()==1 && testSandBox.getPerformanceTestScreen() ===0">
-    </app-performance-tests>
-    <app-performance-test-execution
-        *ngIf="testSandBox.getPerformanceTestScreen() ===1">
-    </app-performance-test-execution>
-    <app-test-execution-history
-        *ngIf="testSandBox.getPerformanceTestScreen() ===2">
+    </app-test-details>
+    <app-test-execution *ngIf="testSandBox.getPerformanceTestScreen() ===1">
+    </app-test-execution>
+    <app-test-execution-history *ngIf="testSandBox.getPerformanceTestScreen() ===2">
     </app-test-execution-history>
 </ng-container>

@@ -15,10 +15,13 @@
  * limitations under the License.
  */
 import { Component } from '@angular/core';
+import { MainAreaSandbox } from '../../main-area/main-area.sandbox';
 
 @Component({
   selector: 'app-test-case-category',
   templateUrl: './test-case-category.component.html',
   styleUrls: ['./test-case-category.component.scss']
 })
-export class TestCaseCategoryComponent { }
+export class TestCaseCategoryComponent {
+  constructor(public mainAreaSandbox: MainAreaSandbox) {}
+}

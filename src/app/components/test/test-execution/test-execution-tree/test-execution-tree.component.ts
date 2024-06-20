@@ -17,6 +17,8 @@
 import { Component } from '@angular/core';
 import { SharedAPI } from 'src/app/shared/core_apis/shared';
 import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
+import { TestSandbox } from '../../test.sandbox';
+import { MainAreaSandbox } from 'src/app/components/main-area/main-area.sandbox';
 import * as _ from 'lodash';
 @Component({
   selector: 'app-test-execution-tree',
@@ -25,7 +27,8 @@ import * as _ from 'lodash';
 })
 export class TestExecutionTreeComponent {
   activeBlock: any;
-  constructor(public testRunAPI: TestRunAPI, public sharedAPI: SharedAPI) { }
+  constructor(public testRunAPI: TestRunAPI, public sharedAPI: SharedAPI,
+    public testSandbox: TestSandbox, public mainAreaSandbox: MainAreaSandbox) { }
 
   expandClick(data: any) {
     if (data.children.length) {
@@ -102,5 +105,10 @@ export class TestExecutionTreeComponent {
       className = 'pi pi-times error';
     }
     return className;
+  }
+
+  // get current test case data
+  runTestCaseData() {
+    return this.testSandbox.getRunTestCaseData()[this.testSandbox.getCurrentTestCategory()];
   }
 }

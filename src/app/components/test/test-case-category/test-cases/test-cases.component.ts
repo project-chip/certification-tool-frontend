@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 import { Component, OnDestroy } from '@angular/core';
+import { MainAreaSandbox } from 'src/app/components/main-area/main-area.sandbox';
 import { TestSandbox } from '../../test.sandbox';
 
 @Component({
@@ -26,7 +27,7 @@ export class TestCasesComponent implements OnDestroy {
   searchQuery: any = '';
   filteredCategories = ['SDK Performance Tests'];
 
-  constructor(public testSandbox: TestSandbox) {
+  constructor(public mainAreaSandbox: MainAreaSandbox, public testSandbox: TestSandbox) {
     this.onTestSearch();
   }
   // to find the number of selectedtestcases

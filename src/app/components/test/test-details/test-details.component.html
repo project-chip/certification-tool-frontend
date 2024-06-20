@@ -15,9 +15,9 @@
  * limitations under the License.
 -->
 <div fxLayout="column" class="test-details" *ngIf="!sharedAPI.getTestCaseLoader()">
-  <p class="sub-heading mt-15 mb-0">Test Details</p>
-  <div fxLayout="row" fxLayoutGap="50px" fxLayoutAlign="space-between center" class="container mt-12">
-
+  <p *ngIf="mainAreaSandbox.fetchCurrentIndex() === 1" class="sub-heading mt-15 mb-0">Test Details</p>
+  <div fxLayout="row" fxLayoutGap="50px"
+    [fxLayoutAlign]="mainAreaSandbox.fetchCurrentIndex() === 1 ? 'space-between center' : ''" class="container mt-12">
     <div fxLayoutAlign="center center" fxLayoutGap="30px">
       <div class="test-name-parent" fxLayoutAlign="center center" fxLayout="column">
         <div>
@@ -28,7 +28,7 @@
           {{testName ==='' ? 'Test name cannot be empty' : 'Special cases are not allowed'}}
         </small>
       </div>
-      <div fxLayoutAlign="center center">
+      <div *ngIf="mainAreaSandbox.fetchCurrentIndex() === 1" fxLayoutAlign="center center">
         <div>
           <p class="textbox-label">Description</p>
           <input type="text" pInputText placeholder="(optional)" [(ngModel)]="description">
@@ -40,9 +40,16 @@
       <app-test-operator></app-test-operator>
     </div>
 
+    <div *ngIf="mainAreaSandbox.fetchCurrentIndex() === 6" class="box" fxLayout="row">
+      <span class="p-input-icon-left" fxFlexAlign="end">
+        <i class="pi pi-search"></i>
+        <input type="text" (keyup)="onTestSearch()" [(ngModel)]="searchQuery" pInputText
+          placeholder="Search test cases" />
+      </span>
+    </div>
+
   </div>
-  <app-test-case-category class="app-test-case-component">
-  </app-test-case-category>
+  <app-test-case-category class="app-test-case-component"></app-test-case-category>
   <div class="test-buttons">
     <p-button [disabled]="isTestCaseSelected() || isWarningExist()" class="start-button" (click)="onTestStart()">Start
     </p-button>

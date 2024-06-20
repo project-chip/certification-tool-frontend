@@ -21,6 +21,7 @@ import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
 import { WebSocketAPI } from 'src/app/shared/core_apis/websocket';
 import { APP_STATE } from 'src/app/shared/utils/constants';
 import { TestSandbox } from '../test.sandbox';
+import { MainAreaSandbox } from '../../main-area/main-area.sandbox';
 
 @Component({
   selector: 'app-test-execution',
@@ -32,7 +33,7 @@ export class TestExecutionComponent implements OnInit {
   inputItems: any;
   appState = APP_STATE;
   abortClicked = false;
-  constructor(public sharedAPI: SharedAPI, public testSandBox: TestSandbox,
+  constructor(public sharedAPI: SharedAPI, public testSandBox: TestSandbox, public mainAreaSandbox: MainAreaSandbox,
     public webSocketAPI: WebSocketAPI, private testRunAPI: TestRunAPI, public sharedService: SharedService) { }
   onAbort() {
     this.sharedAPI.setShowCustomPopup('ABORT');
@@ -45,7 +46,11 @@ export class TestExecutionComponent implements OnInit {
     this.testRunAPI.setRunningTestCasesRawData([]);
     this.testRunAPI.setRunningTestCases([]);
     this.testRunAPI.setTestLogs([]);
-    this.testSandBox.setTestScreen(2);
+    if (this.mainAreaSandbox.fetchCurrentIndex() === 1) {
+      this.testSandBox.setTestScreen(2);
+    } else if (this.mainAreaSandbox.fetchCurrentIndex() === 6) {
+      this.testSandBox.setPerformanceTestScreen(2);
+    }
   }
   onYesClick() {
     this.abortClicked = true;
@@ -66,6 +71,3 @@ export class TestExecutionComponent implements OnInit {
   }
 
 }
-
-
-
