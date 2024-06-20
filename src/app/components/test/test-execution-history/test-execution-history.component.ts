@@ -89,9 +89,9 @@ export class TestExecutionHistoryComponent {
     }
   }
   newTestRun() {
-    if (this.mainAreaSandbox.fetchCurrentIndex() === 1) {
+    if (this.mainAreaSandbox.isTestPanel) {
       this.testSandbox.setTestScreen(0);
-    } else if (this.mainAreaSandbox.fetchCurrentIndex() === 6) {
+    } else if (this.mainAreaSandbox.isUtilityPanel) {
       this.sharedAPI.setIsPerformanceTypeSelected(1);
       this.testSandbox.setPerformanceTestScreen(0);
     }
@@ -221,9 +221,9 @@ export class TestExecutionHistoryComponent {
     this.testRunAPI.setRunningTestCasesRawData([]);
     this.testRunAPI.setRunningTestCases([]);
     this.testRunAPI.setTestLogs([]);
-    if (this.mainAreaSandbox.fetchCurrentIndex() === 1) {
+    if (this.mainAreaSandbox.isTestPanel) {
       this.testSandbox.setTestScreen(1);
-    } else if (this.mainAreaSandbox.fetchCurrentIndex() === 6) {
+    } else if (this.mainAreaSandbox.isUtilityPanel) {
       this.testSandbox.setPerformanceTestScreen(1);
     }
     if (environment.isMockActive) {
@@ -233,9 +233,9 @@ export class TestExecutionHistoryComponent {
     }
   }
   repeatTestRun(executionData: any) {
-    if (this.mainAreaSandbox.fetchCurrentIndex() === 1) {
+    if (this.mainAreaSandbox.isTestPanel) {
       this.testSandbox.setTestScreen(1);
-    } else if (this.mainAreaSandbox.fetchCurrentIndex() === 6) {
+    } else if (this.mainAreaSandbox.isUtilityPanel) {
       this.testSandbox.setPerformanceTestScreen(1);
     }
     if (environment.isMockActive) {

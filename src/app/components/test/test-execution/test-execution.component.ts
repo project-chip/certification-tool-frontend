@@ -46,9 +46,9 @@ export class TestExecutionComponent implements OnInit {
     this.testRunAPI.setRunningTestCasesRawData([]);
     this.testRunAPI.setRunningTestCases([]);
     this.testRunAPI.setTestLogs([]);
-    if (this.mainAreaSandbox.fetchCurrentIndex() === 1) {
+    if (this.mainAreaSandbox.isTestPanel) {
       this.testSandBox.setTestScreen(2);
-    } else if (this.mainAreaSandbox.fetchCurrentIndex() === 6) {
+    } else if (this.mainAreaSandbox.isUtilityPanel) {
       this.testSandBox.setPerformanceTestScreen(2);
     }
   }

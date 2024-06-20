@@ -15,11 +15,12 @@
  * limitations under the License.
 -->
 <div fxLayout="column" class="test-details" *ngIf="!sharedAPI.getTestCaseLoader()">
-  <p *ngIf="mainAreaSandbox.fetchCurrentIndex() === 1" class="sub-heading mt-15 mb-0">Test Details</p>
-  <div fxLayout="row" fxLayoutGap="50px"
-    [fxLayoutAlign]="mainAreaSandbox.fetchCurrentIndex() === 1 ? 'space-between center' : ''" class="container mt-12">
+  <p *ngIf="mainAreaSandbox.isTestPanel" class="sub-heading mt-15 mb-0">Test Details</p>
+
+  <div *ngIf="mainAreaSandbox.isTestPanel" fxLayout="row" fxLayoutGap="50px" fxLayoutAlign="space-between center"
+    class="container mt-12">
     <div fxLayoutAlign="center center" fxLayoutGap="30px">
-      <div class="test-name-parent" fxLayoutAlign="center center" fxLayout="column">
+      <div class="test-name-parent" fxLayout="column">
         <div>
           <p class="textbox-label">Test Name</p>
           <input type="text" pInputText placeholder="Sample Test" maxlength="30" [(ngModel)]="testName" />
@@ -28,7 +29,7 @@
           {{testName ==='' ? 'Test name cannot be empty' : 'Special cases are not allowed'}}
         </small>
       </div>
-      <div *ngIf="mainAreaSandbox.fetchCurrentIndex() === 1" fxLayoutAlign="center center">
+      <div>
         <div>
           <p class="textbox-label">Description</p>
           <input type="text" pInputText placeholder="(optional)" [(ngModel)]="description">
@@ -36,21 +37,39 @@
       </div>
     </div>
 
-    <div fxLayoutAlign="center center">
+    <div>
       <app-test-operator></app-test-operator>
     </div>
+  </div>
 
-    <div *ngIf="mainAreaSandbox.fetchCurrentIndex() === 6" class="box" fxLayout="row">
+  <div *ngIf="mainAreaSandbox.isUtilityPanel" fxLayout="row" fxLayoutGap="50px" fxLayoutAlign="space-between end"
+    class="container">
+    <div fxLayoutAlign="center center" fxLayoutGap="30px">
+      <div class="test-name-parent" fxLayout="column">
+        <div>
+          <p class="textbox-label">Test Name</p>
+          <input type="text" pInputText placeholder="Sample Test" maxlength="30" [(ngModel)]="testName" />
+        </div>
+        <small *ngIf="testName ==='' || allowedCharacter.test(testName)" class="test-name-warning">
+          {{testName ==='' ? 'Test name cannot be empty' : 'Special cases are not allowed'}}
+        </small>
+      </div>
+      <div>
+        <app-test-operator></app-test-operator>
+      </div>
+    </div>
+    <div class="box" fxLayout="row">
       <span class="p-input-icon-left" fxFlexAlign="end">
         <i class="pi pi-search"></i>
         <input type="text" (keyup)="onTestSearch()" [(ngModel)]="searchQuery" pInputText
           placeholder="Search test cases" />
       </span>
     </div>
-
   </div>
+
   <app-test-case-category class="app-test-case-component"></app-test-case-category>
-  <div class="test-buttons">
+
+  <div class="test-buttons" [ngClass]="{'mt-12': mainAreaSandbox.isUtilityPanel}">
     <p-button [disabled]="isTestCaseSelected() || isWarningExist()" class="start-button" (click)="onTestStart()">Start
     </p-button>
     <p-button (click)="clearTestSelection()" class="clear-test">Clear Selection

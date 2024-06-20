@@ -53,8 +53,8 @@
   <ng-template #recursiveListTmpl let-list="list" let-index="index" let-testCollectionKeys="testCollectionKeys">
     <ng-container *ngFor="let item of list; let ind = index">
       <ng-container *ngIf="testCollectionKeys.includes(item.name) || index !==1">
-        <div *ngIf="item.children.length || mainAreaSandbox.fetchCurrentIndex() !== 6" fxLayout="row"
-          (click)="expandClick(item)" [class]="'testcase-div-'+index"
+        <div *ngIf="item.children.length || !mainAreaSandbox.isUtilityPanel" fxLayout="row" (click)="expandClick(item)"
+          [class]="'testcase-div-'+index"
           [ngClass]="{'remove-padding': !item.children.length, 'remove-border': !item.children.length && list.length !== ind+1}">
           <div fxFlex="1 1 auto" class="text-ellipsis">
             <i *ngIf="item.status ==='passed'" class="pi pi-check success"></i>
@@ -73,7 +73,7 @@
           </div>
         </div>
         <ng-container *ngIf="item.expanded">
-          <ng-container *ngIf="mainAreaSandbox.fetchCurrentIndex() === 6 && index === 2">
+          <ng-container *ngIf="mainAreaSandbox.isUtilityPanel && index === 2">
             <app-performance-test-execution-tree-details [testItem]="item.children"
               [item]="item"></app-performance-test-execution-tree-details>
           </ng-container>

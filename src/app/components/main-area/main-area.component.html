@@ -21,12 +21,12 @@
     <app-side-nav></app-side-nav>
   </div>
   <div fxFlex="1 0 auto" class="mainarea-parent-div">
-    <app-project *ngIf="mainAreaSandbox.fetchCurrentIndex() === 5"></app-project>
-    <app-test *ngIf="mainAreaSandbox.fetchCurrentIndex() === 1"></app-test>
-    <app-project-table *ngIf="mainAreaSandbox.fetchCurrentIndex() === 4"></app-project-table>
-    <app-utility *ngIf="mainAreaSandbox.fetchCurrentIndex() === 6"></app-utility>
-    <app-settings *ngIf="mainAreaSandbox.fetchCurrentIndex() === 3"></app-settings>
-    <div *ngIf="mainAreaSandbox.fetchCurrentIndex() === 0" class="construction">
+    <app-project *ngIf="mainAreaSandbox.isProjectPanel"></app-project>
+    <app-test *ngIf="mainAreaSandbox.isTestPanel"></app-test>
+    <app-project-table *ngIf="mainAreaSandbox.isProjectTablePanel"></app-project-table>
+    <app-utility *ngIf="mainAreaSandbox.isUtilityPanel"></app-utility>
+    <app-settings *ngIf="mainAreaSandbox.isSettingsPanel"></app-settings>
+    <div *ngIf="mainAreaSandbox.isHomePanel" class="construction">
       <img src="../../../assets/under_construction.png" alt="under_construction">
       <span class="construction-span">Page Under Construction</span>
     </div>

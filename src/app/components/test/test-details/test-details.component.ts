@@ -35,7 +35,7 @@ import * as _ from 'lodash';
 export class TestDetailsComponent {
   searchQuery: any = '';
   selectedDataFinal: any = {};
-  testName = this.mainAreaSandbox.fetchCurrentIndex() === 1 ? 'UI_Test_Run' : 'Stress_Stability_Test_Run';
+  testName = this.mainAreaSandbox.isTestPanel ? 'UI_Test_Run' : 'Stress_Stability_Test_Run';
   description = '';
   allowedCharacter = /[^A-Za-z0-9 _-]/;
   constructor(public testSandbox: TestSandbox, public sharedAPI: SharedAPI, public mainAreaSandbox: MainAreaSandbox,
@@ -77,9 +77,9 @@ export class TestDetailsComponent {
       if (!this.testRunAPI.getSelectedOperator()) {
         this.sharedService.setToastAndNotification({ status: 'error', summary: 'Error!', message: 'Select a operator' });
       } else {
-        if (this.mainAreaSandbox.fetchCurrentIndex() === 1) {
+        if (this.mainAreaSandbox.isTestPanel) {
           this.testSandbox.setTestScreen(1);
-        } else if (this.mainAreaSandbox.fetchCurrentIndex() === 6) {
+        } else if (this.mainAreaSandbox.isUtilityPanel) {
           this.testSandbox.setPerformanceTestScreen(1);
         }
         this.testRunAPI.getRunningTestsData();
@@ -94,9 +94,9 @@ export class TestDetailsComponent {
         this.testRunAPI.setRunningTestCasesRawData([]);
         this.testRunAPI.setRunningTestCases([]);
         this.testRunAPI.setTestLogs([]);
-        if (this.mainAreaSandbox.fetchCurrentIndex() === 1) {
+        if (this.mainAreaSandbox.isTestPanel) {
           this.testSandbox.setTestScreen(1);
-        } else if (this.mainAreaSandbox.fetchCurrentIndex() === 6) {
+        } else if (this.mainAreaSandbox.isUtilityPanel) {
           this.testSandbox.setPerformanceTestScreen(1);
         }
         /* eslint-disable @typescript-eslint/naming-convention */

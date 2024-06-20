@@ -14,8 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 -->
-<div fxLayout="column" class="test-case-view">
-  <ng-container *ngIf="mainAreaSandbox.fetchCurrentIndex() === 1">
+<div fxLayout="column" class="test-case-view" [ngClass]="{'mt-12': mainAreaSandbox.isUtilityPanel}">
+  <ng-container *ngIf="mainAreaSandbox.isTestPanel">
     <p class="sub-heading mt-15">Test Cases</p>
     <span class="p-input-icon-left search-test-case">
       <i class="pi pi-search"></i>
@@ -27,7 +27,7 @@
     <i class="pi pi-angle-right scroll-test" *ngIf="isNavbar('RC')" (click)="scrollNavbar('R')"></i>
   </ng-container>
 
-  <p-tabView *ngIf="mainAreaSandbox.fetchCurrentIndex() === 1" (onChange)="testCategoryClicked($event.index)"
+  <p-tabView *ngIf="mainAreaSandbox.isTestPanel" (onChange)="testCategoryClicked($event.index)"
     styleClass="testcase-custom-view" fxFlex="1 1 auto">
     <ng-container *ngFor="let category of this.testSandbox.getTestSuiteCategory(); let index = index">
       <p-tabPanel *ngIf="shouldShowTests(category)">
@@ -43,7 +43,8 @@
     </ng-container>
   </p-tabView>
 
-  <div *ngIf="mainAreaSandbox.fetchCurrentIndex() === 6" fxLayout fxFlex="1 1 auto" class="parent-test-cases">
+  <div *ngIf="mainAreaSandbox.isUtilityPanel" fxLayout fxFlex="1 1 auto" class="parent-test-cases">
     <app-performance-test-suites-list fxFlex="40%"></app-performance-test-suites-list>
     <app-performance-test-cases-list fxFlex></app-performance-test-cases-list>
   </div>
+</div>

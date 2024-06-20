@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 -->
-<div class="utility-upload-parent" *ngIf="(mainAreaSandbox.fetchCurrentIndex()===6 && sharedAPI.getUtilityIndex()===0)">
+<div class="utility-upload-parent" *ngIf="(mainAreaSandbox.isUtilityPanel && sharedAPI.getUtilityIndex()===0)">
   <div class="upload-file" fxLayout fxLayoutAlign="none center">
     <div class="file-upload">
       <input type="file" (change)="onUpload($event)" accept=".json" id="file" class="input-file">
@@ -32,8 +32,8 @@
 </div>
 
 <div
-  [ngClass]="{'test-report':(mainAreaSandbox.fetchCurrentIndex()===6 || mainAreaSandbox.fetchCurrentIndex()===1) && fileName,
-              'test-border':(mainAreaSandbox.fetchCurrentIndex()===6 || mainAreaSandbox.fetchCurrentIndex()===1) && sharedAPI.getTestReportData()}">
+  [ngClass]="{'test-report':(mainAreaSandbox.isUtilityPanel || mainAreaSandbox.isTestPanel) && fileName,
+              'test-border':(mainAreaSandbox.isUtilityPanel || mainAreaSandbox.isTestPanel) && sharedAPI.getTestReportData()}">
   <div fxLayout="column" fxLayoutAlign="center center" *ngIf="sharedAPI.getTestReportData()">
     <div class="report-heading" fxLayout fxLayoutAlign="space-between center">
       <h3 class="report-title">Matter Test Harness - Test Run Report</h3>

@@ -141,11 +141,6 @@
     height: 100%;
   }
 
-  .p-tabview-panels {
-    padding: 0 !important;
-    height: 93%;
-  }
-
   .isDisabled {
     pointer-events: none;
     opacity: 0.59;
@@ -211,13 +206,8 @@
       }
     }
 
-    .test-parent,
     .app-test-component {
       height: 100%;
-    }
-
-    .test-parent {
-      padding: 15px;
     }
 
     p-badge .p-badge.p-component {
