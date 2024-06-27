@@ -134,15 +134,23 @@
     }
   }
 
+  .utility-performance-tab-panel,
   .testcase-custom-view,
   .p-tabview-panel,
   .p-tabview,
   .parent-test-cases {
     height: 100%;
   }
+  .p-tabview.p-component {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
 
   .p-tabview-panels {
-    height: 93%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
   .isDisabled {
@@ -155,17 +163,19 @@
   }
 
   .card-comp-parent-div {
-    height: calc(100vh - 97px);
+    height: 100%;
     width: calc(100vw - 114px);
-    margin: 14px;
+    margin: 0 14px;
 
     .p-card-parent {
+      display: flex;
+      flex-direction: column;
       height: 100%;
     }
   }
 
   .p-card-comp {
-    flex: 1 1 auto;
+    height: 100%;
 
     &>.p-component {
       height: 100%;

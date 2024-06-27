@@ -21,6 +21,8 @@
     box-shadow: unset;
   }
   .app-test-cases {
+    display: flex;
+    flex-direction: column;
     position: relative;
   }
   .tabview-custom {

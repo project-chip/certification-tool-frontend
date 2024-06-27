@@ -17,6 +17,8 @@
 :host ::ng-deep {
   .test-name {
     border-bottom-right-radius: 4px;
+    min-height: 100px;
+    height: 100%;
   }
   .test-name-master{
     border-top-right-radius: 4px;

@@ -30,6 +30,11 @@
     height: 88%;
   }
 
+  .tests-area {
+    display: flex;
+    flex-direction: column;
+  }
+
   .test-name {
     display: flex;
     flex-direction: column;

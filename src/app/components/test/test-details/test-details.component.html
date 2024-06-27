@@ -69,7 +69,7 @@
 
   <app-test-case-category class="app-test-case-component"></app-test-case-category>
 
-  <div class="test-buttons" [ngClass]="{'mt-12': mainAreaSandbox.isUtilityPanel}">
+  <div class="test-buttons" [ngClass]="{'mt-20': mainAreaSandbox.isUtilityPanel}">
     <p-button [disabled]="isTestCaseSelected() || isWarningExist()" class="start-button" (click)="onTestStart()">Start
     </p-button>
     <p-button (click)="clearTestSelection()" class="clear-test">Clear Selection
