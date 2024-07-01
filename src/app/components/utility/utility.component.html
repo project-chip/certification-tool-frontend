@@ -20,13 +20,13 @@
       <p-card class="p-card-comp">
         <p-tabView #tabView (onChange)="tabViewChange($event)">
 
-          <p-tabPanel header="File Upload">
+          <p-tabPanel header="File Upload" class="utility-tab-panel">
             <ng-template pTemplate="content">
               <app-upload-file></app-upload-file>
             </ng-template>
           </p-tabPanel>
 
-          <p-tabPanel header="Stress and Stability Test" class="utility-performance-tab-panel">
+          <p-tabPanel header="Stress and Stability Test" class="utility-tab-panel">
             <ng-template pTemplate="content">
               <app-utility-performance></app-utility-performance>
             </ng-template>
