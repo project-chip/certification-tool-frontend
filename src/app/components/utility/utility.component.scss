@@ -175,7 +175,8 @@
   }
 
   .p-card-comp {
-    height: 100%;
+    flex: auto;
+    overflow: auto;
 
     &>.p-component {
       height: 100%;
