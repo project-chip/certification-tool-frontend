@@ -50,6 +50,8 @@
 }
 .test-report {
   margin-top: 12px;
+  max-height: calc(100vh - 217px);
+  overflow-y: scroll;
 }
 .test-border,
 .utility-parent {
