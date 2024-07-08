@@ -21,8 +21,11 @@
     max-height: 400px;
     height: 100%;
   }
-  .test-name-master{
+  .test-name-master {
     border-top-right-radius: 4px;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
   }
   .span-input-number {
     margin: auto 10px 0;
