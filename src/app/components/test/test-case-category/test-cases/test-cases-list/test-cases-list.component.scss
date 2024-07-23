@@ -39,4 +39,7 @@
   .d-none {
     display: none !important;
   }
+  .disabled {
+    pointer-events: none;
+  }
 }

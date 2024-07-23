@@ -16,10 +16,10 @@
 -->
 <div class="test-name-master" fxLayout fxLayoutAlign="space-between center">
   <div fxLayout fxLayoutAlign="center" class="master-text">
-    <p-checkbox class="test-name-checkbox"
+    <p-checkbox [disabled]="this.certificationMode" class="test-name-checkbox"
       [value]="this.testSandbox.getRunTestCaseData()[this.testSandbox.getCurrentTestCategory()]"
       (click)="checkAndUncheckAll(); currentElement('0')" [binary]=true [(ngModel)]="masterCheckBox"
-      [ngClass]="{'custom-icon':isPartiallySelected(),'isDisabled':runTestCaseData().length===0 || this.testSandbox.getTestCaseQuery()!==''}">
+      [ngClass]="{'custom-icon':isPartiallySelected(),'isDisabled':runTestCaseData().length===0 || this.testSandbox.getTestCaseQuery()!=='','disabled':this.certificationMode}">
     </p-checkbox>
     <label class="master-label">Test Suites</label>
   </div>
@@ -34,8 +34,8 @@
       [ngClass]='{"current-element": +category.key === this.testSandbox.getLastChecked()}' class="p-field-checkbox"
       fxLayout fxLayoutAlign="space-between center">
       <div fxLayout fxLayoutAlign="center center" class="div-test-name-checkbox">
-        <p-checkbox class="test-name-checkbox"
-          [ngClass]='{"custom-icon": checkCurrentChildLength(category.key),"isDisabled":this.testSandbox.getTestCaseQuery()!==""}'
+        <p-checkbox [disabled]="this.certificationMode" class="test-name-checkbox"
+          [ngClass]='{"custom-icon": checkCurrentChildLength(category.key),"isDisabled":this.testSandbox.getTestCaseQuery()!=="","disabled": this.certificationMode}'
           [value]="category" [binary]="true" [ngModel]='isParentSelected(category.key)' [inputId]="category.key"
           (click)="isMasterChecked(category.key)">
         </p-checkbox>
