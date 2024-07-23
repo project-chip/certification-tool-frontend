@@ -38,6 +38,11 @@
             </div>
             <span style="padding-left: 8px;">Importing Test Runs...</span>
           </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+              <p-toggleButton [(ngModel)]="certificationMode" class="toggle-button"
+              [onIcon]="'pi pi-check-circle'" [offIcon]="'pi pi-times-circle'" (onChange)="certModeToggle()"></p-toggleButton>
+              <div class="check-label">Certification Mode</div>
+          </div>
         </div>
         <div>
           <span class="p-input-icon-left">

@@ -93,4 +93,8 @@ export class SharedStore {
   @action setShaVersion(data: any) {
     this.shaVersion = data;
   }
+  @observable certificationMode = false;
+  @action setCertificationMode(certificationMode: any) {
+    this.certificationMode = certificationMode;
+  }
 }

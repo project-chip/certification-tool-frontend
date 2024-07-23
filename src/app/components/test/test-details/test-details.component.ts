@@ -117,7 +117,8 @@ export class TestDetailsComponent {
           this.selectedDataFinal,
           this.testName,
           this.testRunAPI.getSelectedOperator().id,
-          this.description
+          this.description,
+          this.sharedAPI.getCertificationMode()
         );
       }
     }
