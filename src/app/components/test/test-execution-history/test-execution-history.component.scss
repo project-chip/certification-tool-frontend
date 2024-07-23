@@ -206,4 +206,15 @@
     padding-left: 8px;
     font-size: 1.025rem;
   }
+
+  .blank {
+    visibility: hidden;
+  }
+
+  .icon-thick {
+    float: left;
+    width: 24px;
+    color:#2196F3;
+    text-shadow: 0.5px 0.5px 0px #2196F3, -0.5px -0.5px 0px #2196F3, 0.5px -0.5px 0px #2196F3, -0.5px 0.5px 0px #2196F3;
+  }
 }

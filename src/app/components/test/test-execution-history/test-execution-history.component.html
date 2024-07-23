@@ -81,6 +81,10 @@
     <ng-template pTemplate="body" let-data>
       <tr class="table_row">
         <td class="test-name-td capitalize test-title" (click)="showExecutionPage(data.id)">
+          <div class="icon-thick">
+            <i [ngClass]="data.certification_mode ? 'pi pi-check-circle' : 'pi pi-times-circle blank'" 
+            pTooltip="Certification Mode" tooltipPosition="bottom"></i>
+          </div>
           {{ data.title }}
         </td>
         <td class="capitalize" style="width:249px ;">
