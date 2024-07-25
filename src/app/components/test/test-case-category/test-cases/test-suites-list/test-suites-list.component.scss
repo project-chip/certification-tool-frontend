@@ -36,4 +36,7 @@
   .no-test-available {
     height: 100%;
   }
+  .disabled {
+    pointer-events: none;
+  }
 }

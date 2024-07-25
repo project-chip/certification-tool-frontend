@@ -38,6 +38,11 @@
             </div>
             <span style="padding-left: 8px;">Importing Test Runs...</span>
           </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+              <p-toggleButton [(ngModel)]="certificationMode" class="toggle-button"
+              [onIcon]="'pi pi-check-circle'" [offIcon]="'pi pi-times-circle'" (onChange)="certModeToggle()"></p-toggleButton>
+              <div class="check-label">Certification Mode</div>
+          </div>
         </div>
         <div>
           <span class="p-input-icon-left">
@@ -76,6 +81,10 @@
     <ng-template pTemplate="body" let-data>
       <tr class="table_row">
         <td class="test-name-td capitalize test-title" (click)="showExecutionPage(data.id)">
+          <div class="icon-thick">
+            <i [ngClass]="data.certification_mode ? 'pi pi-check-circle' : 'pi pi-times-circle blank'" 
+            pTooltip="Certification Mode" tooltipPosition="bottom"></i>
+          </div>
           {{ data.title }}
         </td>
         <td class="capitalize" style="width:249px ;">

@@ -121,4 +121,10 @@ export class SharedAPI {
   getShaVersion() {
     return this.sharedStore.shaVersion;
   }
+  getCertificationMode() {
+    return this.sharedStore.certificationMode;
+  }
+  setCertificationMode(certMode: boolean) {
+    this.sharedStore.setCertificationMode(certMode);
+  }
 }

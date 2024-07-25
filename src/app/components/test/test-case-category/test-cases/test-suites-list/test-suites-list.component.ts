@@ -16,6 +16,7 @@
  */
 import { Component, DoCheck } from '@angular/core';
 import { TestSandbox } from '../../../test.sandbox';
+import { SharedAPI } from 'src/app/shared/core_apis/shared';
 
 @Component({
   selector: 'app-test-suites-list',
@@ -27,13 +28,14 @@ export class TestSuitesListComponent implements DoCheck {
   masterCheckBox = false;
   lastChanges = true;
   categoryChanges = -1;
-  constructor(public testSandbox: TestSandbox) {
+  certificationMode = false;
+  constructor(public testSandbox: TestSandbox, public sharedAPI: SharedAPI) {
     // defines number of index(test-suites)
     for (let index = 0; index < this.testSandbox.getRunTestCaseData().length; index++) {
       this.selectedCategories[index] = [];
     }
     this.testSandbox.setDefaultSelectedData(this.selectedCategories);
-
+    this.certificationMode = this.sharedAPI.getCertificationMode();
   }
   // it is a hook, get triggered when value changes
   ngDoCheck() {

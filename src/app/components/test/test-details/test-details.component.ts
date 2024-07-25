@@ -117,7 +117,8 @@ export class TestDetailsComponent {
           this.selectedDataFinal,
           this.testName,
           this.testRunAPI.getSelectedOperator().id,
-          this.description
+          this.description,
+          this.sharedAPI.getCertificationMode()
         );
       }
     }
@@ -156,11 +157,13 @@ export class TestDetailsComponent {
     return returnVal;
   }
   clearTestSelection() {
-    const emptySelection: any = [];
-    for (let index = 0; index < this.testSandbox.getRunTestCaseData().length; index++) {
-      emptySelection[index] = [];
+    if (!this.sharedAPI.getCertificationMode()) {
+      const emptySelection: any = [];
+      for (let index = 0; index < this.testSandbox.getRunTestCaseData().length; index++) {
+        emptySelection[index] = [];
+      }
+      this.testRunStore.setSelectedTestCase(emptySelection);
+      this.testSandbox.setOnClickChanges();
     }
-    this.testRunStore.setSelectedTestCase(emptySelection);
-    this.testSandbox.setOnClickChanges();
   }
 }

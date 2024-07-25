@@ -38,7 +38,7 @@ export class TestRunService {
     return this.http.get(getBaseUrl() + 'test_collections');
   }
   createTestRunExecution(selectedDataFinal: any, selectedProjectId: number, testName: string, operatorId: any,
-    description: any): Observable<any> {
+    description: any, certMode: boolean): Observable<any> {
     /* eslint-disable @typescript-eslint/naming-convention */
     const selected_tests = selectedDataFinal.selected_tests;
     const requestJson = {
@@ -52,7 +52,7 @@ export class TestRunService {
       selected_tests
     };
     /* eslint-enable @typescript-eslint/naming-convention */
-    return this.http.post(getBaseUrl() + 'test_run_executions', requestJson);
+    return this.http.post(getBaseUrl() + `test_run_executions/?certification_mode=${certMode}`, requestJson);
   }
   repeatTestRunExecution(testExecutionId: number): Observable<any> {
     return this.http.post(getBaseUrl() + `test_run_executions/${testExecutionId}/repeat`, {});
