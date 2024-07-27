@@ -25,6 +25,7 @@ import * as _ from 'lodash';
 })
 export class TestExecutionTreeComponent {
   activeBlock: any;
+  iconTitle = '';
   constructor(public testRunAPI: TestRunAPI, public sharedAPI: SharedAPI) { }
 
   expandClick(data: any) {
@@ -93,13 +94,21 @@ export class TestExecutionTreeComponent {
     const isPending = data.some((ele: any) => ele.status === 'pending');
     const isExecuting = data.some((ele: any) => ele.status === 'executing');
     const isPassed = data.every((ele: any) => ele.status === 'passed');
+    const isNotApplicable = data.some((ele: any) => ele.status === 'not_applicable');
     let className = '';
-    if (isExecuting) {
+    this.iconTitle = '';
+    if (isNotApplicable) {
+      className = 'pi pi-angle-double-right not-applicable';
+      this.iconTitle = 'Not Applicable';
+    } else if (isExecuting) {
       className = 'pi pi-spin pi-spinner';
+      this.iconTitle = 'Executing';
     } else if (isPassed) {
       className = 'pi pi-check success';
+      this.iconTitle = 'Passed';
     } else if (!isPending) {
       className = 'pi pi-times error';
+      this.iconTitle = 'Error';
     }
     return className;
   }
