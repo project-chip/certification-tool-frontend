@@ -30,7 +30,8 @@
           <div fxFlex="1 1 auto" (click)="switchActiveBlock(testCollection.key)">
             <i *ngIf="activeBlock===testCollection.key" class="pi pi-angle-down"></i>
             <i *ngIf="activeBlock!==testCollection.key" class="pi pi-angle-right"></i>
-            <i [title]="iconTitle" [ngClass]="getCategoryClassName(filteredRunningTC)" class="category-progress"></i>
+            <i [title]="(getCategoryClassName(filteredRunningTC)).iconTitle" 
+            [ngClass]="(getCategoryClassName(filteredRunningTC)).className" class="category-progress"></i>
             {{testCollection.key}}
             <span class="test-count badge-count">{{filteredRunningTC.length|number:'2.0'}}</span>
           </div>
