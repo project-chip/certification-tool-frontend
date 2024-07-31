@@ -127,14 +127,17 @@ describe('TestExecutionTreeComponent', () => {
   const passedReturn = 'pi pi-check success';
   const errorReturn = 'pi pi-times error';
   const executingReturn = 'pi pi-spin pi-spinner';
+  const isNotApplicableReturn = 'pi pi-angle-double-right not-applicable';
 
   it('check getCategoryClassName', () => {
-    const passedReturnValue = component.getCategoryClassName(passed);
-    const errorReturnValue = component.getCategoryClassName(error);
-    const executingReturnValue = component.getCategoryClassName(executing);
+    const passedReturnValue = component.getCategoryClassName(passed).className;
+    const errorReturnValue = component.getCategoryClassName(error).className;
+    const executingReturnValue = component.getCategoryClassName(executing).className;
+    const isNotApplicableReturnValue = component.getCategoryClassName(isNotApplicableReturn).className;
     expect(passedReturn).toEqual(passedReturnValue);
     expect(errorReturn).toEqual(errorReturnValue);
     expect(executingReturn).toEqual(executingReturnValue);
+    expect(isNotApplicableReturn).toEqual(isNotApplicableReturnValue);
   });
 
   it('check getFilteredRunningTestCases', () => {
