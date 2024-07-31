@@ -124,20 +124,31 @@ describe('TestExecutionTreeComponent', () => {
   ];
 
   // Configuration: these are the expected return values.
-  const passedReturn = 'pi pi-check success';
-  const errorReturn = 'pi pi-times error';
-  const executingReturn = 'pi pi-spin pi-spinner';
-  const isNotApplicableReturn = 'pi pi-angle-double-right not-applicable';
+  const passedReturn = { className: 'pi pi-check success', iconTitle: 'Passed' };
+  const errorReturn = { className: 'pi pi-times error', iconTitle: 'Error' };
+  const executingReturn = { className: 'pi pi-spin pi-spinner', iconTitle: 'Executing' };
+  const isNotApplicableReturn = { className: 'pi pi-angle-double-right not-applicable', iconTitle: 'Not Applicable' };
 
-  it('check getCategoryClassName', () => {
+  it('check getCategoryClassName className', () => {
     const passedReturnValue = component.getCategoryClassName(passed).className;
     const errorReturnValue = component.getCategoryClassName(error).className;
     const executingReturnValue = component.getCategoryClassName(executing).className;
     const isNotApplicableReturnValue = component.getCategoryClassName(isNotApplicableReturn).className;
-    expect(passedReturn).toEqual(passedReturnValue);
-    expect(errorReturn).toEqual(errorReturnValue);
-    expect(executingReturn).toEqual(executingReturnValue);
-    expect(isNotApplicableReturn).toEqual(isNotApplicableReturnValue);
+    expect(passedReturn.className).toEqual(passedReturnValue);
+    expect(errorReturn.className).toEqual(errorReturnValue);
+    expect(executingReturn.className).toEqual(executingReturnValue);
+    expect(isNotApplicableReturn.className).toEqual(isNotApplicableReturnValue);
+  });
+
+  it('check getCategoryClassName iconTitle', () => {
+    const passedReturnValue = component.getCategoryClassName(passed).iconTitle;
+    const errorReturnValue = component.getCategoryClassName(error).iconTitle;
+    const executingReturnValue = component.getCategoryClassName(executing).iconTitle;
+    const isNotApplicableReturnValue = component.getCategoryClassName(isNotApplicableReturn).iconTitle;
+    expect(passedReturn.iconTitle).toEqual(passedReturnValue);
+    expect(errorReturn.iconTitle).toEqual(errorReturnValue);
+    expect(executingReturn.iconTitle).toEqual(executingReturnValue);
+    expect(isNotApplicableReturn.iconTitle).toEqual(isNotApplicableReturnValue);
   });
 
   it('check getFilteredRunningTestCases', () => {
