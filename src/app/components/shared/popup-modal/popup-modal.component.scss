@@ -36,9 +36,10 @@
     white-space: pre;
       @extend .heading-text;
       font-size: 16px !important;
-      max-height: 134px;
-      overflow: auto;
+      max-height: 469px;
+      overflow: scroll;
       user-select: text !important;
+      text-wrap: wrap;
     
   }
   .buttons-div {
