@@ -26,10 +26,7 @@
     <app-project-table *ngIf="mainAreaSandbox.fetchCurrentIndex() === 4"></app-project-table>
     <app-utility *ngIf="mainAreaSandbox.fetchCurrentIndex() === 6"></app-utility>
     <app-settings *ngIf="mainAreaSandbox.fetchCurrentIndex() === 3"></app-settings>
-    <div *ngIf="mainAreaSandbox.fetchCurrentIndex() === 0" class="construction">
-      <img src="../../../assets/under_construction.png" alt="under_construction">
-      <span class="construction-span">Page Under Construction</span>
-    </div>
+    <app-project-table *ngIf="mainAreaSandbox.fetchCurrentIndex() === 0"></app-project-table>
   </div>
   <p class="copy-rights"> &copy; Connectivity Standards Alliance</p>
   <div *ngIf="projectSandbox.getIsNewProjectClicked() === null" class="glass-pane"></div>
