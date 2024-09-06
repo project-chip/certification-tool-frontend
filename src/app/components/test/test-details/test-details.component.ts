@@ -24,6 +24,7 @@ import { TestSandbox } from '../test.sandbox';
 import { environment } from 'src/environments/environment';
 import { SharedService } from 'src/app/shared/core_apis/shared-utils';
 import { TestRunStore } from 'src/app/store/test-run-store';
+import { Collection, TestSuite, TestCase, SelectedTests } from 'src/app/shared/interfaces/test';
 import * as _ from 'lodash';
 
 @Component({
@@ -32,7 +33,6 @@ import * as _ from 'lodash';
   styleUrls: ['./test-details.component.scss']
 })
 export class TestDetailsComponent {
-  selectedDataFinal: any = {};
   testName = 'UI_Test_Run';
   description = '';
   allowedCharacter = /[^A-Za-z0-9 _-]/;
@@ -89,32 +89,10 @@ export class TestDetailsComponent {
         this.testRunAPI.setRunningTestCases([]);
         this.testRunAPI.setTestLogs([]);
         this.testSandbox.setTestScreen(1);
-        /* eslint-disable @typescript-eslint/naming-convention */
-        this.selectedDataFinal = {
-          'name': 'test',
-          'dut_name': 'test_dut',
-          'selected_tests': {}
-        };
-        /* eslint-enable @typescript-eslint/naming-convention */
-        for (let mainIndex = 0; mainIndex < this.testSandbox.getSelectedData().length; mainIndex++) {
-          if (this.testSandbox.getSelectedData()[mainIndex].length > 0) {
-            this.selectedDataFinal.selected_tests[this.testSandbox.getTestSuiteCategory()[mainIndex]] = {};
-            for (let parentIndex = 0; parentIndex < this.testSandbox.getSelectedData()[mainIndex].length; parentIndex++) {
-              if (this.testSandbox.getSelectedData()[mainIndex][parentIndex]) {
-                this.selectedDataFinal.selected_tests[this.testSandbox.getTestSuiteCategory()
-                [mainIndex]][this.testSandbox.getSelectedData()[mainIndex][parentIndex].public_id] = {};
-                this.testSandbox.getSelectedData()[mainIndex][parentIndex].children.forEach((selectedChildren: any) => {
-                  this.selectedDataFinal.selected_tests[this.testSandbox.getTestSuiteCategory()[mainIndex]]
-                  [this.testSandbox.getSelectedData()[mainIndex][parentIndex].public_id][selectedChildren.public_id] =
-                    selectedChildren.count;
-                });
-              }
-            }
-          }
-        }
+
         this.testSandbox.createTestRunExecution(
           this.callbackForStartTestExecution.bind(this),
-          this.selectedDataFinal,
+          this.getTestRunExecutionSelection(),
           this.testName,
           this.testRunAPI.getSelectedOperator().id,
           this.description,
@@ -122,6 +100,62 @@ export class TestDetailsComponent {
         );
       }
     }
+  }
+
+  getTestRunExecutionSelection() {
+    /* eslint-disable @typescript-eslint/naming-convention */
+    const selectedCollections = this.testSandbox.getSelectedData();
+    const testSuiteCategories = this.testSandbox.getTestSuiteCategory();
+    const selected_tests: SelectedTests = {
+      collections: []
+    };
+
+    // Build test run data object
+    for (let collectionIndex = 0; collectionIndex < selectedCollections.length; collectionIndex++) {
+      const collectionData = selectedCollections[collectionIndex];
+      if (collectionData.length > 0) {
+        // Add collection
+        const collectionId = testSuiteCategories[collectionIndex];
+        const collection: Collection = {
+          public_id: collectionId,
+          test_suites: []
+        };
+        const collectionsLength = selected_tests.collections.push(collection);
+        const collectionInsertIndex = collectionsLength - 1;
+
+        for (let testSuiteIndex = 0; testSuiteIndex < collectionData.length; testSuiteIndex++) {
+          const testSuiteData = collectionData[testSuiteIndex];
+          if (testSuiteData) {
+            // Add test suite
+            const testSuiteId = testSuiteData.public_id;
+            const testSuite: TestSuite = {
+              public_id: testSuiteId,
+              test_cases: []
+            };
+            const testSuitesLength = selected_tests.collections[collectionInsertIndex]
+            .test_suites.push(testSuite);
+            const testSuiteInsertIndex = testSuitesLength - 1;
+
+            for (let testCaseIndex = 0; testCaseIndex < testSuiteData.children.length; testCaseIndex++) {
+              const testCaseData = testSuiteData.children[testCaseIndex];
+              if (testCaseData) {
+                // Add test case
+                const testCaseId = testCaseData.public_id;
+                const testCaseIterations = testCaseData.count;
+                const testCase: TestCase = {
+                    public_id: testCaseId,
+                    iterations: testCaseIterations
+                };
+                selected_tests.collections[collectionInsertIndex]
+                .test_suites[testSuiteInsertIndex].test_cases.push(testCase);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return { selected_tests };
   }
 
   // call back for test execution
