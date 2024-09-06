@@ -26,6 +26,7 @@ import { APP_STATE } from 'src/app/shared/utils/constants';
 import { environment } from 'src/environments/environment';
 import { saveAs } from 'file-saver';
 import { SharedService } from 'src/app/shared/core_apis/shared-utils';
+import { saveAsWithCallback } from 'src/app/shared/utils/utils';
 
 @Component({
   selector: 'app-test-execution-history',
@@ -136,11 +137,13 @@ export class TestExecutionHistoryComponent {
       const response: any = responseObj;
       const jsonStr = JSON.stringify(response);
       const file = new Blob([jsonStr], { type: 'application/json;charset=utf-8' });
-      saveAs(file, `${response.test_run_execution.title}.json`);
-      this.sharedService.setToastAndNotification({
-        status: 'success',
-        summary: 'Success!',
-        message: 'Test run exported successfully'
+      // Use the custom saveAsWithCallback function
+      saveAsWithCallback(file, `${response.test_run_execution.title}.json`, () => {
+        this.sharedService.setToastAndNotification({
+          status: 'success',
+          summary: 'Success!',
+          message: 'Test run exported successfully'
+        });
       });
     }, () => {
       this.sharedService.setToastAndNotification({
@@ -155,11 +158,12 @@ export class TestExecutionHistoryComponent {
       const response: any = responseObj;
       const fileName = `${arguments[0].title}.zip`;
       const file = new Blob([response], { type: 'application/zip;charset=utf-8' });
-      saveAs(file, fileName);
-      this.sharedService.setToastAndNotification({
-        status: 'success',
-        summary: 'Success!',
-        message: 'Grouped logs downloaded successfully'
+      saveAsWithCallback(file, fileName, () => {
+        this.sharedService.setToastAndNotification({
+          status: 'success',
+          summary: 'Success!',
+          message: 'Grouped logs downloaded successfully'
+        });
       });
     }, (err) => {
       this.sharedService.setToastAndNotification({
@@ -207,7 +211,13 @@ export class TestExecutionHistoryComponent {
     const reportData = this.sharedAPI.getTestReportData();
     const reportDataStr = JSON.stringify(reportData);
     const file = new Blob([reportDataStr], { type: 'text/plain;charset=utf-8' });
-    saveAs(file, reportData.title + '-' + reportData.id.toString() + '.json');
+    saveAsWithCallback(file, reportData.title + '-' + reportData.id.toString() + '.json', () => {
+      this.sharedService.setToastAndNotification({
+        status: 'success',
+        summary: 'Success!',
+        message: 'Test Report downloaded successfully'
+      });
+    });
   }
 
   downloadTestLog(data: any) {
@@ -251,7 +261,13 @@ export class TestExecutionHistoryComponent {
   }
   saveLogs(title: any, data: any) {
     const file = new Blob([data], { type: 'text/plain;charset=utf-8' });
-    saveAs(file, title + '.log');
+    saveAsWithCallback(file, title + '.log', () => {
+      this.sharedService.setToastAndNotification({
+        status: 'success',
+        summary: 'Success!',
+        message: 'Logs downloaded successfully'
+      });
+    });
   }
 
   certModeToggle() {
