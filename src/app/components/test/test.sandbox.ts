@@ -32,6 +32,21 @@ export class TestSandbox {
     const testSuite = Object.keys(this.testRunStore.testSuiteCategory.test_collections).map((data) => data);
     return testSuite;
   }
+
+  getTestCollectionBySuiteName(suiteName: string) {
+    // Loop through each test collection (test category)
+    const testCollections = this.testRunStore.testSuiteCategory.test_collections;
+    for (let collectionName in testCollections) {
+        let testSuites = testCollections[collectionName].test_suites;
+
+        // Check if the test suite name exists in this collection
+        if (testSuites && testSuites.hasOwnProperty(suiteName)) {
+            return collectionName;  // Return the test collection name
+        }
+    }
+    return null;  // Return null if the test suite is not found
+  }
+
   // set's selected data in mobx
   setSelectedData(selectedData: any) {
     const defaulTestcases = _.cloneDeep(this.testRunStore.runTestCases);
