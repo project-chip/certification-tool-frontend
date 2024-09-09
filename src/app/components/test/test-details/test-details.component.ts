@@ -32,7 +32,6 @@ import * as _ from 'lodash';
   styleUrls: ['./test-details.component.scss']
 })
 export class TestDetailsComponent {
-  selectedDataFinal: any = {};
   testName = 'UI_Test_Run';
   description = '';
   allowedCharacter = /[^A-Za-z0-9 _-]/;
@@ -41,17 +40,18 @@ export class TestDetailsComponent {
     testRunAPI.getApplicableTestCases(this.sharedAPI.getSelectedProjectType().id, this.setDefaultPicsData.bind(this));
   }
 
-  setDefaultPicsData(data: any) {
+  setDefaultPicsData(applicableTestCases: any) {
     const selectedData = _.cloneDeep(this.testRunStore.selectedTestCase);
-    const defaultTestCase = _.cloneDeep(this.testSandbox.getRunTestCaseData());
+    const allTestCases = _.cloneDeep(this.testSandbox.getRunTestCaseData());
     // eslint-disable-next-line prefer-const
     let detectPicsChanges: any = [];
-    defaultTestCase.forEach((category: any, categoryIndex: any) => {
+    allTestCases.forEach((category: any, categoryIndex: any) => {
       detectPicsChanges[categoryIndex] = '';
       category.forEach((testSuite: any, testSuiteIndex: any) => {
         testSuite.children.forEach((testCase: any) => {
-          data.test_cases.find((e: any) => {
-            if (testCase.title === e) {
+          applicableTestCases.test_cases.find((e: any) => {
+            let applicableTestCaseName = Object.keys(e)[0];
+            if (testCase.title === applicableTestCaseName) {
               if (selectedData[categoryIndex][testSuiteIndex]) {
                 selectedData[categoryIndex][testSuiteIndex].children.push(testCase);
               } else {
@@ -65,10 +65,142 @@ export class TestDetailsComponent {
         });
       });
     });
-    this.testRunStore.setSelectedTestCase(selectedData);
+
+    let tgf = this.organizeTestCases(applicableTestCases, allTestCases)
+
+    // this.testRunStore.setSelectedTestCase(selectedData);
+    this.testRunStore.setSelectedTestCase(tgf);
     this.testSandbox.setOnClickChanges();
     this.testRunStore.setDetectPicsChanges(detectPicsChanges);
   }
+
+  organizeTestCases(applicableTestCases: any, allTestCases: any[]) {
+    let resultArray: any[] = [];
+
+    applicableTestCases.test_cases.forEach((testCaseObj: any) => {
+      let testCaseID = Object.keys(testCaseObj)[0];
+      let testCaseDetails = testCaseObj[testCaseID];
+      let testCollection = testCaseDetails.test_collection;
+      let testSuite = testCaseDetails.test_suite;
+    
+      // Find or create the collection array for this test collection
+      let collection = resultArray.find((col: any) => col.some((suiteObj: any) => suiteObj.test_collection === testCollection));
+    
+      if (!collection) {
+        collection = []; // Create a new array for this collection
+        resultArray.push(collection);
+      }
+    
+      // Find or create the suite object within the collection array
+      let suiteObject = collection.find((suite: any) => suite.test_suite === testSuite);
+    
+      if (!suiteObject) {
+        // Create a new suite object and add it to the collection
+        suiteObject = {
+          test_suite: testSuite,
+          test_collection: testCollection,
+          children: []
+        };
+        collection.push(suiteObject);
+      }
+    
+      // Add the test case to the suite's children
+      suiteObject.children.push({
+        title: testCaseID
+      });
+    });
+
+
+    let newArr = this.mixAndMatchDetails(resultArray, allTestCases);
+
+
+    return newArr;
+}
+
+mixAndMatchDetails(arrayResult: any[], allTestCases: any[]) {
+  let newArray: any[] = [];
+
+  // Helper function to find a test suite in allTestCases
+  function findTestSuiteDetails(testSuite: any, testCollection: any[]) {
+      for (let testCollectionObj of allTestCases) {
+          // Iterate over the suites in each collection
+          for (let suiteObj of testCollectionObj) {
+              // Match both test suite and test collection
+              if (suiteObj.title === testSuite /*&& suiteObj.test_collection === testCollection*/) {
+                  return suiteObj; // Return matching test suite details
+              }
+          }
+      }
+      return null; // If not found, return null
+  }
+
+  // Helper function to find a test case in allTestCases
+  function findTestCaseDetails(testSuite: any, testCollection: any[], testCaseTitle: string) {
+      for (let testCollectionObj of allTestCases) {
+          // Iterate over the suites in each collection
+          for (let suiteObj of testCollectionObj) {
+              // Match both test suite and test collection
+              if (suiteObj.title === testSuite /*&& suiteObj.test_collection === testCollection*/) {
+                  // Look for the test case within the suite's children
+                  for (let child of suiteObj.children) {
+                      if (child.title === testCaseTitle) {
+                          return child; // Return matching test case details
+                      }
+                  }
+              }
+          }
+      }
+      return null; // If not found, return null
+  }
+
+  // Iterate through arrayResult to mix and match details
+  arrayResult.forEach(collection => {
+      let newCollection: any[] = [];
+
+      collection.forEach((suiteObj: any) => {
+          // Find the matching suite details in allTestCases
+          let suiteDetails = findTestSuiteDetails(suiteObj.test_suite, suiteObj.test_collection);
+          
+          if (suiteDetails) {
+              // Change test_suite to public_id and define children array with explicit type
+              let newSuiteObj = { 
+                  ...suiteDetails, // Copy all suite details except children
+                  public_id: suiteDetails.title, // Ensure public_id is set
+                  test_collection: suiteObj.test_collection, // Keep test_collection
+                  children: [] as any[] // Explicitly define the type of children as 'any[]'
+              };
+
+              // Iterate through the test cases in the suite
+              suiteObj.children.forEach((testCase: any) => {
+                  let details = findTestCaseDetails(suiteObj.test_suite, suiteObj.test_collection, testCase.title);
+                  if (details) {
+                      newSuiteObj.children.push(details); // Add the full details from allTestCases
+                  }
+              });
+
+              newCollection.push(newSuiteObj);
+          }
+      });
+
+      newArray.push(newCollection);
+  });
+
+  return newArray;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   // build's final data as object
   async onTestStart() {
     if (environment.isMockActive) {
@@ -89,32 +221,56 @@ export class TestDetailsComponent {
         this.testRunAPI.setRunningTestCases([]);
         this.testRunAPI.setTestLogs([]);
         this.testSandbox.setTestScreen(1);
+
         /* eslint-disable @typescript-eslint/naming-convention */
-        this.selectedDataFinal = {
+        let userTestingSelectionPayload: any = {
           'name': 'test',
           'dut_name': 'test_dut',
           'selected_tests': {}
         };
+        const userSelectedCollections = this.testSandbox.getSelectedData();
+        let userTestingSelection: any = {};
+
         /* eslint-enable @typescript-eslint/naming-convention */
-        for (let mainIndex = 0; mainIndex < this.testSandbox.getSelectedData().length; mainIndex++) {
-          if (this.testSandbox.getSelectedData()[mainIndex].length > 0) {
-            this.selectedDataFinal.selected_tests[this.testSandbox.getTestSuiteCategory()[mainIndex]] = {};
-            for (let parentIndex = 0; parentIndex < this.testSandbox.getSelectedData()[mainIndex].length; parentIndex++) {
-              if (this.testSandbox.getSelectedData()[mainIndex][parentIndex]) {
-                this.selectedDataFinal.selected_tests[this.testSandbox.getTestSuiteCategory()
-                [mainIndex]][this.testSandbox.getSelectedData()[mainIndex][parentIndex].public_id] = {};
-                this.testSandbox.getSelectedData()[mainIndex][parentIndex].children.forEach((selectedChildren: any) => {
-                  this.selectedDataFinal.selected_tests[this.testSandbox.getTestSuiteCategory()[mainIndex]]
-                  [this.testSandbox.getSelectedData()[mainIndex][parentIndex].public_id][selectedChildren.public_id] =
-                    selectedChildren.count;
+        for (let userSelectedTestCollectionIndex = 0; userSelectedTestCollectionIndex < userSelectedCollections.length; userSelectedTestCollectionIndex++) {
+          let selectedSuites = userSelectedCollections[userSelectedTestCollectionIndex];
+
+          if (selectedSuites.length > 0) {
+            let anySelectedTestSuiteName = selectedSuites[0].public_id;
+            let testCollectionName: any = this.testSandbox.getTestCollectionBySuiteName(anySelectedTestSuiteName);
+
+            // Set test collection
+            userTestingSelection[testCollectionName] = {};
+
+            for (let selectedSuitesIndex = 0; selectedSuitesIndex < selectedSuites.length; selectedSuitesIndex++) {
+              let selectedSuite = selectedSuites[selectedSuitesIndex];
+
+              if (selectedSuite) {
+                let selectedSuiteName = selectedSuite.public_id;
+
+                // Set test suite to test collection
+                userTestingSelection[testCollectionName][selectedSuiteName] = {};
+
+                let selectedTests = selectedSuite.children;
+                selectedTests.forEach((selectedTest: any) => {
+                  let selectedTestName = selectedTest.public_id;
+                  let runCount = selectedTest.count;
+
+                  // Set test case and run count to test suite in test collection
+                  userTestingSelection[testCollectionName][selectedSuiteName][selectedTestName] = runCount;
                 });
               }
             }
           }
         }
+
+        userTestingSelectionPayload.selected_tests = userTestingSelection
+
+        console.log('userTestingSelection', userTestingSelection);
+
         this.testSandbox.createTestRunExecution(
           this.callbackForStartTestExecution.bind(this),
-          this.selectedDataFinal,
+          userTestingSelection,
           this.testName,
           this.testRunAPI.getSelectedOperator().id,
           this.description,
