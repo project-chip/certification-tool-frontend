@@ -96,15 +96,23 @@ export class TestExecutionTreeComponent {
     const isPending = data.some((ele: any) => ele.status === 'pending');
     const isExecuting = data.some((ele: any) => ele.status === 'executing');
     const isPassed = data.every((ele: any) => ele.status === 'passed');
+    const isNotApplicable = data.some((ele: any) => ele.status === 'not_applicable');
     let className = '';
-    if (isExecuting) {
+    let iconTitle = '';
+    if (isNotApplicable) {
+      className = 'pi pi-angle-double-right not-applicable';
+      iconTitle = 'Not Applicable';
+    } else if (isExecuting) {
       className = 'pi pi-spin pi-spinner';
+      iconTitle = 'Executing';
     } else if (isPassed) {
       className = 'pi pi-check success';
+      iconTitle = 'Passed';
     } else if (!isPending) {
       className = 'pi pi-times error';
+      iconTitle = 'Error';
     }
-    return className;
+    return { className: className, iconTitle: iconTitle };
   }
 
   // get current test case data

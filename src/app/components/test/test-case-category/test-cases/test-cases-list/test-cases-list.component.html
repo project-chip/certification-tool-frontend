@@ -16,9 +16,9 @@
 -->
 <div class="test-name-master" fxLayout fxLayoutAlign="space-between center">
   <div class="master-text" fxLayout fxLayoutAlign="center">
-    <p-checkbox class="test-name-checkbox" [ngClass]="{'custom-icon': isPartiallySelected(this.testSandbox.getLastChecked()),
+    <p-checkbox [disabled]="this.certificationMode" class="test-name-checkbox" [ngClass]="{'custom-icon': isPartiallySelected(this.testSandbox.getLastChecked()),
       'isDisabled':this.testSandbox.getRunTestCaseData()[this.testSandbox.getCurrentTestCategory()].length===0 
-      || this.testSandbox.getTestCaseQuery()!=='' }" (click)="checkAndUncheckAll(); onClickChanges()"
+      || this.testSandbox.getTestCaseQuery()!=='','disabled':this.certificationMode}" (click)="checkAndUncheckAll(); onClickChanges()"
       [(ngModel)]="masterCheckBox" [binary]=true>
     </p-checkbox>
     <label class="master-label">Test Cases</label>
@@ -39,13 +39,14 @@
       class="p-field-checkbox" fxLayout fxLayoutAlign="space-between baseline" (click)="onClickChanges()"
       [ngClass]='{"d-none": children.filtered===false}'>
       <div pTooltip={{children.description}} tooltipPosition="bottom" (click)="isMasterChecked();">
-        <p-checkbox class="test-name-checkbox" [value]="children"
-          [(ngModel)]="selectedCategories[this.testSandbox.getCurrentTestCategory()][children.parentKey]">
+        <p-checkbox [disabled]="this.certificationMode" class="test-name-checkbox" [value]="children"
+        [ngClass]='{"disabled": this.certificationMode}' 
+        [(ngModel)]="selectedCategories[this.testSandbox.getCurrentTestCategory()][children.parentKey]">
         </p-checkbox>
         <label class="label-text">{{children.title}}</label>
       </div>
       <span class="span-input-number" *ngIf="childrenSelected(+children.parentKey, children.key)===true">
-        <p-inputNumber mode="decimal" [showButtons]="true" inputId="minmax-buttons" [min]="1" [max]="99"
+        <p-inputNumber [disabled]="this.certificationMode" mode="decimal" [showButtons]="true" inputId="minmax-buttons" [min]="1" [max]="99"
           (onInput)="onSelectedChildren()" [(ngModel)]="children.count">
         </p-inputNumber>
       </span>

@@ -245,8 +245,8 @@ export class TestRunAPI {
   }
 
   // Create new test run execution
-  createTestRunExecution(callback: any, selectedDataFinal: any, selectedProjectId: number, testName: string, operatorId: any, description: any) {
-    return this.testRunService.createTestRunExecution(selectedDataFinal, selectedProjectId, testName, operatorId, description).subscribe(
+  createTestRunExecution(callback: any, selectedDataFinal: any, selectedProjectId: number, testName: string, operatorId: any, description: any, certMode: boolean) {
+    return this.testRunService.createTestRunExecution(selectedDataFinal, selectedProjectId, testName, operatorId, description, certMode).subscribe(
       (data) => {
         callback(data.id);
         return data;

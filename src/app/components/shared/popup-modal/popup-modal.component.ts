@@ -58,7 +58,8 @@ export class PopupModalComponent {
     this.fileName = this.file?.name;
   }
   checkInput(data: any) {
-    if (this.fileName !== '' && this.popupId === 'FILE_UPLOAD_' + this.messageId) {
+    if ((this.fileName !== '' && this.popupId === 'FILE_UPLOAD_' + this.messageId)
+      || this.popupId === 'CREATE-TEST-RUN') {
       return false;
     } else if (data && data[0].value || this.popupId === 'ABORT') {
       return false;

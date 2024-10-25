@@ -19,6 +19,7 @@ import { SharedAPI } from 'src/app/shared/core_apis/shared';
 import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
 import { SharedService } from 'src/app/shared/core_apis/shared-utils';
 import { TestSandbox } from '../test.sandbox';
+import { DEFAULT_POPUP_OBJECT } from 'src/app/shared/utils/constants';
 
 @Component({
   selector: 'app-create-new-test-run',
@@ -28,13 +29,31 @@ import { TestSandbox } from '../test.sandbox';
 export class CreateNewTestRunComponent {
   isImportingTestRuns = false;
 
+  certModeButtons = [
+    { id: 0, label: 'Regular Mode', class: 'buttonNo', callback: () => {
+      this.setCertificationMode(false);
+    }
+    },
+    { id: 1, label: 'Certification Mode', class: 'buttonYes', iconClass: 'pi pi-check-circle', callback: () => {
+      this.setCertificationMode(true);
+    }
+    }
+  ];
+
   constructor(public sharedAPI: SharedAPI,
     private testRunAPI: TestRunAPI,
     public sharedService: SharedService,
     public testSandbox: TestSandbox) { }
 
-  createNewProject() {
+  createNewTestRun() {
+    this.sharedAPI.setShowCustomPopup('CREATE-TEST-RUN');
+  }
+
+  setCertificationMode(certMode: boolean) {
+    this.sharedAPI.setCertificationMode(certMode);
     this.sharedAPI.setIsProjectTypeSelected(1);
+    this.sharedAPI.setShowCustomPopup('');
+    this.sharedAPI.setCustomPopupData(DEFAULT_POPUP_OBJECT);
   }
 
   importTestRun(event: any) {

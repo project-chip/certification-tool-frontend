@@ -42,9 +42,13 @@ export class TestExecutionHistoryComponent {
   ref?: DynamicDialogRef;
   searchQuery = '';
   isImportingTestRuns = false;
+  certificationMode = false;
+
   constructor(public testSandbox: TestSandbox, public sanitizer: DomSanitizer, public sharedService: SharedService,
     public sharedAPI: SharedAPI, public dialogService: DialogService, private testRunAPI: TestRunAPI,
     public mainAreaSandbox: MainAreaSandbox) {
+    this.sharedAPI.setCertificationMode(this.certificationMode);
+
     sanitizer.bypassSecurityTrustStyle('--bper');
   }
   mystyle(data: any): string {
@@ -269,5 +273,9 @@ export class TestExecutionHistoryComponent {
   saveLogs(title: any, data: any) {
     const file = new Blob([data], { type: 'text/plain;charset=utf-8' });
     saveAs(file, title + '.log');
+  }
+
+  certModeToggle() {
+    this.sharedAPI.setCertificationMode(this.certificationMode);
   }
 }

@@ -72,7 +72,7 @@
   <div class="test-buttons" [ngClass]="{'mt-20': mainAreaSandbox.isUtilityPanel}">
     <p-button [disabled]="isTestCaseSelected() || isWarningExist()" class="start-button" (click)="onTestStart()">Start
     </p-button>
-    <p-button (click)="clearTestSelection()" class="clear-test">Clear Selection
+    <p-button [disabled]="this.sharedAPI.getCertificationMode()" (click)="clearTestSelection()" class="clear-test">Clear Selection
     </p-button>
   </div>
 </div>

@@ -15,7 +15,7 @@
  * limitations under the License.
 -->
 <div class="new-project-main" fxLayout="column" fxLayoutAlign="center center">
-    <div *ngIf="!isImportingTestRuns" fxLayout="column" fxLayoutAlign="center center" (click)="createNewProject()">
+    <div *ngIf="!isImportingTestRuns" fxLayout="column" fxLayoutAlign="center center" (click)="createNewTestRun()">
         <i class="icon-add-square"></i>
         <p class="create-new-project-label">Create New Test Run</p>
     </div>
@@ -30,4 +30,6 @@
           animationDuration=".5s">Importing Test Runs...</p-progressSpinner>
         <p class="create-new-project-label">Importing Test Runs...</p>
     </div>
+    <app-popup-modal popupId="CREATE-TEST-RUN" header="Select test run mode" [buttons]="certModeButtons">
+    </app-popup-modal>
 </div>

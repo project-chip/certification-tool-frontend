@@ -30,7 +30,8 @@
           <div fxFlex="1 1 auto" (click)="switchActiveBlock(testCollection.key)">
             <i *ngIf="activeBlock===testCollection.key" class="pi pi-angle-down"></i>
             <i *ngIf="activeBlock!==testCollection.key" class="pi pi-angle-right"></i>
-            <i [ngClass]="getCategoryClassName(filteredRunningTC)" class="category-progress"></i>
+            <i [title]="(getCategoryClassName(filteredRunningTC)).iconTitle" 
+            [ngClass]="(getCategoryClassName(filteredRunningTC)).className" class="category-progress"></i>
             {{testCollection.key}}
             <span class="test-count badge-count">{{filteredRunningTC.length|number:'2.0'}}</span>
           </div>
@@ -57,10 +58,11 @@
           [class]="'testcase-div-'+index"
           [ngClass]="{'remove-padding': !item.children.length, 'remove-border': !item.children.length && list.length !== ind+1}">
           <div fxFlex="1 1 auto" class="text-ellipsis">
-            <i *ngIf="item.status ==='passed'" class="pi pi-check success"></i>
-            <i *ngIf="item.status ==='error' || item.status ==='failed'" class="pi pi-times error"></i>
-            <i *ngIf="item.status ==='executing'" class="pi pi-spin pi-spinner"></i>
-            <i *ngIf="item.status ==='cancelled'" class="pi pi-ban error"></i> &nbsp;
+            <i title="Not Applicable" *ngIf="item.status ==='not_applicable'" class="pi pi-angle-double-right not-applicable"></i>
+            <i title="Passed" *ngIf="item.status ==='passed'" class="pi pi-check success"></i>
+            <i title="Error" *ngIf="item.status ==='error' || item.status ==='failed'" class="pi pi-times error"></i>
+            <i title="Executing" *ngIf="item.status ==='executing'" class="pi pi-spin pi-spinner"></i>
+            <i title="Cancelled" *ngIf="item.status ==='cancelled'" class="pi pi-ban error"></i> &nbsp;
             <span [ngClass]="{'line-through': item.status ==='cancelled', 'pending-tc': item.status ==='pending'}">
               {{ item.name }}
             </span>

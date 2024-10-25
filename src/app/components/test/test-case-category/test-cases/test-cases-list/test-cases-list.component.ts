@@ -30,6 +30,7 @@ export class TestCasesListComponent implements DoCheck {
   selectedCategories: any[] = [];
   masterCheckBox = false;
   lastChanges = true;
+  certificationMode = false;
   constructor(public testSandbox: TestSandbox, public testRunStore: TestRunStore,
     public testRunAPI: TestRunAPI, public sharedAPI: SharedAPI) {
     // defines number of index(test-cases)
@@ -39,6 +40,7 @@ export class TestCasesListComponent implements DoCheck {
         this.selectedCategories[categoryIndex][testSuitIndex] = [];
       });
     });
+    this.certificationMode = this.sharedAPI.getCertificationMode();
   }
   // it is a hook, get triggered when value changes
   ngDoCheck() {

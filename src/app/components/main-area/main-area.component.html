@@ -26,10 +26,7 @@
     <app-project-table *ngIf="mainAreaSandbox.isProjectTablePanel"></app-project-table>
     <app-utility *ngIf="mainAreaSandbox.isUtilityPanel"></app-utility>
     <app-settings *ngIf="mainAreaSandbox.isSettingsPanel"></app-settings>
-    <div *ngIf="mainAreaSandbox.isHomePanel" class="construction">
-      <img src="../../../assets/under_construction.png" alt="under_construction">
-      <span class="construction-span">Page Under Construction</span>
-    </div>
+    <app-project-table *ngIf="mainAreaSandbox.isHomePanel"></app-project-table>
   </div>
   <p class="copy-rights"> &copy; Connectivity Standards Alliance</p>
   <div *ngIf="projectSandbox.getIsNewProjectClicked() === null" class="glass-pane"></div>
