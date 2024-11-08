@@ -28,7 +28,7 @@ export class SharedService {
       document.getElementsByTagName('body')[0].classList.remove('cursor-busy');
     }
   }
-  // pop-up if BE is failed to respond
+  // pop-up if BE has failed to respond
   showPopUp() {
     this.confirmationService.confirm({
       message: 'Some thing went wrong',
@@ -41,6 +41,18 @@ export class SharedService {
       accept: () => {
         window.location.reload();
       }
+    });
+  }
+  externalToolErrorPopUp() {
+    this.confirmationService.confirm({
+      message: 'The LogDisplay external tool failed.<br/>Please verify if the tool was installed, configured and initiated properly.',
+      header: 'Failed to call External Tool',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Close',
+      acceptIcon: 'pi pi-times',
+      rejectVisible: false,
+      closeOnEscape: false,
+      accept: () => {}
     });
   }
   // toast and notification

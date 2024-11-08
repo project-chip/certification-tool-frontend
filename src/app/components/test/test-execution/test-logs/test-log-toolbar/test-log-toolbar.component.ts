@@ -50,7 +50,7 @@ export class TestLogToolbarComponent {
     const newTestRunId: number = this.testRunAPI.getRunningTestCasesRawData().id;
     const projectId: number = this.sharedAPI.getSelectedProjectType().id;
 
-    this.testRunAPI.generate_performance_summary(newTestRunId, projectId);
+    this.testRunAPI.generatePerformanceSummary(newTestRunId, projectId);
   }
 
   // Take latest execution data and download as file

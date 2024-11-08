@@ -264,7 +264,7 @@ export class TestExecutionHistoryComponent {
 
   openExternalTool(executionData: any) {
     const projectId: number = this.sharedAPI.getSelectedProjectType().id;
-    this.testSandbox.generate_performance_summary(executionData.id, projectId);
+    this.testSandbox.generatePerformanceSummary(executionData.id, projectId);
   }
 
   deleteTestRun(id: any) {

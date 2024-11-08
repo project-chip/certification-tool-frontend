@@ -210,7 +210,7 @@ export class TestSandbox {
     this.testRunStore.setDetectPicsChanges(data);
   }
 
-  generate_performance_summary(id: number, projectId: number) {
-    this.testRunAPI.generate_performance_summary(id, projectId);
+  generatePerformanceSummary(id: number, projectId: number) {
+    this.testRunAPI.generatePerformanceSummary(id, projectId);
   }
 }
