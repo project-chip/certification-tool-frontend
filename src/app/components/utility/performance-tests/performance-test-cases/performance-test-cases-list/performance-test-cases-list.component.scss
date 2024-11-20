@@ -15,17 +15,37 @@
  * limitations under the License.
  */
 :host ::ng-deep {
-  p-tabview .p-tabview-nav li .p-tabview-nav-link:not(.p-disabled):focus {
-    outline: unset;
-    outline-offset: 0;
-    box-shadow: unset;
+  .test-name {
+    border-bottom-right-radius: 4px;
+    min-height: 100px;
+    max-height: 400px;
+    height: 100%;
   }
-  .app-test-cases {
+  .test-name-master {
+    border-top-right-radius: 4px;
+    align-items: center;
     display: flex;
-    flex-direction: column;
-    position: relative;
+    justify-content: space-between;
   }
-  .tabview-custom {
-    font-size: 14px;
+  .span-input-number {
+    margin: auto 10px 0;
+    .p-inputnumber-input {
+      width: 35px;
+    }
+    .p-inputnumber {
+      height: 22.5px;
+    }
+ .p-inputnumber-button {
+      width: 20px;
+    }
+  }
+  .label-text {
+    user-select: none;
+  }
+  .d-none {
+    display: none !important;
+  }
+  .interation-count {
+    padding-right: 10px 
   }
 }

@@ -47,4 +47,13 @@ describe('UploadFileComponent', () => {
     expect(component).toBeTruthy();
     expect(component.onUpload).toBeTruthy();
   });
+
+  it('should return difference in time', () => {
+    expect(component.getTimeDifference(0, 0)).toBe('-');
+  });
+
+  it('should return True or False', () => {
+    expect(component.isFieldDisplayed(1)).toBe(true);
+    expect(component.isFieldDisplayed(2)).toBe(false);
+  });
 });

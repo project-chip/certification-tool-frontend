@@ -95,6 +95,14 @@ export class TestSandbox {
   getTestScreen() {
     return this.testRunStore.testScreen;
   }
+  // set's current performance test screen (selection / execution)
+  setPerformanceTestScreen(value: any) {
+    this.testRunStore.setPerformanceTestScreen(value);
+  }
+  // get's current performance test screen (selection / execution)
+  getPerformanceTestScreen() {
+    return this.testRunStore.performanceTestScreen;
+  }
   // get's test execution result
   getTestExecutionResult() {
     return this.testRunStore.testExecutionResult;
@@ -200,5 +208,9 @@ export class TestSandbox {
   }
   setDetectPicsChanges(data: any) {
     this.testRunStore.setDetectPicsChanges(data);
+  }
+
+  generatePerformanceSummary(id: number, projectId: number) {
+    this.testRunAPI.generatePerformanceSummary(id, projectId);
   }
 }

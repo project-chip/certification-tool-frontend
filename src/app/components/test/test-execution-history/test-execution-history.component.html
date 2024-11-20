@@ -24,21 +24,21 @@
           <p-dropdown [options]="testExecutionDropDown" [(ngModel)]="selectedDropdownData" optionLabel="tableName">
           </p-dropdown>
           <p-button label="Add Test" icon="pi pi-plus" iconPos="left" (click)="newTestRun()"></p-button>
-          <div *ngIf="this.selectedDropdownData.tableName == 'Test'">
+          <div *ngIf="this.selectedDropdownData.tableName == 'Test' && mainAreaSandbox.isTestPanel">
             <div fxFlex="16px"></div>
             <p-button label="Import Test Run" icon="icon-import-2" iconPos="left" (click)="fileInput.click()">
             </p-button>
             <input type="file" multiple style="display: none;" #fileInput (change)="importTestRun($event)">
           </div>
           <div fxFlex="16px"></div>
-          <div *ngIf="isImportingTestRuns" class="import-loader-container">
+          <div *ngIf="isImportingTestRuns && mainAreaSandbox.isTestPanel" class="import-loader-container">
             <div class="import-loader-items">
               <p-progressSpinner [style]="{width: '24px', height: '24px'}" styleClass="custom-spinner" strokeWidth="6"
                 animationDuration=".5s"></p-progressSpinner>
             </div>
             <span style="padding-left: 8px;">Importing Test Runs...</span>
           </div>
-          <div fxLayout="row" fxLayoutAlign="center center">
+          <div *ngIf="mainAreaSandbox.isTestPanel" fxLayout="row" fxLayoutAlign="center center">
               <p-toggleButton [(ngModel)]="certificationMode" class="toggle-button"
               [onIcon]="'pi pi-check-circle'" [offIcon]="'pi pi-times-circle'" (onChange)="certModeToggle()"></p-toggleButton>
               <div class="check-label">Certification Mode</div>
@@ -104,6 +104,8 @@
         </td>
         <td style="width: 20% !important">
           <span class="table_icons">
+            <i *ngIf="mainAreaSandbox.isUtilityPanel" class="icon-eye" (click)="openExternalTool(data)"
+              pTooltip="ExternalTool" tooltipPosition="bottom"></i>
             <i class="icon-repeat" (click)="repeatTestRun(data)" pTooltip="Repeat" tooltipPosition="bottom"></i>
             <i class="icon-document-text-1" (click)="showTestReport(data.id)" pTooltip="Show Report"
               tooltipPosition="bottom"></i>
@@ -112,9 +114,9 @@
             <i class="icon-document-download" (click)="downloadTestLog(data)" pTooltip="Download Logs"
               tooltipPosition="bottom"></i>
             <i class="icon-arrow-down-2" (click)="downloadGroupedLogs(data)" pTooltip="Download Grouped Logs"
-            tooltipPosition="bottom"></i>
-            <i class="icon-export-3" (click)="exportTestRun(data)" pTooltip="Export Test Run"
-            tooltipPosition="bottom"></i>
+              tooltipPosition="bottom"></i>
+            <i *ngIf="mainAreaSandbox.isTestPanel" class="icon-export-3" (click)="exportTestRun(data)"
+              pTooltip="Export Test Run" tooltipPosition="bottom"></i>
             <i [ngClass]="{'icon-archive-tick':selectedDropdownData.tableName ==='Test', 'icon-archive-minus': selectedDropdownData.tableName ==='Archived Test'}"
               [pTooltip]='selectedDropdownData.toolTip' (click)="archiveTestRun(data.id)" tooltipPosition="bottom"></i>
             <i class="icon-trash" pTooltip="Delete" (click)="deleteTestRun(data.id)" tooltipPosition="bottom"></i>

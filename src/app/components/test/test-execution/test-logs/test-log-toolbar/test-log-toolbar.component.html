@@ -19,10 +19,24 @@
     <div fxFlex="1 1 auto" class="table-heading">
       Logs
     </div>
-    <div class="download-logs-div" [ngClass]="{'disable-logs-icon': sharedAPI.getAppState() === appState[1] }"
-      (click)="downloadExecHistory()" pTooltip="Download Report"><i class="pi pi-download"></i></div>
-    <div class="pdf-logs-div" [ngClass]="{'disable-logs-icon': sharedAPI.getAppState() === appState[1] }"
-      (click)="downloadTestLogs()" pTooltip="Save Logs"><i class="pi pi-save"></i></div>
+    <ng-container *ngIf="mainAreaSandbox.isUtilityPanel">
+      <div class="log-toolbar-buttons">
+        <p-button [disabled]="currentAppState === 'BUSY'" label="External Tool" icon="pi pi-eye" iconPos="left"
+          (onClick)="openExternalTool()"></p-button>
+      </div>
+      <div class="log-toolbar-buttons">
+        <p-button label="Download Logs" icon="pi pi-download" iconPos="left" (click)="downloadTestLogs()"></p-button>
+      </div>
+      <div class="log-toolbar-buttons">
+        <p-button label="Save Test Report" icon="pi pi-save" iconPos="left" (click)="downloadExecHistory()"></p-button>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="mainAreaSandbox.isTestPanel">
+      <div class="download-logs-div" [ngClass]="{'disable-logs-icon': sharedAPI.getAppState() === appState[1] }"
+        (click)="downloadExecHistory()" pTooltip="Download Report"><i class="pi pi-download"></i></div>
+      <div class="pdf-logs-div" [ngClass]="{'disable-logs-icon': sharedAPI.getAppState() === appState[1] }"
+        (click)="downloadTestLogs()" pTooltip="Save Logs"><i class="pi pi-save"></i></div>
+    </ng-container>
     <div>
       <span class="p-input-icon-left">
         <i class="pi pi-search"></i>

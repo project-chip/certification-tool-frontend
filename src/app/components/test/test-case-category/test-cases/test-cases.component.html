@@ -14,19 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 -->
-<div fxLayout="column" class="test-case-view">
-  <p class="sub-heading mt-15">Test Cases</p>
-  <span class="p-input-icon-left search-test-case">
-    <i class="pi pi-search"></i>
-    <input type="text" (keyup)="onTestSearch()" [(ngModel)]="searchQuery" pInputText placeholder="Search test cases" />
-  </span>
-  <i class="pi pi-angle-left scroll-test" *ngIf="isNavbar('LC')" (onscroll)="isNavbar('LC')"
-    (click)="scrollNavbar('L')"></i>
+<div fxLayout="column" class="test-case-view" [ngClass]="{'mt-12': mainAreaSandbox.isUtilityPanel}">
+  <ng-container *ngIf="mainAreaSandbox.isTestPanel">
+    <p class="sub-heading mt-15">Test Cases</p>
+    <span class="p-input-icon-left search-test-case">
+      <i class="pi pi-search"></i>
+      <input type="text" (keyup)="onTestSearch()" [(ngModel)]="searchQuery" pInputText
+        placeholder="Search test cases" />
+    </span>
+    <i class="pi pi-angle-left scroll-test" *ngIf="isNavbar('LC')" (onscroll)="isNavbar('LC')"
+      (click)="scrollNavbar('L')"></i>
+    <i class="pi pi-angle-right scroll-test" *ngIf="isNavbar('RC')" (click)="scrollNavbar('R')"></i>
+  </ng-container>
 
-  <i class="pi pi-angle-right scroll-test" *ngIf="isNavbar('RC')" (click)="scrollNavbar('R')"></i>
-  <p-tabView (onChange)="testCategoryClicked($event.index)" styleClass="testcase-custom-view" fxFlex="1 1 auto">
+  <p-tabView *ngIf="mainAreaSandbox.isTestPanel" (onChange)="testCategoryClicked($event.index)"
+    styleClass="testcase-custom-view" fxFlex="1 1 auto">
     <ng-container *ngFor="let category of this.testSandbox.getTestSuiteCategory(); let index = index">
-      <p-tabPanel>
+      <p-tabPanel *ngIf="shouldShowTests(category)">
         <ng-template pTemplate="header">
           <span>{{category}} </span>
         </ng-template>
@@ -38,3 +42,9 @@
       </p-tabPanel>
     </ng-container>
   </p-tabView>
+
+  <div *ngIf="mainAreaSandbox.isUtilityPanel" fxLayout fxFlex="1 1 auto" class="parent-test-cases">
+    <app-performance-test-suites-list fxFlex="40%" class="tests-area"></app-performance-test-suites-list>
+    <app-performance-test-cases-list fxFlex class="tests-area"></app-performance-test-cases-list>
+  </div>
+</div>

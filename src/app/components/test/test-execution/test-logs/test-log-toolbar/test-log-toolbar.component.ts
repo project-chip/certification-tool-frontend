@@ -14,12 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
 import { saveAs } from 'file-saver';
 import { SharedAPI } from 'src/app/shared/core_apis/shared';
 import { APP_STATE } from 'src/app/shared/utils/constants';
 import { SharedService } from 'src/app/shared/core_apis/shared-utils';
+import { MainAreaSandbox } from 'src/app/components/main-area/main-area.sandbox';
 
 @Component({
   selector: 'app-test-log-toolbar',
@@ -28,7 +29,12 @@ import { SharedService } from 'src/app/shared/core_apis/shared-utils';
 })
 export class TestLogToolbarComponent {
   appState = APP_STATE;
-  constructor(public testRunAPI: TestRunAPI, public sharedAPI: SharedAPI, public sharedService: SharedService) { }
+  constructor(public testRunAPI: TestRunAPI, public sharedAPI: SharedAPI, public sharedService: SharedService,
+    public mainAreaSandbox: MainAreaSandbox) { }
+
+  get currentAppState(): string {
+    return this.sharedAPI.getAppState();
+  }
 
   // Using Blob save the execution data as file
   saveExecHistoryAsFile() {
@@ -39,9 +45,17 @@ export class TestLogToolbarComponent {
     this.sharedService.cursorBusy(false);
   }
 
+  // Open Matter QA external tool for execution analysis
+  openExternalTool() {
+    const newTestRunId: number = this.testRunAPI.getRunningTestCasesRawData().id;
+    const projectId: number = this.sharedAPI.getSelectedProjectType().id;
+
+    this.testRunAPI.generatePerformanceSummary(newTestRunId, projectId);
+  }
+
   // Take latest execution data and download as file
   downloadExecHistory() {
-    if (this.sharedAPI.getAppState() === APP_STATE[0]) {
+    if (this.currentAppState === APP_STATE[0]) {
       this.sharedService.cursorBusy(true);
       const newTestRun: any = this.testRunAPI.getRunningTestCasesRawData();
       this.testRunAPI.getTestReportData(newTestRun.id, this.saveExecHistoryAsFile.bind(this));
@@ -50,7 +64,7 @@ export class TestLogToolbarComponent {
 
   // Download the logs as file
   downloadTestLogs() {
-    if (this.sharedAPI.getAppState() === APP_STATE[0]) {
+    if (this.currentAppState === APP_STATE[0]) {
       this.sharedService.cursorBusy(true);
       this.testRunAPI.getLogs(this.testRunAPI.getRunningTestCasesRawData().id, this.saveLogs.bind(this), false);
     }

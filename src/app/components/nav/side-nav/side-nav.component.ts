@@ -33,7 +33,24 @@ export class SideNavComponent {
   constructor(public navSandbox: NavSandbox, public projectsAPI: ProjectsAPI,
     public confirmationService: ConfirmationService, public testSandBox: TestSandbox) { }
   sideBarClicked(index: number) {
-    if (this.navSandbox.getCurrentIndex() === 1 && index !== 1 && this.testSandBox.getTestScreen() !== 2) {
+    if (this.navSandbox.getCurrentIndex() === 6 && index !== 6 && this.testSandBox.getPerformanceTestScreen() === 1) {
+      this.confirmationService.confirm({
+        message: 'Are you sure that you want to proceed?',
+        header: 'You Are in Test Execution Screen',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.projectsAPI.setCurrentPanelIndex(index);
+          this.sideBarIndex = index;
+        },
+        reject: () => {
+        }
+      });
+    } else if (this.navSandbox.getCurrentIndex() === 6 && index === 6 && this.testSandBox.getPerformanceTestScreen() === 0) {
+      this.testSandBox.setPerformanceTestScreen(2);
+      this.projectsAPI.setCurrentPanelIndex(index);
+      this.sideBarIndex = index;
+
+    } else if (this.navSandbox.getCurrentIndex() === 1 && index !== 1 && this.testSandBox.getTestScreen() !== 2) {
       this.confirmationService.confirm({
         message: 'Are you sure that you want to proceed?',
         header: 'You Are in Test Execution Screen',

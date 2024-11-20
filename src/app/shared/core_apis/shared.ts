@@ -47,6 +47,18 @@ export class SharedAPI {
   getIsProjectTypeSelected() {
     return this.sharedStore.isProjecTypeSelected;
   }
+  setIsPerformanceTypeSelected(data: number) {
+    this.sharedStore.setIsPerformanceTypeSelected(data);
+  }
+  getIsPerformanceTypeSelected() {
+    return this.sharedStore.isPerformanceTypeSelected;
+  }
+  setUtilityIndex(data: number) {
+    this.sharedStore.setUtilityTabIndex(data);
+  }
+  getUtilityIndex() {
+    return this.sharedStore.utilityTabIndex;
+  }
   setSelectedProjectType(selectedType: any) {
     this.sharedStore.setSelectedProjectType(selectedType);
 

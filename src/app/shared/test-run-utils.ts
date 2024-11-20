@@ -19,6 +19,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { getBaseUrl } from 'src/environments/environment';
 import { getTimeStamp } from './utils/utils';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class TestRunService {
@@ -35,7 +36,26 @@ export class TestRunService {
       projectId + '&skip=' + skipLimit + '&limit=250');
   }
   getDefaultTestCases(): Observable<any> {
-    return this.http.get(getBaseUrl() + 'test_collections');
+    // TODO: remove this temporary solution in favor of a better collection filter solution.
+    // This workaround fills the 'SDK Performance Tests' collection as last, so we may easily filter in the Test Menu.
+    return this.http.get(getBaseUrl() + 'test_collections').pipe(map((response: any) => {
+      let res: any = { test_collections: {} }
+      let performanceTests: any;
+      for (const key in response.test_collections) {
+        if (Object.prototype.hasOwnProperty.call(response.test_collections, key)) {
+          const element = response.test_collections[key];
+          if (key !== 'SDK Performance Tests') {
+            res.test_collections[key] = element;
+          } else {
+            performanceTests = element;
+          }
+        }
+      }
+      if (performanceTests) {
+        res.test_collections['SDK Performance Tests'] = performanceTests;
+      }
+      return res;
+    }));
   }
   createTestRunExecution(selectedDataFinal: any, selectedProjectId: number, testName: string, operatorId: any,
     description: any, certMode: boolean): Observable<any> {
@@ -121,5 +141,9 @@ export class TestRunService {
   }
   downloadGroupedLogs(data: any) {
     return this.http.get(getBaseUrl() + `test_run_executions/${data.id}/grouped-log`, { responseType: 'blob' });
+  }
+
+  generatePerformanceSummary(id: number, projectId: number) {
+    return this.http.post(getBaseUrl() + `test_run_executions/${id}/performance_summary?project_id=${projectId}`, {responseType: 'json' });
   }
 }

@@ -89,7 +89,12 @@ import { CreateNewTestRunComponent } from './components/test/create-new-test-run
 import { UtilityComponent } from './components/utility/utility.component';
 import { SharedService } from './shared/core_apis/shared-utils';
 import { FileUploadModule } from 'primeng/fileupload';
-import { UploadFileComponent } from './components/utility/upload-file/upload-file.component';
+import { UploadFileComponent } from './components/utility/utility-upload-file-tab/upload-file.component';
+import { UtilityPerformanceComponent } from './components/utility/utility-performance-tab/utility-performance.component';
+import { PerformanceTestCasesListComponent } from './components/utility/performance-tests/performance-test-cases/performance-test-cases-list/performance-test-cases-list.component';
+import { CreateNewPerformanceTestRunComponent } from './components/utility/performance-tests/create-new-performance-test-run/create-new-performance-test-run.component';
+import { PerformanceTestSuitesListComponent } from './components/utility/performance-tests/performance-test-cases/performance-test-suites-list/performance-test-suites-list.component';
+import { PerformanceTestExecutionTreeDetailsComponent } from './components/utility/performance-tests/performance-test-execution-tree-details/performance-test-execution-tree-details.component';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { SettingsComponent } from './components/settings/settings.component';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
@@ -172,6 +177,11 @@ import { DndDirective } from './shared/dnd.directive';
     CreateNewTestRunComponent,
     UtilityComponent,
     UploadFileComponent,
+    UtilityPerformanceComponent,
+    PerformanceTestCasesListComponent,
+    CreateNewPerformanceTestRunComponent,
+    PerformanceTestSuitesListComponent,
+    PerformanceTestExecutionTreeDetailsComponent,
     SettingsComponent,
     TestOperatorComponent,
     HighlightSearchPipe,

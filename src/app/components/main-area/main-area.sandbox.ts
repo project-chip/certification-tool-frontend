@@ -36,6 +36,30 @@ export class MainAreaSandbox {
     return this.index;
   }
 
+  public get isHomePanel() {
+    return this.fetchCurrentIndex() === 0;
+  }
+
+  public get isTestPanel() {
+    return this.fetchCurrentIndex() === 1;
+  }
+
+  public get isSettingsPanel() {
+    return this.fetchCurrentIndex() === 3;
+  }
+
+  public get isProjectTablePanel() {
+    return this.fetchCurrentIndex() === 4;
+  }
+
+  public get isProjectPanel() {
+    return this.fetchCurrentIndex() === 5;
+  }
+
+  public get isUtilityPanel() {
+    return this.fetchCurrentIndex() === 6;
+  }
+
   getTestData() {
     this.testSandBox.getTestData();
   }

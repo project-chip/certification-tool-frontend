@@ -14,14 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Component } from '@angular/core';
-import { MainAreaSandbox } from '../../main-area/main-area.sandbox';
-
-@Component({
-  selector: 'app-test-case-category',
-  templateUrl: './test-case-category.component.html',
-  styleUrls: ['./test-case-category.component.scss']
-})
-export class TestCaseCategoryComponent {
-  constructor(public mainAreaSandbox: MainAreaSandbox) { }
+:host ::ng-deep {
+  .test-name {
+    border-bottom-left-radius: 4px;
+    gap: unset;
+    min-height: 100px;
+    max-height: 400px;
+    height: 100%;
+  }
+  .current-element {
+    background-color: #e9ecef;
+  }
+  .div-test-name-checkbox {
+    .test-name-checkbox {
+      margin: 0px 15px 0;
+      padding: 9px 0;
+    }
+  }
+  .test-name-master {
+    border-top-left-radius: 4px;
+  }
+  .no-test-available {
+    height: 100%;
+  }
 }

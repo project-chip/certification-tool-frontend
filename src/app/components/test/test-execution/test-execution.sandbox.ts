@@ -125,6 +125,7 @@ export class TestExecutionSandbox {
           children[suiteData.test_step_execution_index].status = suiteData.state;
       } else if (suiteData.test_case_execution_index > -1) {
         testData[suiteData.test_suite_execution_index].children[suiteData.test_case_execution_index].status = suiteData.state;
+        testData[suiteData.test_suite_execution_index].children[suiteData.test_case_execution_index].analytics = suiteData.analytics;
       } else {
         testData[suiteData.test_suite_execution_index].status = statusJson.payload.body.state;
       }

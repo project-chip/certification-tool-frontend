@@ -1,4 +1,4 @@
-/**
+<!--
  *
  * Copyright (c) 2023 Project CHIP Authors
  *
@@ -13,15 +13,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
-import { Component } from '@angular/core';
-import { MainAreaSandbox } from '../../main-area/main-area.sandbox';
-
-@Component({
-  selector: 'app-test-case-category',
-  templateUrl: './test-case-category.component.html',
-  styleUrls: ['./test-case-category.component.scss']
-})
-export class TestCaseCategoryComponent {
-  constructor(public mainAreaSandbox: MainAreaSandbox) { }
-}
+-->
+<div class="new-project-main" fxLayout="column" fxLayoutAlign="center center">
+    <div fxLayout="column" fxLayoutAlign="center center" (click)="createNewProject()">
+        <i class="icon-add-square"></i>
+        <p class="create-new-project-label">Create New Stress and Stability Test Run</p>
+    </div>
+</div>

@@ -21,6 +21,7 @@ import { EXECUTION_STATUS_COMPLETED } from '../utils/constants';
 import { SharedAPI } from './shared';
 import * as _ from 'lodash';
 import { SharedService } from './shared-utils';
+import { createJsxExpression } from 'typescript';
 
 @Injectable()
 export class TestRunAPI {
@@ -132,7 +133,7 @@ export class TestRunAPI {
           const newObject3 = { 'key': 'test_step_execution_' + eleStep.id, 'testStepIndex': index + '' + '' + caseIndex + '' + stepIndex, 'name': eleStep.title, 'status': eleStep.state, 'children': [] };
           return newObject3;
         });
-        const newObject2 = { 'key': 'test_case_execution_' + eleExec.id, 'name': eleExec.test_case_metadata.title, 'expanded': true, 'count': '1', 'status': eleExec.state, 'children': stepExec };
+        const newObject2 = { 'key': 'test_case_execution_' + eleExec.id, 'name': eleExec.test_case_metadata.title, 'expanded': true, 'count': '1', 'status': eleExec.state, 'analytics': eleExec.analytics, 'children': stepExec };
         return newObject2;
       });
 
@@ -440,6 +441,19 @@ export class TestRunAPI {
   }
   downloadGroupedLogs(data: any) {
     return this.testRunService.downloadGroupedLogs(data);
+  }
+
+  generatePerformanceSummary(id: number, projectId: number) {
+    this.testRunService.generatePerformanceSummary(id, projectId).subscribe(data => {
+      const response = JSON.stringify(data);
+      console.log('Response from generatePerformanceSummary: '+ response);
+      const obj = JSON.parse(response);
+      this.sharedService.setToastAndNotification({ status: 'success', summary: 'Success!', message: 'Performance summary generated!' });
+      // URL example: 'http://192.168.64.26:60500/home'
+      const newTab = window.open(obj.url, '_blank');
+    }, err => {
+      this.sharedService.externalToolErrorPopUp();
+    });
   }
 }
 
