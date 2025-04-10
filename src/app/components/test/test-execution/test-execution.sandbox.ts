@@ -48,7 +48,7 @@ export class TestExecutionSandbox {
 
     if (promptType === 'message_request') { // Displaying the message popup
       popupObject.popupId = 'TEXTBOX_' + promptData.payload.message_id;
-    } else if (promptType === 'options_request') { // Displaying the radio buttons popup
+    } else if (promptType === 'options_request' || promptType === 'stream_verification_request') {
       const options = Object.entries(promptData.payload.options).map(([key, value]) => ({ key: value, value: key }));
       const inputItems = [
         {
@@ -59,7 +59,12 @@ export class TestExecutionSandbox {
           options: options
         }
       ];
-      popupObject.popupId = 'RADIO_' + promptData.payload.message_id;
+      if (promptType === 'stream_verification_request'){
+        popupObject.popupId = 'STREAM_'
+      }else{
+        popupObject.popupId = 'RADIO_'
+      }
+      popupObject.popupId += promptData.payload.message_id;
       popupObject.inputItems = inputItems;
       popupObject.buttons = buttons;
     } else if (promptData.payload.placeholder_text) { // Displaying the text field popup

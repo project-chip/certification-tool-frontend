@@ -14,17 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Component, Input } from '@angular/core';
+import { Component, Input, ElementRef, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { SharedAPI } from 'src/app/shared/core_apis/shared';
 import { DEFAULT_POPUP_OBJECT } from 'src/app/shared/utils/constants';
 import { DataService } from 'src/app/shared/web_sockets/ws-config';
+import { environment } from 'src/environments/environment';
+
+declare class EncodedVideoChunk{
+  constructor(chunk: any);
+}
+
+type VideoDecoderConfig = {
+  codec: string;
+}
+
+declare class VideoDecoder{
+  constructor(decpder: any);
+  decode(chunk: any): void;
+  reset(): void;
+  close(): void;
+  configure(config: VideoDecoderConfig): void;
+}
 
 @Component({
   selector: 'app-popup-modal',
   templateUrl: './popup-modal.component.html',
   styleUrls: ['./popup-modal.component.scss']
 })
-export class PopupModalComponent {
+export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() popupId!: string;
   @Input() header!: string;
   @Input() subHeader!: string;
@@ -33,10 +50,77 @@ export class PopupModalComponent {
   @Input() messageId!: any;
   fileName: any = '';
   file?: File;
+  private socket!: WebSocket;
+  private ctx!: CanvasRenderingContext2D | null;
+  private decoder: VideoDecoder | null;
+
+  @ViewChild('videoCanvas', {static: false}) canvasRef!: ElementRef<HTMLCanvasElement>
 
   constructor(public sharedAPI: SharedAPI, private dataService: DataService) {
     this.fileName = '';
+    this.decoder = new VideoDecoder({
+      output: (frame: any) => {
+          if (this.ctx){
+            this.ctx.drawImage(frame, 0, 0, 640, 480);
+          }
+          frame.close();
+      },
+      error: (err: any) => {
+          console.log("decoder Error: ", err);
+      }
+    });
+    this.decoder.configure({ codec: "avc1.42E01E" });
+  }
 
+  ngOnInit(): void {
+    if(this.popupId.includes('STREAM_')){
+      this.connectWebSocket();
+    }
+  }
+
+  ngAfterViewInit(): void {
+    console.log("ngAfterViewInit CanvasRef: ", this.canvasRef)
+    if(this.popupId.includes('STREAM_')){
+      this.initCanvas();
+    }
+  }
+
+  ngOnDestroy(): void {
+    if(this.socket){
+      this.socket.close();
+    }
+  }
+
+  private initCanvas(){
+    if (this.canvasRef){
+      const canvas = this.canvasRef.nativeElement
+      this.ctx = canvas.getContext('2d');
+      console.log("Initialised ctx");
+    }
+  }
+
+  private connectWebSocket(): void {
+    if (!this.socket){
+      this.socket = new WebSocket(environment.streamBaseURL);
+      this.socket.binaryType = "arraybuffer";
+
+      this.socket.onmessage = (event) => {
+          try {
+              const chunck = new EncodedVideoChunk({
+                  type: "key",
+                  timestamp: performance.now(),
+                  data: new Uint8Array(event.data)
+              });
+              if (this.decoder){
+                this.decoder.decode(chunck);
+              }else{
+                console.log("Decoder is not intialized")
+              }
+          } catch (err) {
+              console.error("Error while decoding chunk: ", err);
+          }
+      };
+    }
   }
 
   cancel(event: any) {

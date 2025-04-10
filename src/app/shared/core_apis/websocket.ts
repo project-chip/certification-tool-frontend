@@ -47,6 +47,7 @@ export class WebSocketAPI {
           dataObject.type === 'options_request' ||
           dataObject.type === 'message_request' ||
           dataObject.type === 'file_upload_request' ||
+          dataObject.type === 'stream_verification_request' ||
           dataObject.type === 'custom_upload') {
             this.testExecutionSandbox.showExecutionPrompt(dataObject);
           } else if (dataObject.type === 'time_out_notification') {
