@@ -59,9 +59,9 @@ export class TestExecutionSandbox {
           options: options
         }
       ];
-      if (promptType === 'stream_verification_request'){
+      if (promptType === 'stream_verification_request') {
         popupObject.popupId = 'STREAM_'
-      }else{
+      } else {
         popupObject.popupId = 'RADIO_'
       }
       popupObject.popupId += promptData.payload.message_id;

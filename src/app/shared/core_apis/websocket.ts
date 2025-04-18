@@ -44,11 +44,11 @@ export class WebSocketAPI {
             this.testRunAPI.setRunningTestCases(updated);
             this.checkExecutionEnded(dataObject);
           } else if (dataObject.type === 'prompt_request' ||
-          dataObject.type === 'options_request' ||
-          dataObject.type === 'message_request' ||
-          dataObject.type === 'file_upload_request' ||
-          dataObject.type === 'stream_verification_request' ||
-          dataObject.type === 'custom_upload') {
+            dataObject.type === 'options_request' ||
+            dataObject.type === 'message_request' ||
+            dataObject.type === 'file_upload_request' ||
+            dataObject.type === 'stream_verification_request' ||
+            dataObject.type === 'custom_upload') {
             this.testExecutionSandbox.showExecutionPrompt(dataObject);
           } else if (dataObject.type === 'time_out_notification') {
             this.sharedService.setToastAndNotification({ status: 'error', summary: 'Error!', message: 'Failed to give input' });
