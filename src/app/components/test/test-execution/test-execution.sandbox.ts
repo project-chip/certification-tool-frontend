@@ -35,7 +35,8 @@ export class TestExecutionSandbox {
       header: ' ',
       buttons: [] as any,
       inputItems: [] as any,
-      messageId: promptData.payload.message_id
+      messageId: promptData.payload.message_id,
+      imgHexStr: "" as string
     };
     const buttons = [
       {
@@ -48,7 +49,7 @@ export class TestExecutionSandbox {
 
     if (promptType === 'message_request') { // Displaying the message popup
       popupObject.popupId = 'TEXTBOX_' + promptData.payload.message_id;
-    } else if (promptType === 'options_request' || promptType === 'stream_verification_request') {
+    } else if (['options_request', 'stream_verification_request', 'image_verification_request'].includes(promptType)) {
       const options = Object.entries(promptData.payload.options).map(([key, value]) => ({ key: value, value: key }));
       const inputItems = [
         {
@@ -59,10 +60,18 @@ export class TestExecutionSandbox {
           options: options
         }
       ];
-      if (promptType === 'stream_verification_request') {
-        popupObject.popupId = 'STREAM_'
-      } else {
-        popupObject.popupId = 'RADIO_'
+      switch(promptType){
+        case "stream_verification_request":
+          popupObject.popupId = 'STREAM_';
+          break;
+          
+        case "image_verification_request":
+          popupObject.popupId = 'IMAGE_';
+          popupObject.imgHexStr = promptData.payload.image_hex_str
+          break;
+        
+        default:
+          popupObject.popupId = 'RADIO_';
       }
       popupObject.popupId += promptData.payload.message_id;
       popupObject.inputItems = inputItems;

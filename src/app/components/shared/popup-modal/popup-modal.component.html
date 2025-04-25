@@ -22,6 +22,10 @@
     <canvas #videoCanvas width="640" height="480"></canvas>
   </div>
 
+  <div *ngIf="popupId.includes('IMAGE_')">
+    <img #imageView width="640" height="480" alt="No Image">
+  </div>
+
   <div *ngFor="let inputItem of inputItems" class="input-items-div">
     <input *ngIf="inputItem.type === 'inputbox'" type="text" pInputText [(ngModel)]="inputItem.value"
       [placeholder]="inputItem.placeHolder" class="popup-inputbox" />

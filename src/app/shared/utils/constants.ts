@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const DEFAULT_POPUP_OBJECT = { 'popupId': '', 'header': '', 'subHeader': '', 'buttons': [], 'inputItems': [], 'messageId': '' };
+export const DEFAULT_POPUP_OBJECT = { 'popupId': '', 'header': '', 'subHeader': '', 'buttons': [], 'inputItems': [], 'messageId': '' , 'imgHexStr': ''};
 export const EXECUTION_STATUS = ['passed', 'error', 'cancelled', 'failed', 'pending', 'executing'];
 export const EXECUTION_STATUS_COMPLETED = ['passed', 'error', 'cancelled', 'failed'];
 export const APP_STATE = ['READY', 'BUSY'];

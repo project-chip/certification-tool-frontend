@@ -19,6 +19,7 @@ import { SharedAPI } from 'src/app/shared/core_apis/shared';
 import { DEFAULT_POPUP_OBJECT } from 'src/app/shared/utils/constants';
 import { DataService } from 'src/app/shared/web_sockets/ws-config';
 import { environment } from 'src/environments/environment';
+import { convert_hex_to_base64, commaSeparatedHexToBase64 } from './image-utils';
 
 declare class EncodedVideoChunk {
   constructor(chunk: any);
@@ -54,7 +55,8 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
   private ctx!: CanvasRenderingContext2D | null;
   private decoder: VideoDecoder | null;
 
-  @ViewChild('videoCanvas', { static: false }) canvasRef!: ElementRef<HTMLCanvasElement>
+  @ViewChild('videoCanvas', {static: false}) canvasRef!: ElementRef<HTMLCanvasElement>
+  @ViewChild('imageView') imageRef!: ElementRef<HTMLImageElement>;
 
   constructor(public sharedAPI: SharedAPI, private dataService: DataService) {
     this.fileName = '';
@@ -79,6 +81,14 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
     console.log("ngAfterViewInit CanvasRef: ", this.canvasRef)
     if (this.popupId.includes('STREAM_')) {
       this.initCanvas();
+    }
+    if (this.popupId.includes('IMAGE_')) {
+      const data = this.sharedAPI.getCustomPopupData()
+      if (data.imgHexStr) {
+        const imgHexStr = data.imgHexStr;
+        var byteStream = commaSeparatedHexToBase64(imgHexStr);
+        this.imageRef.nativeElement.src = "data:image/jpg;base64," + byteStream;
+      }
     }
   }
 
