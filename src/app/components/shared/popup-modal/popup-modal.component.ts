@@ -27,10 +27,10 @@ declare class EncodedVideoChunk {
 
 type VideoDecoderConfig = {
   codec: string;
-}
+};
 
 declare class VideoDecoder {
-  constructor(decpder: any);
+  constructor(decoder: any);
   decode(chunk: any): void;
   reset(): void;
   close(): void;
@@ -66,7 +66,8 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
           this.ctx.drawImage(frame, 0, 0, 640, 480);
         }
         frame.close();
-      }
+      },
+      error: (err: any) => {},
     });
     this.decoder.configure({ codec: "avc1.42E01E" });
   }
@@ -78,12 +79,11 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log("ngAfterViewInit CanvasRef: ", this.canvasRef)
     if (this.popupId.includes('STREAM_')) {
       this.initCanvas();
     }
     if (this.popupId.includes('IMAGE_')) {
-      const data = this.sharedAPI.getCustomPopupData()
+      const data = this.sharedAPI.getCustomPopupData();
       if (data.imgHexStr) {
         const imgHexStr = data.imgHexStr;
         var byteStream = commaSeparatedHexToBase64(imgHexStr);
@@ -100,9 +100,8 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private initCanvas() {
     if (this.canvasRef) {
-      const canvas = this.canvasRef.nativeElement
+      const canvas = this.canvasRef.nativeElement;
       this.ctx = canvas.getContext('2d');
-      console.log("Initialised ctx");
     }
   }
 
@@ -121,7 +120,7 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
           if (this.decoder) {
             this.decoder.decode(chunck);
           } else {
-            console.log("Decoder is not intialized")
+            console.log("Decoder is not intialized");
           }
         } catch (err) {
           console.error("Encountered error while decoding chunk: ", err);
