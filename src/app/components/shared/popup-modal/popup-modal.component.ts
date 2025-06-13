@@ -19,7 +19,7 @@ import { SharedAPI } from 'src/app/shared/core_apis/shared';
 import { DEFAULT_POPUP_OBJECT } from 'src/app/shared/utils/constants';
 import { DataService } from 'src/app/shared/web_sockets/ws-config';
 import { environment } from 'src/environments/environment';
-import { convert_hex_to_base64, commaSeparatedHexToBase64 } from './image-utils';
+import { commaSeparatedHexToBase64 } from './image-utils';
 
 declare class EncodedVideoChunk {
   constructor(chunk: any);
@@ -27,6 +27,7 @@ declare class EncodedVideoChunk {
 
 type VideoDecoderConfig = {
   codec: string;
+  hardwareAcceleration: string;
 };
 
 declare class VideoDecoder {
@@ -51,7 +52,7 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() messageId!: any;
   fileName: any = '';
   file?: File;
-  private socket!: WebSocket;
+  private socket!: WebSocket | null;
   private ctx!: CanvasRenderingContext2D | null;
   private decoder: VideoDecoder | null;
 
@@ -69,7 +70,7 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
       },
       error: (err: any) => {},
     });
-    this.decoder.configure({ codec: "avc1.42E01E" });
+    this.decoder.configure({ codec: "avc1.42E01E", hardwareAcceleration: 'prefer-software' });
   }
 
   ngOnInit(): void {
@@ -93,8 +94,13 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    if (this.socket) {
+    if (this.socket && this.socket.readyState == WebSocket.OPEN) {
       this.socket.close();
+      this.socket = null;
+    }
+    if (this.decoder){
+      this.decoder.close();
+      this.decoder = null;
     }
   }
 
