@@ -18,7 +18,7 @@
 import { Injectable } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TestExecutionSandbox } from 'src/app/components/test/test-execution/test-execution.sandbox';
-import { APP_STATE, EXECUTION_STATUS_COMPLETED } from '../utils/constants';
+import { APP_STATE, DEFAULT_POPUP_OBJECT, EXECUTION_STATUS_COMPLETED } from '../utils/constants';
 import { DataService } from '../web_sockets/ws-config';
 import { SharedAPI } from './shared';
 import { TestRunAPI } from './test-run';
@@ -54,6 +54,8 @@ export class WebSocketAPI {
           } else if (dataObject.type === 'time_out_notification') {
             this.sharedService.setToastAndNotification({ status: 'error', summary: 'Error!', message: 'Failed to give input' });
             this.sharedAPI.setShowCustomPopup('');
+            //Ensure lifecycle hook ngOnDestroy is called on popup modal timeout
+            this.sharedAPI.setCustomPopupData(DEFAULT_POPUP_OBJECT);
           } else if (dataObject.type === 'test_log_records') {
             if (this.sharedAPI.getWebSocketLoader() === true) {
               this.sharedAPI.setWebSocketLoader(false);
