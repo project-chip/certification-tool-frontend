@@ -54,27 +54,27 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
   file?: File;
   private socket!: WebSocket | null;
   private ctx!: CanvasRenderingContext2D | null;
-  private decoder: VideoDecoder | null;
+  private decoder!: VideoDecoder | null;
 
   @ViewChild('videoCanvas', {static: false}) canvasRef!: ElementRef<HTMLCanvasElement>
   @ViewChild('imageView') imageRef!: ElementRef<HTMLImageElement>;
 
   constructor(public sharedAPI: SharedAPI, private dataService: DataService) {
     this.fileName = '';
-    this.decoder = new VideoDecoder({
-      output: (frame: any) => {
-        if (this.ctx) {
-          this.ctx.drawImage(frame, 0, 0, 640, 480);
-        }
-        frame.close();
-      },
-      error: (err: any) => {},
-    });
-    this.decoder.configure({ codec: "avc1.42E01E", hardwareAcceleration: 'prefer-software' });
   }
 
   ngOnInit(): void {
     if (this.popupId.includes('STREAM_')) {
+      this.decoder = new VideoDecoder({
+        output: (frame: any) => {
+          if (this.ctx) {
+            this.ctx.drawImage(frame, 0, 0, 640, 480);
+          }
+          frame.close();
+        },
+        error: (err: any) => {},
+      });
+      this.decoder.configure({ codec: "avc1.42E01E", hardwareAcceleration: 'prefer-software' });
       this.connectWebSocket();
     }
   }
