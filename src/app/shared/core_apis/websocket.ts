@@ -18,7 +18,7 @@
 import { Injectable } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TestExecutionSandbox } from 'src/app/components/test/test-execution/test-execution.sandbox';
-import { APP_STATE, EXECUTION_STATUS_COMPLETED } from '../utils/constants';
+import { APP_STATE, DEFAULT_POPUP_OBJECT, EXECUTION_STATUS_COMPLETED } from '../utils/constants';
 import { DataService } from '../web_sockets/ws-config';
 import { SharedAPI } from './shared';
 import { TestRunAPI } from './test-run';
@@ -44,14 +44,18 @@ export class WebSocketAPI {
             this.testRunAPI.setRunningTestCases(updated);
             this.checkExecutionEnded(dataObject);
           } else if (dataObject.type === 'prompt_request' ||
-          dataObject.type === 'options_request' ||
-          dataObject.type === 'message_request' ||
-          dataObject.type === 'file_upload_request' ||
-          dataObject.type === 'custom_upload') {
+            dataObject.type === 'options_request' ||
+            dataObject.type === 'message_request' ||
+            dataObject.type === 'file_upload_request' ||
+            dataObject.type === 'stream_verification_request' ||
+            dataObject.type === 'image_verification_request' ||
+            dataObject.type === 'custom_upload') {
             this.testExecutionSandbox.showExecutionPrompt(dataObject);
           } else if (dataObject.type === 'time_out_notification') {
             this.sharedService.setToastAndNotification({ status: 'error', summary: 'Error!', message: 'Failed to give input' });
             this.sharedAPI.setShowCustomPopup('');
+            //Ensure lifecycle hook ngOnDestroy is called on popup modal timeout
+            this.sharedAPI.setCustomPopupData(DEFAULT_POPUP_OBJECT);
           } else if (dataObject.type === 'test_log_records') {
             if (this.sharedAPI.getWebSocketLoader() === true) {
               this.sharedAPI.setWebSocketLoader(false);

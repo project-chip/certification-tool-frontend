@@ -14,17 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Component, Input } from '@angular/core';
+import { Component, Input, ElementRef, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { SharedAPI } from 'src/app/shared/core_apis/shared';
 import { DEFAULT_POPUP_OBJECT } from 'src/app/shared/utils/constants';
 import { DataService } from 'src/app/shared/web_sockets/ws-config';
+import { environment } from 'src/environments/environment';
+import { commaSeparatedHexToBase64 } from './image-utils';
+
+declare class EncodedVideoChunk {
+  constructor(chunk: any);
+}
+
+type VideoDecoderConfig = {
+  codec: string;
+  hardwareAcceleration: string;
+};
+
+declare class VideoDecoder {
+  constructor(decoder: any);
+  decode(chunk: any): void;
+  reset(): void;
+  close(): void;
+  configure(config: VideoDecoderConfig): void;
+}
 
 @Component({
   selector: 'app-popup-modal',
   templateUrl: './popup-modal.component.html',
   styleUrls: ['./popup-modal.component.scss']
 })
-export class PopupModalComponent {
+export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() popupId!: string;
   @Input() header!: string;
   @Input() subHeader!: string;
@@ -33,10 +52,87 @@ export class PopupModalComponent {
   @Input() messageId!: any;
   fileName: any = '';
   file?: File;
+  private socket!: WebSocket | null;
+  private ctx!: CanvasRenderingContext2D | null;
+  private decoder!: VideoDecoder | null;
+
+  @ViewChild('videoCanvas', {static: false}) canvasRef!: ElementRef<HTMLCanvasElement>
+  @ViewChild('imageView') imageRef!: ElementRef<HTMLImageElement>;
 
   constructor(public sharedAPI: SharedAPI, private dataService: DataService) {
     this.fileName = '';
+  }
 
+  ngOnInit(): void {
+    if (this.popupId.includes('STREAM_')) {
+      this.decoder = new VideoDecoder({
+        output: (frame: any) => {
+          if (this.ctx) {
+            this.ctx.drawImage(frame, 0, 0, 640, 480);
+          }
+          frame.close();
+        },
+        error: (err: any) => {},
+      });
+      this.decoder.configure({ codec: "avc1.42E01E", hardwareAcceleration: 'prefer-software' });
+      this.connectWebSocket();
+    }
+  }
+
+  ngAfterViewInit(): void {
+    if (this.popupId.includes('STREAM_')) {
+      this.initCanvas();
+    }
+    if (this.popupId.includes('IMAGE_')) {
+      const data = this.sharedAPI.getCustomPopupData();
+      if (data.imgHexStr) {
+        const imgHexStr = data.imgHexStr;
+        var byteStream = commaSeparatedHexToBase64(imgHexStr);
+        this.imageRef.nativeElement.src = "data:image/jpg;base64," + byteStream;
+      }
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.socket && this.socket.readyState == WebSocket.OPEN) {
+      this.socket.close();
+      this.socket = null;
+    }
+    if (this.decoder){
+      this.decoder.close();
+      this.decoder = null;
+    }
+  }
+
+  private initCanvas() {
+    if (this.canvasRef) {
+      const canvas = this.canvasRef.nativeElement;
+      this.ctx = canvas.getContext('2d');
+    }
+  }
+
+  private connectWebSocket(): void {
+    if (!this.socket) {
+      this.socket = new WebSocket(environment.streamBaseURL);
+      this.socket.binaryType = "arraybuffer";
+
+      this.socket.onmessage = (event) => {
+        try {
+          const chunck = new EncodedVideoChunk({
+            type: "key",
+            timestamp: performance.now(),
+            data: new Uint8Array(event.data)
+          });
+          if (this.decoder) {
+            this.decoder.decode(chunck);
+          } else {
+            console.log("Decoder is not intialized");
+          }
+        } catch (err) {
+          console.error("Encountered error while decoding chunk: ", err);
+        }
+      };
+    }
   }
 
   cancel(event: any) {
