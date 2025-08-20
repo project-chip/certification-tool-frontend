@@ -10,7 +10,8 @@
     "test": "ng test",
     "api": "json-server src/app/shared/api/db.json --routes src/app/shared/api/routes.json --no-cors=true",
     "dev": "concurrently \"ng serve --host 0.0.0.0 \" \" json-server --watch src/app/shared/api/db.json\"",
-    "runtest": "concurrently \"ng test \" \" json-server --watch src/app/shared/api/db.json\""
+    "runtest": "concurrently \"ng test \" \" json-server --watch src/app/shared/api/db.json\"",
+    "postinstall": "patch-package"
   },
   "private": true,
   "dependencies": {
@@ -38,7 +39,9 @@
     "primeng": "^12.0.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
-    "zone.js": "~0.11.4"
+    "zone.js": "~0.11.4",
+    "shaka-player": "4.5.0",
+    "patch-package": "6.5.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~12.1.3",

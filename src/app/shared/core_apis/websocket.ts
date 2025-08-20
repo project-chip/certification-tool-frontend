@@ -49,6 +49,7 @@ export class WebSocketAPI {
             dataObject.type === 'file_upload_request' ||
             dataObject.type === 'stream_verification_request' ||
             dataObject.type === 'image_verification_request' ||
+            dataObject.type === 'push_av_stream_verification_request' ||
             dataObject.type === 'custom_upload') {
             this.testExecutionSandbox.showExecutionPrompt(dataObject);
           } else if (dataObject.type === 'time_out_notification') {

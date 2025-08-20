@@ -28,7 +28,8 @@ export const environment = {
   reconnectInterval: 2000,
   mockBaseURL: 'http://' + hostName + ':3000/',
   isMockActive: false,
-  streamBaseURL: 'ws://' + hostName + '/api/v1/ws/video'
+  streamBaseURL: 'ws://' + hostName + '/api/v1/ws/video',
+  testPushAVServerURL: 'https://' + hostName + ':1234/',
 };
 
 /**

@@ -98,4 +98,8 @@ export class TestRunStore {
   @action setDetectPicsChanges(data: any) {
     this.detectPicsChanges = data;
   }
+  @observable pushAVStreamsList: any = [];
+  @action setPushAVStreamsList(streamsList: any) {
+    this.pushAVStreamsList = streamsList;
+  }
 }

@@ -49,7 +49,7 @@ export class TestExecutionSandbox {
 
     if (promptType === 'message_request') { // Displaying the message popup
       popupObject.popupId = 'TEXTBOX_' + promptData.payload.message_id;
-    } else if (['options_request', 'stream_verification_request', 'image_verification_request'].includes(promptType)) {
+    } else if (['options_request', 'stream_verification_request', 'image_verification_request', 'push_av_stream_verification_request'].includes(promptType)) {
       const options = Object.entries(promptData.payload.options).map(([key, value]) => ({ key: value, value: key }));
       const inputItems = [
         {
@@ -60,16 +60,20 @@ export class TestExecutionSandbox {
           options: options
         }
       ];
-      switch(promptType){
+      switch (promptType) {
+        case "push_av_stream_verification_request":
+          popupObject.popupId = 'PUSH_';
+          break;
+
         case "stream_verification_request":
           popupObject.popupId = 'STREAM_';
           break;
-          
+
         case "image_verification_request":
           popupObject.popupId = 'IMAGE_';
           popupObject.imgHexStr = promptData.payload.image_hex_str
           break;
-        
+
         default:
           popupObject.popupId = 'RADIO_';
       }

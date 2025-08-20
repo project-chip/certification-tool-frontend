@@ -22,6 +22,24 @@
     <canvas #videoCanvas width="640" height="480"></canvas>
   </div>
 
+  <div *ngIf="popupId.includes('PUSH_')">
+    <button pButton type="button" [label]="'Refresh Streams'" [icon]="'pi pi-refresh'"
+      (click)="refreshStreams()"></button>
+    <ul>
+      <li *ngFor="let stream of testRunAPI.getPushAVStreamsList()">
+        <a href="#" (click)="updateStreamSrc(stream.id); $event.preventDefault()">Stream ID {{stream.id}}</a>
+      </li>
+    </ul>
+    <video #videoPlayer width="640" height="480" controls>
+    </video>
+    <div *ngIf="currentStream">
+      <p>Stream {{currentStream}} Contents:</p>
+      <ul>
+        <li *ngFor="let file of streamContents"> {{file}} </li>
+      </ul>
+    </div>
+  </div>
+
   <div *ngIf="popupId.includes('IMAGE_')">
     <img #imageView width="640" height="480" alt="No Image">
   </div>
