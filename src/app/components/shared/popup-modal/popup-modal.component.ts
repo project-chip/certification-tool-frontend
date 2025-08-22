@@ -56,11 +56,11 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
   file?: File;
   streamSrc: string | null;
   streamContents: string[];
-  currentStream: string | null;
+  currentStream: number | null;
   private socket!: WebSocket | null;
   private ctx!: CanvasRenderingContext2D | null;
   private decoder!: VideoDecoder | null;
-  private player!: any;
+  private player!: shaka.Player;
   @ViewChild('videoCanvas', { static: false }) canvasRef!: ElementRef<HTMLCanvasElement>
   @ViewChild('imageView') imageRef!: ElementRef<HTMLImageElement>;
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
@@ -105,12 +105,11 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     if (this.popupId.includes('PUSH_')) {
-      console.log("Popup for pushav")
       this.player = new shaka.Player(this.videoPlayer.nativeElement);
       this.player.configure({
         streaming: {
           bufferingGoal: 30,
-          failureCallback: (error: any) => {
+          failureCallback: (error: shaka.util.Error) => {
             console.error('Streaming error:', error);
           }
         }
@@ -119,14 +118,25 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  updateStreamSrc(streamId?: any) {
-    const streams: any[] = this.testRunAPI.getPushAVStreamsList();
-    this.streamContents = streams.find(stream => stream.id == streamId).files
-    const streamPath = this.streamContents.find(fileName => fileName.endsWith('.mpd'))
-    this.streamSrc = `${environment.testPushAVServerURL}streams/${streamId}/${streamPath}`
-    setTimeout(() => {
-      this.player.load(this.streamSrc)
-    })
+  updateStreamSrc(streamId: number) {
+    const streams: { id: number, files: string[] }[] = this.testRunAPI.getPushAVStreamsList();
+    const stream = streams.find(s => s.id === streamId);
+    if (!stream) {
+      console.error(`Stream with id ${streamId} not found.`);
+      return;
+    }
+
+    this.streamContents = stream.files;
+    const streamPath = this.pickEntryPoint(stream.files);
+    if (!streamPath) {
+      console.error(`No manifest found (DASH MPD or HLS M3U8). Cannot play stream ${streamId}.`);
+      return;
+    }
+
+    this.streamSrc = `${environment.testPushAVServerURL}streams/${streamId}/${streamPath}`;
+    this.player.load(this.streamSrc).catch((e: shaka.util.Error) => {
+      console.error(`Error loading stream: ${streamId}`, e);
+    });
     this.currentStream = streamId;
   }
 
@@ -150,8 +160,25 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
       this.player
         .destroy()
         .then(() => console.log("Shaka player destroyed"))
-        .catch((e: any) => console.error("Failed to destroy Shaka player", e));
+        .catch((e: shaka.util.Error) => console.error("Failed to destroy Shaka player", e));
     }
+  }
+
+  private pickEntryPoint(files: string[]): string | null {
+    // Check for DASH first
+    const mpd = files.find(f => f.endsWith('.mpd'));
+    if (mpd) return mpd;
+
+    // HLS fallback
+    const m3u8s = files.filter(f => f.endsWith('.m3u8'));
+    if(m3u8s.length === 0) return null;
+
+    //Prefer master-like names if available
+    const master = m3u8s.find(f => f.toLowerCase().includes('master'));
+    if(master) return master;
+
+    //pick the first m3u8 file as entry point
+    return m3u8s[0];
   }
 
   private initCanvas() {

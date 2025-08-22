@@ -457,7 +457,7 @@ export class TestRunAPI {
   }
 
   getPushAVStreamsList() {
-    return this.testRunStore.pushAVStreamsList.slice().sort((a: any, b: any) => a.id - b.id);
+    return this.testRunStore.pushAVStreamsList.slice().sort((s1: {id: number}, s2: {id: number}) => s1.id - s2.id);
   }
 
   fetchPushAVStreamsList() {
