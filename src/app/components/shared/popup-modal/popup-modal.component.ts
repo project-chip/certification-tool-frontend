@@ -57,6 +57,8 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
   streamSrc: string | null;
   streamContents: string[];
   currentStream: number | null;
+  errorMessage: string | null = null;
+  isLoading: boolean = false;
   private socket!: WebSocket | null;
   private ctx!: CanvasRenderingContext2D | null;
   private decoder!: VideoDecoder | null;
@@ -87,7 +89,8 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
       this.connectWebSocket();
     }
     if (this.popupId.includes('PUSH_')) {
-      this.testRunAPI.fetchPushAVStreamsList();
+      this.loadStreams();
+      this.initializeShakaPlayer();
     }
   }
 
@@ -105,47 +108,9 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     if (this.popupId.includes('PUSH_')) {
-      this.player = new shaka.Player(this.videoPlayer.nativeElement);
-      this.player.configure({
-        streaming: {
-          bufferingGoal: 30,
-          failureCallback: (error: shaka.util.Error) => {
-            console.error('Streaming error:', error);
-          }
-        }
-      });
-      shaka.polyfill.installAll();
+      this.player.attach(this.videoPlayer.nativeElement);
     }
   }
-
-  updateStreamSrc(streamId: number) {
-    const streams: { id: number, files: string[] }[] = this.testRunAPI.getPushAVStreamsList();
-    const stream = streams.find(s => s.id === streamId);
-    if (!stream) {
-      console.error(`Stream with id ${streamId} not found.`);
-      return;
-    }
-
-    this.streamContents = stream.files;
-    const streamPath = this.pickEntryPoint(stream.files);
-    if (!streamPath) {
-      console.error(`No manifest found (DASH MPD or HLS M3U8). Cannot play stream ${streamId}.`);
-      return;
-    }
-
-    this.streamSrc = `${environment.testPushAVServerURL}streams/${streamId}/${streamPath}`;
-    this.player.load(this.streamSrc).catch((e: shaka.util.Error) => {
-      console.error(`Error loading stream: ${streamId}`, e);
-    });
-    this.currentStream = streamId;
-  }
-
-  refreshStreams() {
-    this.testRunAPI.fetchPushAVStreamsList();
-    this.streamContents = [];
-    this.currentStream = null;
-  }
-
 
   ngOnDestroy(): void {
     if (this.socket && this.socket.readyState == WebSocket.OPEN) {
@@ -164,6 +129,58 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  loadStreams() {
+    this.isLoading = true;
+    this.errorMessage = null;
+    this.testRunAPI.fetchPushAVStreamsList();
+    
+    // Check if streams are available after a short delay
+    setTimeout(() => {
+      const streams = this.testRunAPI.getPushAVStreamsList();
+      if (!streams || streams.length === 0) {
+        this.errorMessage = 'No video streams available. Click "Refresh Streams" to check for new streams.';
+      }
+      this.isLoading = false;
+    }, 1000);
+  }
+
+  updateStreamSrc(streamId: number) {
+    this.errorMessage = null;
+    this.isLoading = true;
+    
+    const streams: { id: number, files: string[] }[] = this.testRunAPI.getPushAVStreamsList();
+    const stream = streams.find(s => s.id === streamId);
+    if (!stream) {
+      this.errorMessage = `Stream with ID ${streamId} not found.`;
+      this.isLoading = false;
+      return;
+    }
+
+    this.streamContents = stream.files;
+    const streamPath = this.pickEntryPoint(stream.files);
+    if (!streamPath) {
+      this.errorMessage = `No DASH MPD or HLS M3U8 manifest found for stream ${streamId}. Cannot view stream.`;
+      this.isLoading = false;
+      return;
+    }
+
+    this.streamSrc = `${environment.testPushAVServerURL}streams/${streamId}/${streamPath}`;
+    this.player.load(this.streamSrc).then(() => {
+      this.currentStream = streamId;
+      this.isLoading = false;
+    }).catch((e: shaka.util.Error) => {
+      console.error(`Error loading stream: ${streamId}`, e);
+      this.errorMessage = `Failed to load stream ${streamId}. Error: ${e.message || 'Unknown error occurred'}`;
+      this.isLoading = false;
+    });
+  }
+
+  refreshStreams() {
+    this.streamContents = [];
+    this.currentStream = null;
+    this.loadStreams();
+  }
+
   private pickEntryPoint(files: string[]): string | null {
     // Check for DASH first
     const mpd = files.find(f => f.endsWith('.mpd'));
@@ -179,6 +196,19 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
     //pick the first m3u8 file as entry point
     return m3u8s[0];
+  }
+
+  private initializeShakaPlayer(){
+    this.player = new shaka.Player();
+    this.player.configure({
+      streaming: {
+        bufferingGoal: 30,
+        failureCallback: (error: shaka.util.Error) => {
+          console.error('Streaming error:', error);
+        }
+      }
+    });
+    shaka.polyfill.installAll();
   }
 
   private initCanvas() {

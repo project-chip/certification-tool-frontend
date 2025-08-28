@@ -465,6 +465,7 @@ export class TestRunAPI {
       (data: any) => {
         this.testRunStore.setPushAVStreamsList(data.streams);
       }, err => {
+        this.testRunStore.setPushAVStreamsList([]);
         this.sharedService.setToastAndNotification({ status: 'error', summary: 'Error!', message: 'Failed to fetch streams' });
       }
     );
