@@ -17,7 +17,10 @@ RUN bash -c "if [ $INSTALL_PUPPETEER == 'true' ] ; then apt-get update && apt-ge
 WORKDIR /app
 RUN bash -c "if [ $INSTALL_PUPPETEER == 'true' ] ; then npm install puppeteer ; fi"
 COPY package*.json /app/
-RUN npm install
+# The application resides in the root directory (/app). By default, npm restricts
+# lifecycle scripts (e.g., postinstall) from executing with elevated privileges.
+# To ensure patch-package applies the patch, the --unsafe-perm flag is used here.
+RUN npm install --unsafe-perm
 COPY ./ /app/
 ARG FRONTEND_ENV=production
 ENV ANGULAR_APP_ENV=${FRONTEND_ENV}

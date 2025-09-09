@@ -455,6 +455,21 @@ export class TestRunAPI {
       this.sharedService.externalToolErrorPopUp();
     });
   }
+
+  getPushAVStreamsList() {
+    return this.testRunStore.pushAVStreamsList.slice().sort((s1: {id: number}, s2: {id: number}) => s1.id - s2.id);
+  }
+
+  fetchPushAVStreamsList() {
+    this.testRunService.getPushAVStreamsList().subscribe(
+      (data: any) => {
+        this.testRunStore.setPushAVStreamsList(data.streams);
+      }, err => {
+        this.testRunStore.setPushAVStreamsList([]);
+        this.sharedService.setToastAndNotification({ status: 'error', summary: 'Error!', message: 'Failed to fetch streams' });
+      }
+    );
+  }
 }
 
 export function testExecutionTable() {

@@ -17,7 +17,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { getBaseUrl } from 'src/environments/environment';
+import { getBaseUrl, environment } from 'src/environments/environment';
 import { getTimeStamp } from './utils/utils';
 import { map } from 'rxjs/operators';
 
@@ -145,5 +145,9 @@ export class TestRunService {
 
   generatePerformanceSummary(id: number, projectId: number) {
     return this.http.post(getBaseUrl() + `test_run_executions/${id}/performance_summary?project_id=${projectId}`, {responseType: 'json' });
+  }
+
+  getPushAVStreamsList(){
+    return this.http.get(environment.testPushAVServerURL + 'streams', {responseType: 'json'})
   }
 }

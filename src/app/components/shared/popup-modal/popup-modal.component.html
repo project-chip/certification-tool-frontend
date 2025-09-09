@@ -22,6 +22,47 @@
     <canvas #videoCanvas width="640" height="480"></canvas>
   </div>
 
+  <div *ngIf="popupId.includes('PUSH_')">
+    <button pButton type="button" [label]="'Refresh Streams'" [icon]="'pi pi-refresh'"
+      (click)="refreshStreams()" [disabled]="isLoading"></button>
+    
+    <!-- Error Message Display -->
+    <div *ngIf="errorMessage" class="error-message">
+      <i class="pi pi-exclamation-triangle"></i>
+      <span>{{errorMessage}}</span>
+    </div>
+    
+    <!-- Loading Indicator -->
+    <div *ngIf="isLoading" class="loading-indicator">
+      <i class="pi pi-spin pi-spinner"></i>
+      <span>Loading streams...</span>
+    </div>
+    
+    <!-- Streams List -->
+    <div *ngIf="!isLoading && !errorMessage">
+      <ul>
+        <li *ngFor="let stream of testRunAPI.getPushAVStreamsList()">
+          <a href="#" (click)="updateStreamSrc(stream.id); $event.preventDefault()">Stream ID {{stream.id}}</a>
+        </li>
+      </ul>
+      
+      <!-- No Streams Message -->
+      <div *ngIf="testRunAPI.getPushAVStreamsList().length === 0" class="no-streams-message">
+        <i class="pi pi-info-circle"></i>
+        <span>No streams available. Click "Refresh Streams" to check for new streams.</span>
+      </div>
+    </div>
+    
+    <video #videoPlayer width="640" height="480" controls>
+    </video>
+    <div *ngIf="currentStream">
+      <p>Stream {{currentStream}} Contents:</p>
+      <ul>
+        <li *ngFor="let file of streamContents"> {{file}} </li>
+      </ul>
+    </div>
+  </div>
+
   <div *ngIf="popupId.includes('IMAGE_')">
     <img #imageView width="640" height="480" alt="No Image">
   </div>

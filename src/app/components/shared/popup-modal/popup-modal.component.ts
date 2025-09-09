@@ -16,10 +16,12 @@
  */
 import { Component, Input, ElementRef, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { SharedAPI } from 'src/app/shared/core_apis/shared';
+import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
 import { DEFAULT_POPUP_OBJECT } from 'src/app/shared/utils/constants';
 import { DataService } from 'src/app/shared/web_sockets/ws-config';
 import { environment } from 'src/environments/environment';
 import { commaSeparatedHexToBase64 } from './image-utils';
+import shaka from 'shaka-player/dist/shaka-player.compiled';
 
 declare class EncodedVideoChunk {
   constructor(chunk: any);
@@ -52,15 +54,24 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() messageId!: any;
   fileName: any = '';
   file?: File;
+  streamSrc: string | null;
+  streamContents: string[];
+  currentStream: number | null;
+  errorMessage: string | null = null;
+  isLoading: boolean = false;
   private socket!: WebSocket | null;
   private ctx!: CanvasRenderingContext2D | null;
   private decoder!: VideoDecoder | null;
-
-  @ViewChild('videoCanvas', {static: false}) canvasRef!: ElementRef<HTMLCanvasElement>
+  private player!: shaka.Player;
+  @ViewChild('videoCanvas', { static: false }) canvasRef!: ElementRef<HTMLCanvasElement>
   @ViewChild('imageView') imageRef!: ElementRef<HTMLImageElement>;
+  @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
 
-  constructor(public sharedAPI: SharedAPI, private dataService: DataService) {
+  constructor(public sharedAPI: SharedAPI, private dataService: DataService, public testRunAPI: TestRunAPI) {
     this.fileName = '';
+    this.streamSrc = null;
+    this.streamContents = [];
+    this.currentStream = null;
   }
 
   ngOnInit(): void {
@@ -77,6 +88,10 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
       this.decoder.configure({ codec: "avc1.42E01E", hardwareAcceleration: 'prefer-software' });
       this.connectWebSocket();
     }
+    if (this.popupId.includes('PUSH_')) {
+      this.loadStreams();
+      this.initializeShakaPlayer();
+    }
   }
 
   ngAfterViewInit(): void {
@@ -91,6 +106,10 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
         this.imageRef.nativeElement.src = "data:image/jpg;base64," + byteStream;
       }
     }
+
+    if (this.popupId.includes('PUSH_')) {
+      this.player.attach(this.videoPlayer.nativeElement);
+    }
   }
 
   ngOnDestroy(): void {
@@ -102,6 +121,94 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
       this.decoder.close();
       this.decoder = null;
     }
+    if (this.player){
+      this.player
+        .destroy()
+        .then(() => console.log("Shaka player destroyed"))
+        .catch((e: shaka.util.Error) => console.error("Failed to destroy Shaka player", e));
+    }
+  }
+
+  loadStreams() {
+    this.isLoading = true;
+    this.errorMessage = null;
+    this.testRunAPI.fetchPushAVStreamsList();
+    
+    // Check if streams are available after a short delay
+    setTimeout(() => {
+      const streams = this.testRunAPI.getPushAVStreamsList();
+      if (!streams || streams.length === 0) {
+        this.errorMessage = 'No video streams available. Click "Refresh Streams" to check for new streams.';
+      }
+      this.isLoading = false;
+    }, 1000);
+  }
+
+  updateStreamSrc(streamId: number) {
+    this.errorMessage = null;
+    this.isLoading = true;
+    
+    const streams: { id: number, files: string[] }[] = this.testRunAPI.getPushAVStreamsList();
+    const stream = streams.find(s => s.id === streamId);
+    if (!stream) {
+      this.errorMessage = `Stream with ID ${streamId} not found.`;
+      this.isLoading = false;
+      return;
+    }
+
+    this.streamContents = stream.files;
+    const streamPath = this.pickEntryPoint(stream.files);
+    if (!streamPath) {
+      this.errorMessage = `No DASH MPD or HLS M3U8 manifest found for stream ${streamId}. Cannot view stream.`;
+      this.isLoading = false;
+      return;
+    }
+
+    this.streamSrc = `${environment.testPushAVServerURL}streams/${streamId}/${streamPath}`;
+    this.player.load(this.streamSrc).then(() => {
+      this.currentStream = streamId;
+      this.isLoading = false;
+    }).catch((e: shaka.util.Error) => {
+      console.error(`Error loading stream: ${streamId}`, e);
+      this.errorMessage = `Failed to load stream ${streamId}. Error: ${e.message || 'Unknown error occurred'}`;
+      this.isLoading = false;
+    });
+  }
+
+  refreshStreams() {
+    this.streamContents = [];
+    this.currentStream = null;
+    this.loadStreams();
+  }
+
+  private pickEntryPoint(files: string[]): string | null {
+    // Check for DASH first
+    const mpd = files.find(f => f.endsWith('.mpd'));
+    if (mpd) return mpd;
+
+    // HLS fallback
+    const m3u8s = files.filter(f => f.endsWith('.m3u8'));
+    if(m3u8s.length === 0) return null;
+
+    //Prefer master-like names if available
+    const master = m3u8s.find(f => f.toLowerCase().includes('master'));
+    if(master) return master;
+
+    //pick the first m3u8 file as entry point
+    return m3u8s[0];
+  }
+
+  private initializeShakaPlayer(){
+    this.player = new shaka.Player();
+    this.player.configure({
+      streaming: {
+        bufferingGoal: 30,
+        failureCallback: (error: shaka.util.Error) => {
+          console.error('Streaming error:', error);
+        }
+      }
+    });
+    shaka.polyfill.installAll();
   }
 
   private initCanvas() {

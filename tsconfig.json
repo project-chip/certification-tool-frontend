@@ -17,6 +17,7 @@
     "importHelpers": true,
     "target": "es2017",
     "module": "es2020",
+    "skipLibCheck": true, //shaka-player doesn't have typescript support yet
     "lib": [
       "es2018",
       "dom"

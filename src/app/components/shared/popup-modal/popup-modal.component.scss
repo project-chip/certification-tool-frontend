@@ -110,3 +110,53 @@
     width: 50vw !important;
   }
 }
+
+// Error handling styles for PUSH_ popup
+.error-message {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  margin: 10px 0;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  color: #dc2626;
+  font-size: 14px;
+  
+  i {
+    margin-right: 8px;
+    font-size: 16px;
+  }
+}
+
+.loading-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  margin: 10px 0;
+  color: var(--blue-500);
+  font-size: 14px;
+  
+  i {
+    margin-right: 8px;
+    font-size: 18px;
+  }
+}
+
+.no-streams-message {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  margin: 10px 0;
+  background-color: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 6px;
+  color: #0369a1;
+  font-size: 14px;
+  
+  i {
+    margin-right: 8px;
+    font-size: 16px;
+  }
+}
