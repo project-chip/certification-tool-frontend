@@ -82,7 +82,6 @@ class WebRTCSession {
 
     this.peerConnection = new RTCPeerConnection(configuration);
 
-    //TODO: would need the create peer connection message to tell us what this should be
     this.peerConnection.addTransceiver("audio", { direction: "sendrecv" });
     this.peerConnection.addTransceiver("video", { direction: "recvonly" });
 
@@ -97,7 +96,7 @@ class WebRTCSession {
         this.setupAnalyzer(stream, 'local');
       });
 
-    // Set up event listeners and these report s we receive
+    // Set up event listeners and report as we receive
     this.peerConnection.onicecandidate = (event) => {
       if (event.candidate && event.candidate?.candidate != "") {
         this.sendIceCandidate(event.candidate, request);
