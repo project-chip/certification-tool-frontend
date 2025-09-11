@@ -22,6 +22,7 @@ import { DataService } from 'src/app/shared/web_sockets/ws-config';
 import { environment } from 'src/environments/environment';
 import { commaSeparatedHexToBase64 } from './image-utils';
 import shaka from 'shaka-player/dist/shaka-player.compiled';
+import { WebRTCService } from 'src/app/shared/core_apis/webrtc.service';
 
 declare class EncodedVideoChunk {
   constructor(chunk: any);
@@ -59,6 +60,7 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
   currentStream: number | null;
   errorMessage: string | null = null;
   isLoading: boolean = false;
+  sessions$? = this.webRTCService.sessions$;
   private socket!: WebSocket | null;
   private ctx!: CanvasRenderingContext2D | null;
   private decoder!: VideoDecoder | null;
@@ -67,7 +69,7 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('imageView') imageRef!: ElementRef<HTMLImageElement>;
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
 
-  constructor(public sharedAPI: SharedAPI, private dataService: DataService, public testRunAPI: TestRunAPI) {
+  constructor(public sharedAPI: SharedAPI, public testRunAPI: TestRunAPI, private dataService: DataService, private webRTCService: WebRTCService) {
     this.fileName = '';
     this.streamSrc = null;
     this.streamContents = [];
@@ -209,6 +211,9 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
     shaka.polyfill.installAll();
+    if(this.popupId.includes('TWO_WAY_TALK_')){
+      this.webRTCService.closeAllSessions();
+    }
   }
 
   private initCanvas() {
@@ -269,5 +274,15 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       return true;
     }
+  }
+
+  getAudioLevelColor(level: number): string {
+    if (level < 20) return '#4CAF50'; // Green for low levels
+    if (level < 60) return '#FFC107'; // Yellow for medium levels
+    return '#F44336'; // Red for high levels
+  }
+
+  getAudioLevelWidth(level: number): string {
+    return `${Math.max(2, level)}%`;
   }
 }

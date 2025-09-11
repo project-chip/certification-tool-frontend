@@ -18,6 +18,46 @@
   class="custom-popup-parent" [draggable]="true" [ngClass]='{"upload-width": popupId === "upload-popup"}'>
   <div class="subheader">{{subHeader}}</div>
 
+  <div *ngIf="popupId.includes('TWO_WAY_TALK_')">
+    <!-- WebRTC Audio Level Bars -->
+    <div *ngFor="let session of (sessions$ | async)" class="audio-session-container">
+      <video autoplay playsinline [streamSrc]=session.remoteStream$ width="640" height="480"></video>
+      <div class="audio-container">
+        <div class="audio-level-item">
+          <div class="audio-label">Remote Audio</div>
+          <i class="pi pi-volume-up"></i>
+          <div class="audio-level-bar-container">
+            <div class="audio-level-bar-background"></div>
+            <div 
+              class="audio-level-bar" 
+              [style.width]="getAudioLevelWidth((session.remoteAudioLevel$ | async) || 0)"
+              [style.backgroundColor]="getAudioLevelColor((session.remoteAudioLevel$ | async) || 0)"
+            ></div>
+          </div>
+          <div class="audio-level-value">{{ (session.remoteAudioLevel$ | async) || 0 | number:'1.0-0' }}%</div>
+        </div>
+        
+        <div class="audio-level-item">
+          <div class="audio-label">Local Audio</div>
+          <i class="pi pi-microphone"></i>
+          <div class="audio-level-bar-container">
+            <div class="audio-level-bar-background"></div>
+            <div 
+              class="audio-level-bar" 
+              [style.width]="getAudioLevelWidth((session.localAudioLevel$ | async) || 0)"
+              [style.backgroundColor]="getAudioLevelColor((session.localAudioLevel$ | async) || 0)"
+            ></div>
+          </div>
+          <div class="audio-level-value">{{ (session.localAudioLevel$ | async) || 0 | number:'1.0-0' }}%</div>
+        </div>
+      </div>
+      
+      <div class="state">
+        Peer Connection State: {{ session.connectionState$ | async }}
+      </div>
+    </div>
+  </div>
+
   <div *ngIf="popupId.includes('STREAM_')">
     <canvas #videoCanvas width="640" height="480"></canvas>
   </div>

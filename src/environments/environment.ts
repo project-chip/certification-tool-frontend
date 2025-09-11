@@ -25,6 +25,7 @@ export const environment = {
   production: false,
   restBaseURL: 'http://' + hostName + '/api/v1/',
   webSocketBaseURL: 'ws://' + hostName + '/api/v1/ws',
+  webRTCWebSocketURL: 'ws://' + hostName + '/api/v1/ws/webrtc/peer', // passing peer to identify client as browser
   reconnectInterval: 2000,
   mockBaseURL: 'http://' + hostName + ':3000/',
   isMockActive: false,
