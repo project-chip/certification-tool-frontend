@@ -23,35 +23,36 @@
     <div *ngFor="let session of (sessions$ | async)" class="audio-session-container">
       <video autoplay playsinline [streamSrc]=session.remoteStream$ width="640" height="480"></video>
       <div class="audio-container">
-        <div class="audio-level-item">
-          <div class="audio-label">Remote Audio</div>
-          <i class="pi pi-volume-up"></i>
-          <div class="audio-level-bar-container">
-            <div class="audio-level-bar-background"></div>
-            <div 
-              class="audio-level-bar" 
-              [style.width]="getAudioLevelWidth((session.remoteAudioLevel$ | async) || 0)"
-              [style.backgroundColor]="getAudioLevelColor((session.remoteAudioLevel$ | async) || 0)"
-            ></div>
+        <ng-container *ngIf="{ remote: session.remoteAudioLevel$ | async, local: session.localAudioLevel$ | async } as levels">
+          <div class="audio-level-item">
+            <div class="audio-label">Speaker</div>
+            <i class="pi pi-volume-up"></i>
+            <div class="audio-level-bar-container">
+              <div class="audio-level-bar-background"></div>
+              <div 
+                class="audio-level-bar" 
+                [style.width]="getAudioLevelWidth(levels.remote || 0)"
+                [style.backgroundColor]="getAudioLevelColor(levels.remote || 0)"
+              ></div>
+            </div>
+            <div class="audio-level-value">{{ levels.remote || 0 | number:'1.0-0' }}%</div>
           </div>
-          <div class="audio-level-value">{{ (session.remoteAudioLevel$ | async) || 0 | number:'1.0-0' }}%</div>
-        </div>
-        
-        <div class="audio-level-item">
-          <div class="audio-label">Local Audio</div>
-          <i class="pi pi-microphone"></i>
-          <div class="audio-level-bar-container">
-            <div class="audio-level-bar-background"></div>
-            <div 
-              class="audio-level-bar" 
-              [style.width]="getAudioLevelWidth((session.localAudioLevel$ | async) || 0)"
-              [style.backgroundColor]="getAudioLevelColor((session.localAudioLevel$ | async) || 0)"
-            ></div>
+          
+          <div class="audio-level-item">
+            <div class="audio-label">Mic</div>
+            <i class="pi pi-microphone"></i>
+            <div class="audio-level-bar-container">
+              <div class="audio-level-bar-background"></div>
+              <div 
+                class="audio-level-bar" 
+                [style.width]="getAudioLevelWidth(levels.local || 0)"
+                [style.backgroundColor]="getAudioLevelColor(levels.local || 0)"
+              ></div>
+            </div>
+            <div class="audio-level-value">{{ levels.local || 0 | number:'1.0-0' }}%</div>
           </div>
-          <div class="audio-level-value">{{ (session.localAudioLevel$ | async) || 0 | number:'1.0-0' }}%</div>
-        </div>
+        </ng-container>
       </div>
-      
       <div class="state">
         Peer Connection State: {{ session.connectionState$ | async }}
       </div>

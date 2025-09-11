@@ -20,8 +20,13 @@ import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
 import { DEFAULT_POPUP_OBJECT } from 'src/app/shared/utils/constants';
 import { DataService } from 'src/app/shared/web_sockets/ws-config';
 import { environment } from 'src/environments/environment';
-import { commaSeparatedHexToBase64 } from './image-utils';
 import shaka from 'shaka-player/dist/shaka-player.compiled';
+import {
+  commaSeparatedHexToBase64,
+  LOW_AUDIO_THRESHOLD,
+  MEDIUM_AUDIO_THRESHOLD,
+  AUDIO_LEVEL_COLORS,
+} from "./utils";
 import { WebRTCService } from 'src/app/shared/core_apis/webrtc.service';
 
 declare class EncodedVideoChunk {
@@ -277,9 +282,9 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getAudioLevelColor(level: number): string {
-    if (level < 20) return '#4CAF50'; // Green for low levels
-    if (level < 60) return '#FFC107'; // Yellow for medium levels
-    return '#F44336'; // Red for high levels
+    if (level < LOW_AUDIO_THRESHOLD) return AUDIO_LEVEL_COLORS.LOW; // Green for low levels
+    if (level < MEDIUM_AUDIO_THRESHOLD) return AUDIO_LEVEL_COLORS.MEDIUM; // Yellow for medium levels
+    return AUDIO_LEVEL_COLORS.HIGH; // Red for high levels
   }
 
   getAudioLevelWidth(level: number): string {

@@ -362,7 +362,7 @@ export class WebRTCService {
     this.webrtcMessageSubscription =
       this.webrtcWebSocketService.messages$.subscribe(async (data: any) => {
         try {
-          const request: WebRTCRequest = new WebRTCRequest(JSON.parse(data));
+          const request: WebRTCRequest = new WebRTCRequest(typeof data === 'string' ? JSON.parse(data) : data);
           await this.handleWebRTCMessage(request);
         } catch (error) {
           console.warn("Failed to handle WebRTC message:", error);

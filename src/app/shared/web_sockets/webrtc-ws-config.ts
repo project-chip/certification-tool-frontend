@@ -19,7 +19,7 @@ import { Injectable } from "@angular/core";
 import { webSocket, WebSocketSubject } from "rxjs/webSocket";
 import { environment } from "../../../environments/environment";
 import { catchError, tap } from "rxjs/operators";
-import { EMPTY, Subject } from "rxjs";
+import { EMPTY } from "rxjs";
 import { SharedService } from "../core_apis/shared-utils";
 
 export const webrtcWebSocketStateEnum = {
