@@ -19,13 +19,14 @@ import { MainAreaSandbox } from './components/main-area/main-area.sandbox';
 import { ProjectsAPI } from './shared/core_apis/project';
 import { SharedService } from './shared/core_apis/shared-utils';
 import { DataService } from './shared/web_sockets/ws-config';
+import { WebRTCService } from './shared/core_apis/webrtc.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
 export class AppComponent implements AfterViewInit {
   constructor(public projectsAPI: ProjectsAPI, private dataService: DataService, public mainAreaSandbox: MainAreaSandbox,
-    public sharedService: SharedService) {
+    public sharedService: SharedService, public webRTCService: WebRTCService) {
     mainAreaSandbox.syncDataToServer(this.dataService);
   }
   ngAfterViewInit() {

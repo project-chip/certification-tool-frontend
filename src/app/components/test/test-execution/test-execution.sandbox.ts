@@ -49,7 +49,15 @@ export class TestExecutionSandbox {
 
     if (promptType === 'message_request') { // Displaying the message popup
       popupObject.popupId = 'TEXTBOX_' + promptData.payload.message_id;
-    } else if (['options_request', 'stream_verification_request', 'image_verification_request', 'push_av_stream_verification_request'].includes(promptType)) {
+    } else if (
+      [
+        "options_request",
+        "stream_verification_request",
+        "image_verification_request",
+        "two_way_talk_verification_request",
+        "push_av_stream_verification_request",
+      ].includes(promptType)
+    ) {
       const options = Object.entries(promptData.payload.options).map(([key, value]) => ({ key: value, value: key }));
       const inputItems = [
         {
@@ -72,6 +80,10 @@ export class TestExecutionSandbox {
         case "image_verification_request":
           popupObject.popupId = 'IMAGE_';
           popupObject.imgHexStr = promptData.payload.image_hex_str
+          break;
+
+        case "two_way_talk_verification_request":
+          popupObject.popupId = "TWO_WAY_TALK_";
           break;
 
         default:

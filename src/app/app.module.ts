@@ -106,6 +106,9 @@ import { KeyFilterModule } from 'primeng/keyfilter';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DividerModule } from 'primeng/divider';
 import { DndDirective } from './shared/dnd.directive';
+import { WebRTCWebSocketService } from './shared/web_sockets/webrtc-ws-config';
+import { WebRTCService } from './shared/core_apis/webrtc.service';
+import { StreamSrcDirective } from './shared/streamsrc.directive';
 @NgModule({
   imports: [
     BrowserModule,
@@ -185,12 +188,13 @@ import { DndDirective } from './shared/dnd.directive';
     SettingsComponent,
     TestOperatorComponent,
     HighlightSearchPipe,
-    DndDirective
+    DndDirective,
+    StreamSrcDirective,
   ],
   bootstrap: [AppComponent],
   providers: [ProjectService, SharedService, ProjectsAPI, SharedAPI, TestRunService,
     TestRunAPI, MessageService, ConfirmationService, NavSandbox,
     MainAreaSandbox, ProjectSandbox, TestSandbox, TestSummarySandbox,
-    TestExecutionSandbox, WebSocketAPI, DialogService, DatePipe]
+    TestExecutionSandbox, WebSocketAPI, DialogService, DatePipe, WebRTCWebSocketService, WebRTCService]
 })
 export class AppModule { }
