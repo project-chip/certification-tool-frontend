@@ -134,6 +134,9 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
         .then(() => console.log("Shaka player destroyed"))
         .catch((e: shaka.util.Error) => console.error("Failed to destroy Shaka player", e));
     }
+    if(this.popupId.includes('TWO_WAY_TALK_')){
+      this.webRTCService.closeAllSessions();
+    }
   }
 
   loadStreams() {
@@ -216,9 +219,6 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
     shaka.polyfill.installAll();
-    if(this.popupId.includes('TWO_WAY_TALK_')){
-      this.webRTCService.closeAllSessions();
-    }
   }
 
   private initCanvas() {
