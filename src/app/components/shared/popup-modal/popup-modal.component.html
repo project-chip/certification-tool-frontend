@@ -81,26 +81,83 @@
     
     <!-- Streams List -->
     <div *ngIf="!isLoading && !errorMessage">
-      <ul>
-        <li *ngFor="let stream of testRunAPI.getPushAVStreamsList()">
-          <a href="#" (click)="updateStreamSrc(stream.id); $event.preventDefault()">Stream ID {{stream.id}}</a>
-        </li>
-      </ul>
-      
-      <!-- No Streams Message -->
-      <div *ngIf="testRunAPI.getPushAVStreamsList().length === 0" class="no-streams-message">
-        <i class="pi pi-info-circle"></i>
-        <span>No streams available. Click "Refresh Streams" to check for new streams.</span>
+      <div class="streams-list-container">
+        <div class="streams-list-header">Available Streams</div>
+        <ul class="streams-list">
+          <li *ngFor="let stream of testRunAPI.getPushAVStreamsList()" class="stream-item">
+            <a href="#" 
+               (click)="updateStreamSrc(stream.id); $event.preventDefault()" 
+               [class.active]="currentStream === stream.id"
+               [attr.aria-label]="'Select Stream ' + stream.id">
+              <i class="pi pi-play-circle"></i>
+              Stream {{stream.id}}
+            </a>
+          </li>
+        </ul>
+        
+        <!-- No Streams Message -->
+        <div *ngIf="testRunAPI.getPushAVStreamsList().length === 0" class="no-streams-message">
+          <i class="pi pi-info-circle"></i>
+          <span>No streams available. Click "Refresh Streams" to check for new streams.</span>
+        </div>
       </div>
     </div>
     
-    <video #videoPlayer width="640" height="480" controls>
-    </video>
-    <div *ngIf="currentStream">
-      <p>Stream {{currentStream}} Contents:</p>
-      <ul>
-        <li *ngFor="let file of streamContents"> {{file}} </li>
-      </ul>
+    <div class="video-player-container">
+      <div class="video-player-header">
+        <i class="pi pi-play-circle"></i>
+        <span>Video Player</span>
+      </div>
+      <div class="video-player-wrapper">
+        <video #videoPlayer width="640" height="480" controls class="video-player" [class.live-stream]="isLiveStream">
+        </video>
+        <div *ngIf="!currentStream" class="video-placeholder">
+          <i class="pi pi-video"></i>
+          <span>Select a stream to play video</span>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="currentStream" class="stream-contents-container">
+      <div class="stream-contents-header">
+        <i class="pi pi-file"></i>
+        <span>Stream {{currentStream}} Contents</span>
+      </div>
+      <div class="stream-contents-list">
+        <div *ngFor="let file of streamContents; let i = index" class="stream-content-item">
+          <div class="file-info">
+            <i class="pi pi-file-o"></i>
+            <span class="file-name">{{file}}</span>
+            <span class="file-index">#{{i + 1}}</span>
+          </div>
+        </div>
+        <div *ngIf="!streamContents || streamContents.length === 0" class="no-contents-message">
+          <i class="pi pi-info-circle"></i>
+          <span>No contents available for this stream</span>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="currentStream" class="stream-contents-container non-conforming-theme">
+      <div class="stream-contents-header">
+        <i class="pi pi-exclamation-triangle"></i>
+        <span>Non-Conforming Files</span>
+      </div>
+      <div class="stream-contents-list">
+        <div *ngFor="let file of nonConformingFiles; let i = index" class="stream-content-item">
+          <div class="file-info">
+            <i class="pi pi-file-o"></i>
+            <span class="file-name">{{file.file_path}}</span>
+            <span class="file-index">#{{i + 1}}</span>
+          </div>
+          <div *ngIf="file.validation_error_reason" class="validation-error">
+            <i class="pi pi-exclamation-circle"></i>
+            <span class="error-reason">{{file.validation_error_reason}}</span>
+          </div>
+        </div>
+        <div *ngIf="!nonConformingFiles || nonConformingFiles.length === 0" class="no-contents-message">
+          <i class="pi pi-check-circle"></i>
+          <span>All files conform to Matter Spec.</span>
+        </div>
+      </div>
     </div>
   </div>
 

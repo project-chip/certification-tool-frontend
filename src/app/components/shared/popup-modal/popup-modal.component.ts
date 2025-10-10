@@ -62,7 +62,9 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
   file?: File;
   streamSrc: string | null;
   streamContents: string[];
+  nonConformingFiles: any[];
   currentStream: number | null;
+  isLiveStream: boolean = false;
   errorMessage: string | null = null;
   isLoading: boolean = false;
   sessions$? = this.webRTCService.sessions$;
@@ -78,6 +80,7 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.fileName = '';
     this.streamSrc = null;
     this.streamContents = [];
+    this.nonConformingFiles = [];
     this.currentStream = null;
   }
 
@@ -158,7 +161,7 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.errorMessage = null;
     this.isLoading = true;
     
-    const streams: { id: number, files: string[] }[] = this.testRunAPI.getPushAVStreamsList();
+    const streams: { id: number, valid_files: string[], invalid_files: any[]}[] = this.testRunAPI.getPushAVStreamsList();
     const stream = streams.find(s => s.id === streamId);
     if (!stream) {
       this.errorMessage = `Stream with ID ${streamId} not found.`;
@@ -166,10 +169,11 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    this.streamContents = stream.files;
-    const streamPath = this.pickEntryPoint(stream.files);
+    this.streamContents = stream.valid_files;
+    this.nonConformingFiles = stream.invalid_files;
+    const streamPath = this.pickEntryPoint(stream.valid_files);
     if (!streamPath) {
-      this.errorMessage = `No DASH MPD or HLS M3U8 manifest found for stream ${streamId}. Cannot view stream.`;
+      this.errorMessage = `No valid DASH MPD or HLS M3U8 manifest found to play stream ${streamId}. Click "Refresh Streams" and try again.`;
       this.isLoading = false;
       return;
     }
@@ -178,6 +182,9 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.player.load(this.streamSrc).then(() => {
       this.currentStream = streamId;
       this.isLoading = false;
+      if (this.player && typeof this.player.isLive === 'function') {
+        this.isLiveStream = this.player.isLive();
+      }
     }).catch((e: shaka.util.Error) => {
       console.error(`Error loading stream: ${streamId}`, e);
       this.errorMessage = `Failed to load stream ${streamId}. Error: ${e.message || 'Unknown error occurred'}`;
@@ -187,7 +194,9 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   refreshStreams() {
     this.streamContents = [];
+    this.nonConformingFiles = [];
     this.currentStream = null;
+    this.isLiveStream = false;
     this.loadStreams();
   }
 
