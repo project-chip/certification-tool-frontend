@@ -64,6 +64,7 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
   streamContents: string[];
   nonConformingFiles: any[];
   currentStream: number | null;
+  isLiveStream: boolean = false;
   errorMessage: string | null = null;
   isLoading: boolean = false;
   sessions$? = this.webRTCService.sessions$;
@@ -181,6 +182,9 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.player.load(this.streamSrc).then(() => {
       this.currentStream = streamId;
       this.isLoading = false;
+      if (this.player && typeof this.player.isLive === 'function') {
+        this.isLiveStream = this.player.isLive();
+      }
     }).catch((e: shaka.util.Error) => {
       console.error(`Error loading stream: ${streamId}`, e);
       this.errorMessage = `Failed to load stream ${streamId}. Error: ${e.message || 'Unknown error occurred'}`;
@@ -192,6 +196,7 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.streamContents = [];
     this.nonConformingFiles = [];
     this.currentStream = null;
+    this.isLiveStream = false;
     this.loadStreams();
   }
 

@@ -109,7 +109,7 @@
         <span>Video Player</span>
       </div>
       <div class="video-player-wrapper">
-        <video #videoPlayer width="640" height="480" controls class="video-player">
+        <video #videoPlayer width="640" height="480" controls class="video-player" [class.live-stream]="isLiveStream">
         </video>
         <div *ngIf="!currentStream" class="video-placeholder">
           <i class="pi pi-video"></i>

@@ -558,3 +558,39 @@
     }
   }
 }
+
+/* Hide time and seekbar for live streams - more targeted approach */
+.live-stream {
+  &::-webkit-media-controls-timeline {
+    display: none !important;
+    width: 0 !important;
+    min-width: 0 !important;
+  }
+  
+  &::-webkit-media-controls-current-time-display,
+  &::-webkit-media-controls-time-remaining-display {
+    display: none !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  /* Firefox */
+  &::-moz-media-controls-current-position,
+  &::-moz-media-controls-duration {
+    display: none !important;
+  }
+  
+  /* Ensure other controls maintain their position */
+  &::-webkit-media-controls-panel {
+    display: flex !important;
+    align-items: center !important;
+  }
+  
+  /* Hide the time separator if it exists */
+  &::-webkit-media-controls-toggle-closed-captions-button + span,
+  &::-webkit-media-controls-toggle-closed-captions-button + div {
+    display: none !important;
+  }
+}
