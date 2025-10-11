@@ -302,9 +302,9 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   toggleMicMute(): void {
-    this.isMicMuted = !this.isMicMuted;
     const localStream = this.webRTCService.currentLocalStream;
     if (localStream) {
+      this.isMicMuted = !this.isMicMuted;
       localStream.getAudioTracks().forEach((track: MediaStreamTrack) => {
         track.enabled = !this.isMicMuted;
       });
