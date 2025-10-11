@@ -103,7 +103,7 @@
   }
   
   // Audio level bars styles
-  .pi-volume-up, .pi-microphone{
+  .pi-volume-up {
     cursor: default !important;
   }
   .audio-session-container {
@@ -581,4 +581,28 @@
   &::-webkit-media-controls-toggle-closed-captions-button + div {
     display: none !important;
   }
+}
+
+.mic-icon {
+  position: relative;
+  display: inline-block;
+  font-size: 1.5rem;
+}
+
+.mic-icon:hover, .pi-microphone:hover{
+  cursor: pointer;
+}
+
+.mic-icon.muted::after {
+  // prime icons does not have mute variant of mic.
+  // This is to add the red slash on mic when mute.
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: red;
+  transform: rotate(-45deg);
+  transform-origin: center;
 }
