@@ -42,6 +42,8 @@ export class VideoStreamComponent implements OnDestroy, AfterViewInit {
   private socket: WebSocket | null = null;
   private ctx: CanvasRenderingContext2D | null = null;
   private decoder: VideoDecoder | null = null;
+  private isCleaningUp = false;
+  private isDecoderClosed = true;
 
   constructor() {
     this.initializeDecoder();
@@ -66,13 +68,14 @@ export class VideoStreamComponent implements OnDestroy, AfterViewInit {
   private initializeDecoder(): void {
     this.decoder = new VideoDecoder({
       output: (frame: any) => {
-        if (this.ctx) {
+        if (this.ctx && !this.isCleaningUp) {
           this.ctx.drawImage(frame, 0, 0, 640, 480);
         }
         frame.close();
       },
       error: (err: any) => {
         console.error('Video decoder error:', err);
+        this.isDecoderClosed = true;
       }
     });
 
@@ -80,6 +83,7 @@ export class VideoStreamComponent implements OnDestroy, AfterViewInit {
       codec: 'avc1.42E01E',
       hardwareAcceleration: 'prefer-software'
     });
+    this.isDecoderClosed = false;
   }
 
   private connectWebSocket(): void {
@@ -88,6 +92,11 @@ export class VideoStreamComponent implements OnDestroy, AfterViewInit {
       this.socket.binaryType = 'arraybuffer';
 
       this.socket.onmessage = (event) => {
+        // Don't process new messages if we're cleaning up
+        if (this.isCleaningUp) {
+          return;
+        }
+
         try {
           const chunk = new EncodedVideoChunk({
             type: 'key',
@@ -95,10 +104,9 @@ export class VideoStreamComponent implements OnDestroy, AfterViewInit {
             data: new Uint8Array(event.data)
           });
 
-          if (this.decoder) {
+          // Only decode if decoder exists and is in a valid state
+          if (this.decoder && !this.isDecoderClosed) {
             this.decoder.decode(chunk);
-          } else {
-            console.error('Decoder is not initialized');
           }
         } catch (err) {
           console.error('Error while decoding chunk:', err);
@@ -111,19 +119,37 @@ export class VideoStreamComponent implements OnDestroy, AfterViewInit {
 
       this.socket.onclose = () => {
         console.log('WebSocket connection closed');
+        if (!this.isCleaningUp) {
+          this.cleanup();
+        }
       };
     }
   }
 
   private cleanup(): void {
-    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-      this.socket.close();
+    // Prevent multiple cleanup calls
+    if (this.isCleaningUp) {
+      return;
+    }
+    this.isCleaningUp = true;
+
+    // First close the WebSocket to stop receiving new messages
+    if (this.socket) {
+      if (this.socket.readyState === WebSocket.OPEN || this.socket.readyState === WebSocket.CONNECTING) {
+        this.socket.close();
+      }
       this.socket = null;
     }
 
-    if (this.decoder) {
-      this.decoder.close();
-      this.decoder = null;
+    // Close the decoder if it exists and is not already closed
+    if (this.decoder && !this.isDecoderClosed) {
+      try {
+        this.decoder!.close();
+      } catch (err) {
+        console.error('Error when closing decoder:', err);
+      }
     }
+    this.decoder = null;
+    this.isDecoderClosed = true;
   }
 }
