@@ -94,7 +94,7 @@ export class PushAvPlayerComponent implements OnDestroy, AfterViewInit {
     this.streamContents = stream.valid_uploads.map((upload) => upload.file_path);
     this.nonConformingFiles = stream.error_uploads.map((upload) => ({
       file_path: upload.file_path,
-      validation_error_reason: upload.reasons ? upload.reasons.join('; ') : ''
+      validation_error_reason: upload.reasons ? upload.reasons.join('\n') : ''
     }));
 
     const streamPath = this.pickEntryPoint(this.streamContents);

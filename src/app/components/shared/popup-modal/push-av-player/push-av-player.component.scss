@@ -315,6 +315,9 @@
       font-size: 12px;
       color: #7f1d1d;
       line-height: 1.4;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      word-break: break-word;
     }
   }
 }
