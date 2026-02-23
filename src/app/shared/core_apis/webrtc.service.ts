@@ -353,6 +353,10 @@ export class WebRTCService {
   public sessions$ = this._sessions$.asObservable();
   public localStream$ = this._localStream$.asObservable();
 
+  get currentLocalStream(): MediaStream | null {
+    return this._localStream$.value;
+  }
+
   constructor(private webrtcWebSocketService: WebRTCWebSocketService) {
     this.webrtcWebSocketService.connect();
     this.setupWebSocketSubscription();
@@ -476,7 +480,7 @@ export class WebRTCService {
     if (sessions.length === 0) {
       //No sessions left, clean up local stream
       const stream = this._localStream$.value;
-      stream?.getTracks().forEach((track) => track.stop());
+      stream?.getTracks().forEach((track: MediaStreamTrack) => track.stop());
       this._localStream$.next(null);
     }
   }

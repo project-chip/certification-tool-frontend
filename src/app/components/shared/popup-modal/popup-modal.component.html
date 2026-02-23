@@ -40,7 +40,9 @@
           
           <div class="audio-level-item">
             <div class="audio-label">Mic</div>
-            <i class="pi pi-microphone"></i>
+            <span (click)="toggleMicMute()" class="mic-icon" [class.muted]="isMicMuted">
+              <i class="pi pi-microphone"></i>
+            </span>
             <div class="audio-level-bar-container">
               <div class="audio-level-bar-background"></div>
               <div 

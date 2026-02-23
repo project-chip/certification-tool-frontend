@@ -68,6 +68,7 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
   errorMessage: string | null = null;
   isLoading: boolean = false;
   sessions$? = this.webRTCService.sessions$;
+  isMicMuted: boolean = false;
   private socket!: WebSocket | null;
   private ctx!: CanvasRenderingContext2D | null;
   private decoder!: VideoDecoder | null;
@@ -298,5 +299,15 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   getAudioLevelWidth(level: number): string {
     return `${Math.max(2, level)}%`;
+  }
+
+  toggleMicMute(): void {
+    const localStream = this.webRTCService.currentLocalStream;
+    if (localStream) {
+      this.isMicMuted = !this.isMicMuted;
+      localStream.getAudioTracks().forEach((track: MediaStreamTrack) => {
+        track.enabled = !this.isMicMuted;
+      });
+    }
   }
 }
