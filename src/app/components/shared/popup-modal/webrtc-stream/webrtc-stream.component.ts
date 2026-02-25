@@ -30,6 +30,7 @@ export interface WebRTCSession {
 })
 export class WebrtcStreamComponent implements OnDestroy {
   @Input() sessions$!: Observable<WebRTCSession[]>;
+  isMicMuted: boolean = false;
 
   constructor(private webRTCService: WebRTCService) {}
 
@@ -45,5 +46,15 @@ export class WebrtcStreamComponent implements OnDestroy {
 
   getAudioLevelWidth(level: number): string {
     return `${Math.max(2, level)}%`;
+  }
+
+  toggleMicMute(): void {
+    const localStream = this.webRTCService.currentLocalStream;
+    if (localStream) {
+      this.isMicMuted = !this.isMicMuted;
+      localStream.getAudioTracks().forEach((track: MediaStreamTrack) => {
+        track.enabled = !this.isMicMuted;
+      });
+    }
   }
 }

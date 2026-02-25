@@ -89,14 +89,4 @@ export class PopupModalComponent {
   isPushAV(): boolean {
     return this.popupId.includes('PUSH_');
   }
-
-  toggleMicMute(): void {
-    const localStream = this.webRTCService.currentLocalStream;
-    if (localStream) {
-      this.isMicMuted = !this.isMicMuted;
-      localStream.getAudioTracks().forEach((track: MediaStreamTrack) => {
-        track.enabled = !this.isMicMuted;
-      });
-    }
-  }
 }

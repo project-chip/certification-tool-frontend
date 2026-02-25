@@ -13,7 +13,7 @@
 @import "../../../../../styles/custom.scss";
 
 // Audio level bars styles
-.pi-volume-up, .pi-microphone{
+.pi-volume-up {
   cursor: default !important;
 }
 
@@ -90,4 +90,28 @@
   border-left: 4px solid #2196f3;
   @extend .table-data;
   font-size: 14px;
+}
+
+.mic-icon {
+  position: relative;
+  display: inline-block;
+  font-size: 1.5rem;
+}
+
+.mic-icon:hover {
+  cursor: pointer;
+}
+
+.mic-icon.muted::after {
+  // prime icons does not have mute variant of mic.
+  // This is to add the red slash on mic when mute.
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: red;
+  transform: rotate(-45deg);
+  transform-origin: center;
 }
