@@ -162,7 +162,7 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.errorMessage = null;
     this.isLoading = true;
     
-    const streams: { id: number, valid_files: string[], invalid_files: any[]}[] = this.testRunAPI.getPushAVStreamsList();
+    const streams: { id: number, valid_uploads: any[], error_uploads: any[]}[] = this.testRunAPI.getPushAVStreamsList();
     const stream = streams.find(s => s.id === streamId);
     if (!stream) {
       this.errorMessage = `Stream with ID ${streamId} not found.`;
@@ -170,9 +170,15 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    this.streamContents = stream.valid_files;
-    this.nonConformingFiles = stream.invalid_files;
-    const streamPath = this.pickEntryPoint(stream.valid_files);
+    // Extract file paths from valid_uploads
+    this.streamContents = stream.valid_uploads.map(upload => upload.file_path);
+    // Process error_uploads to include stitched reasons
+    this.nonConformingFiles = stream.error_uploads.map(upload => ({
+      file_path: upload.file_path,
+      validation_error_reason: upload.reasons ? upload.reasons.join('; ') : ''
+    }));
+    const streamPath = this.pickEntryPoint(this.streamContents);
+    this.currentStream = streamId;
     if (!streamPath) {
       this.errorMessage = `No valid DASH MPD or HLS M3U8 manifest found to play stream ${streamId}. Click "Refresh Streams" and try again.`;
       this.isLoading = false;
@@ -181,7 +187,6 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.streamSrc = `${environment.testPushAVServerURL}streams/${streamId}/${streamPath}`;
     this.player.load(this.streamSrc).then(() => {
-      this.currentStream = streamId;
       this.isLoading = false;
       if (this.player && typeof this.player.isLive === 'function') {
         this.isLiveStream = this.player.isLive();
