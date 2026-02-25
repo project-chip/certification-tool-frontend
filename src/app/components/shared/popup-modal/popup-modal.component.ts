@@ -14,44 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Component, Input, ElementRef, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+
+import { Component, Input } from '@angular/core';
 import { SharedAPI } from 'src/app/shared/core_apis/shared';
-import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
 import { DEFAULT_POPUP_OBJECT } from 'src/app/shared/utils/constants';
 import { DataService } from 'src/app/shared/web_sockets/ws-config';
-import { environment } from 'src/environments/environment';
-import shaka from 'shaka-player/dist/shaka-player.compiled';
-import {
-  commaSeparatedHexToBase64,
-  LOW_AUDIO_THRESHOLD,
-  MEDIUM_AUDIO_THRESHOLD,
-  AUDIO_LEVEL_COLORS,
-} from "./utils";
 import { WebRTCService } from 'src/app/shared/core_apis/webrtc.service';
-
-declare class EncodedVideoChunk {
-  constructor(chunk: any);
-}
-
-type VideoDecoderConfig = {
-  codec: string;
-  hardwareAcceleration: string;
-};
-
-declare class VideoDecoder {
-  constructor(decoder: any);
-  decode(chunk: any): void;
-  reset(): void;
-  close(): void;
-  configure(config: VideoDecoderConfig): void;
-}
 
 @Component({
   selector: 'app-popup-modal',
   templateUrl: './popup-modal.component.html',
   styleUrls: ['./popup-modal.component.scss']
 })
-export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
+export class PopupModalComponent {
   @Input() popupId!: string;
   @Input() header!: string;
   @Input() subHeader!: string;
@@ -60,214 +35,17 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() messageId!: any;
   fileName: any = '';
   file?: File;
-  streamSrc: string | null;
-  streamContents: string[];
-  nonConformingFiles: any[];
-  currentStream: number | null;
-  isLiveStream: boolean = false;
-  errorMessage: string | null = null;
-  isLoading: boolean = false;
-  sessions$? = this.webRTCService.sessions$;
-  isMicMuted: boolean = false;
-  private socket!: WebSocket | null;
-  private ctx!: CanvasRenderingContext2D | null;
-  private decoder!: VideoDecoder | null;
-  private player!: shaka.Player;
-  @ViewChild('videoCanvas', { static: false }) canvasRef!: ElementRef<HTMLCanvasElement>
-  @ViewChild('imageView') imageRef!: ElementRef<HTMLImageElement>;
-  @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
+  sessions$ = this.webRTCService.sessions$;
 
-  constructor(public sharedAPI: SharedAPI, public testRunAPI: TestRunAPI, private dataService: DataService, private webRTCService: WebRTCService) {
-    this.fileName = '';
-    this.streamSrc = null;
-    this.streamContents = [];
-    this.nonConformingFiles = [];
-    this.currentStream = null;
+  constructor(
+    public sharedAPI: SharedAPI,
+    private dataService: DataService,
+    private webRTCService: WebRTCService
+  ) {
+      this.fileName = '';
   }
 
-  ngOnInit(): void {
-    if (this.popupId.includes('STREAM_')) {
-      this.decoder = new VideoDecoder({
-        output: (frame: any) => {
-          if (this.ctx) {
-            this.ctx.drawImage(frame, 0, 0, 640, 480);
-          }
-          frame.close();
-        },
-        error: (err: any) => {},
-      });
-      this.decoder.configure({ codec: "avc1.42E01E", hardwareAcceleration: 'prefer-software' });
-      this.connectWebSocket();
-    }
-    if (this.popupId.includes('PUSH_')) {
-      this.loadStreams();
-      this.initializeShakaPlayer();
-    }
-  }
-
-  ngAfterViewInit(): void {
-    if (this.popupId.includes('STREAM_')) {
-      this.initCanvas();
-    }
-    if (this.popupId.includes('IMAGE_')) {
-      const data = this.sharedAPI.getCustomPopupData();
-      if (data.imgHexStr) {
-        const imgHexStr = data.imgHexStr;
-        var byteStream = commaSeparatedHexToBase64(imgHexStr);
-        this.imageRef.nativeElement.src = "data:image/jpg;base64," + byteStream;
-      }
-    }
-
-    if (this.popupId.includes('PUSH_')) {
-      this.player.attach(this.videoPlayer.nativeElement);
-    }
-  }
-
-  ngOnDestroy(): void {
-    if (this.socket && this.socket.readyState == WebSocket.OPEN) {
-      this.socket.close();
-      this.socket = null;
-    }
-    if (this.decoder){
-      this.decoder.close();
-      this.decoder = null;
-    }
-    if (this.player){
-      this.player
-        .destroy()
-        .then(() => console.log("Shaka player destroyed"))
-        .catch((e: shaka.util.Error) => console.error("Failed to destroy Shaka player", e));
-    }
-    if(this.popupId.includes('TWO_WAY_TALK_')){
-      this.webRTCService.closeAllSessions();
-    }
-  }
-
-  loadStreams() {
-    this.isLoading = true;
-    this.errorMessage = null;
-    this.testRunAPI.fetchPushAVStreamsList();
-    
-    // Check if streams are available after a short delay
-    setTimeout(() => {
-      const streams = this.testRunAPI.getPushAVStreamsList();
-      if (!streams || streams.length === 0) {
-        this.errorMessage = 'No video streams available. Click "Refresh Streams" to check for new streams.';
-      }
-      this.isLoading = false;
-    }, 1000);
-  }
-
-  updateStreamSrc(streamId: number) {
-    this.errorMessage = null;
-    this.isLoading = true;
-    
-    const streams: { id: number, valid_uploads: any[], error_uploads: any[]}[] = this.testRunAPI.getPushAVStreamsList();
-    const stream = streams.find(s => s.id === streamId);
-    if (!stream) {
-      this.errorMessage = `Stream with ID ${streamId} not found.`;
-      this.isLoading = false;
-      return;
-    }
-
-    // Extract file paths from valid_uploads
-    this.streamContents = stream.valid_uploads.map(upload => upload.file_path);
-    // Process error_uploads to include stitched reasons
-    this.nonConformingFiles = stream.error_uploads.map(upload => ({
-      file_path: upload.file_path,
-      validation_error_reason: upload.reasons ? upload.reasons.join('; ') : ''
-    }));
-    const streamPath = this.pickEntryPoint(this.streamContents);
-    this.currentStream = streamId;
-    if (!streamPath) {
-      this.errorMessage = `No valid DASH MPD or HLS M3U8 manifest found to play stream ${streamId}. Click "Refresh Streams" and try again.`;
-      this.isLoading = false;
-      return;
-    }
-
-    this.streamSrc = `${environment.testPushAVServerURL}streams/${streamId}/${streamPath}`;
-    this.player.load(this.streamSrc).then(() => {
-      this.isLoading = false;
-      if (this.player && typeof this.player.isLive === 'function') {
-        this.isLiveStream = this.player.isLive();
-      }
-    }).catch((e: shaka.util.Error) => {
-      console.error(`Error loading stream: ${streamId}`, e);
-      this.errorMessage = `Failed to load stream ${streamId}. Error: ${e.message || 'Unknown error occurred'}`;
-      this.isLoading = false;
-    });
-  }
-
-  refreshStreams() {
-    this.streamContents = [];
-    this.nonConformingFiles = [];
-    this.currentStream = null;
-    this.isLiveStream = false;
-    this.loadStreams();
-  }
-
-  private pickEntryPoint(files: string[]): string | null {
-    // Check for DASH first
-    const mpd = files.find(f => f.endsWith('.mpd'));
-    if (mpd) return mpd;
-
-    // HLS fallback
-    const m3u8s = files.filter(f => f.endsWith('.m3u8'));
-    if(m3u8s.length === 0) return null;
-
-    //Prefer master-like names if available
-    const master = m3u8s.find(f => f.toLowerCase().includes('master'));
-    if(master) return master;
-
-    //pick the first m3u8 file as entry point
-    return m3u8s[0];
-  }
-
-  private initializeShakaPlayer(){
-    this.player = new shaka.Player();
-    this.player.configure({
-      streaming: {
-        bufferingGoal: 30,
-        failureCallback: (error: shaka.util.Error) => {
-          console.error('Streaming error:', error);
-        }
-      }
-    });
-    shaka.polyfill.installAll();
-  }
-
-  private initCanvas() {
-    if (this.canvasRef) {
-      const canvas = this.canvasRef.nativeElement;
-      this.ctx = canvas.getContext('2d');
-    }
-  }
-
-  private connectWebSocket(): void {
-    if (!this.socket) {
-      this.socket = new WebSocket(environment.streamBaseURL);
-      this.socket.binaryType = "arraybuffer";
-
-      this.socket.onmessage = (event) => {
-        try {
-          const chunck = new EncodedVideoChunk({
-            type: "key",
-            timestamp: performance.now(),
-            data: new Uint8Array(event.data)
-          });
-          if (this.decoder) {
-            this.decoder.decode(chunck);
-          } else {
-            console.log("Decoder is not intialized");
-          }
-        } catch (err) {
-          console.error("Encountered error while decoding chunk: ", err);
-        }
-      };
-    }
-  }
-
-  cancel(event: any) {
+  cancel(event: any): void {
     const closeIcon = event.target.className;
     if (closeIcon.includes('p-dialog-header-close-icon')) {
       this.sharedAPI.setShowCustomPopup('');
@@ -296,14 +74,20 @@ export class PopupModalComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  getAudioLevelColor(level: number): string {
-    if (level < LOW_AUDIO_THRESHOLD) return AUDIO_LEVEL_COLORS.LOW; // Green for low levels
-    if (level < MEDIUM_AUDIO_THRESHOLD) return AUDIO_LEVEL_COLORS.MEDIUM; // Yellow for medium levels
-    return AUDIO_LEVEL_COLORS.HIGH; // Red for high levels
+  isWebRTCStream(): boolean {
+    return this.popupId.includes('TWO_WAY_TALK_');
   }
 
-  getAudioLevelWidth(level: number): string {
-    return `${Math.max(2, level)}%`;
+  isVideoStream(): boolean {
+    return this.popupId.includes('STREAM_');
+  }
+
+  isSnapshot(): boolean {
+    return this.popupId.includes('IMAGE_');
+  }
+
+  isPushAV(): boolean {
+    return this.popupId.includes('PUSH_');
   }
 
   toggleMicMute(): void {

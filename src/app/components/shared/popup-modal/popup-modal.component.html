@@ -18,155 +18,19 @@
   class="custom-popup-parent" [draggable]="true" [ngClass]='{"upload-width": popupId === "upload-popup"}'>
   <div class="subheader">{{subHeader}}</div>
 
-  <div *ngIf="popupId.includes('TWO_WAY_TALK_')">
-    <!-- WebRTC Audio Level Bars -->
-    <div *ngFor="let session of (sessions$ | async)" class="audio-session-container">
-      <video autoplay playsinline [streamSrc]=session.remoteStream$ width="640" height="480"></video>
-      <div class="audio-container">
-        <ng-container *ngIf="{ remote: session.remoteAudioLevel$ | async, local: session.localAudioLevel$ | async } as levels">
-          <div class="audio-level-item">
-            <div class="audio-label">Speaker</div>
-            <i class="pi pi-volume-up"></i>
-            <div class="audio-level-bar-container">
-              <div class="audio-level-bar-background"></div>
-              <div 
-                class="audio-level-bar" 
-                [style.width]="getAudioLevelWidth(levels.remote || 0)"
-                [style.backgroundColor]="getAudioLevelColor(levels.remote || 0)"
-              ></div>
-            </div>
-            <div class="audio-level-value">{{ levels.remote || 0 | number:'1.0-0' }}%</div>
-          </div>
-          
-          <div class="audio-level-item">
-            <div class="audio-label">Mic</div>
-            <span (click)="toggleMicMute()" class="mic-icon" [class.muted]="isMicMuted">
-              <i class="pi pi-microphone"></i>
-            </span>
-            <div class="audio-level-bar-container">
-              <div class="audio-level-bar-background"></div>
-              <div 
-                class="audio-level-bar" 
-                [style.width]="getAudioLevelWidth(levels.local || 0)"
-                [style.backgroundColor]="getAudioLevelColor(levels.local || 0)"
-              ></div>
-            </div>
-            <div class="audio-level-value">{{ levels.local || 0 | number:'1.0-0' }}%</div>
-          </div>
-        </ng-container>
-      </div>
-      <div class="state">
-        Peer Connection State: {{ session.connectionState$ | async }}
-      </div>
-    </div>
-  </div>
+  <!-- WebRTC Stream Component -->
+  <app-webrtc-stream *ngIf="isWebRTCStream()" [sessions$]="sessions$"></app-webrtc-stream>
 
-  <div *ngIf="popupId.includes('STREAM_')">
-    <canvas #videoCanvas width="640" height="480"></canvas>
-  </div>
+  <!-- Video Stream Component -->
+  <app-video-stream *ngIf="isVideoStream()"></app-video-stream>
 
-  <div *ngIf="popupId.includes('PUSH_')">
-    <button pButton type="button" [label]="'Refresh Streams'" [icon]="'pi pi-refresh'"
-      (click)="refreshStreams()" [disabled]="isLoading"></button>
-    
-    <!-- Error Message Display -->
-    <div *ngIf="errorMessage" class="error-message">
-      <i class="pi pi-exclamation-triangle"></i>
-      <span>{{errorMessage}}</span>
-    </div>
-    
-    <!-- Loading Indicator -->
-    <div *ngIf="isLoading" class="loading-indicator">
-      <i class="pi pi-spin pi-spinner"></i>
-      <span>Loading streams...</span>
-    </div>
-    
-    <!-- Streams List -->
-    <div *ngIf="!isLoading && !errorMessage">
-      <div class="streams-list-container">
-        <div class="streams-list-header">Available Streams</div>
-        <ul class="streams-list">
-          <li *ngFor="let stream of testRunAPI.getPushAVStreamsList()" class="stream-item">
-            <a href="#" 
-               (click)="updateStreamSrc(stream.id); $event.preventDefault()" 
-               [class.active]="currentStream === stream.id"
-               [attr.aria-label]="'Select Stream ' + stream.id">
-              <i class="pi pi-play-circle"></i>
-              Stream {{stream.id}}
-            </a>
-          </li>
-        </ul>
-        
-        <!-- No Streams Message -->
-        <div *ngIf="testRunAPI.getPushAVStreamsList().length === 0" class="no-streams-message">
-          <i class="pi pi-info-circle"></i>
-          <span>No streams available. Click "Refresh Streams" to check for new streams.</span>
-        </div>
-      </div>
-    </div>
-    
-    <div class="video-player-container">
-      <div class="video-player-header">
-        <i class="pi pi-play-circle"></i>
-        <span>Video Player</span>
-      </div>
-      <div class="video-player-wrapper">
-        <video #videoPlayer width="640" height="480" controls class="video-player" [class.live-stream]="isLiveStream">
-        </video>
-        <div *ngIf="!currentStream" class="video-placeholder">
-          <i class="pi pi-video"></i>
-          <span>Select a stream to play video</span>
-        </div>
-      </div>
-    </div>
-    <div *ngIf="currentStream" class="stream-contents-container">
-      <div class="stream-contents-header">
-        <i class="pi pi-file"></i>
-        <span>Stream {{currentStream}} Contents</span>
-      </div>
-      <div class="stream-contents-list">
-        <div *ngFor="let file of streamContents; let i = index" class="stream-content-item">
-          <div class="file-info">
-            <i class="pi pi-file-o"></i>
-            <span class="file-name">{{file}}</span>
-            <span class="file-index">#{{i + 1}}</span>
-          </div>
-        </div>
-        <div *ngIf="!streamContents || streamContents.length === 0" class="no-contents-message">
-          <i class="pi pi-info-circle"></i>
-          <span>No contents available for this stream</span>
-        </div>
-      </div>
-    </div>
-    <div *ngIf="currentStream" class="stream-contents-container non-conforming-theme">
-      <div class="stream-contents-header">
-        <i class="pi pi-exclamation-triangle"></i>
-        <span>Non-Conforming Files</span>
-      </div>
-      <div class="stream-contents-list">
-        <div *ngFor="let file of nonConformingFiles; let i = index" class="stream-content-item">
-          <div class="file-info">
-            <i class="pi pi-file-o"></i>
-            <span class="file-name">{{file.file_path}}</span>
-            <span class="file-index">#{{i + 1}}</span>
-          </div>
-          <div *ngIf="file.validation_error_reason" class="validation-error">
-            <i class="pi pi-exclamation-circle"></i>
-            <span class="error-reason">{{file.validation_error_reason}}</span>
-          </div>
-        </div>
-        <div *ngIf="!nonConformingFiles || nonConformingFiles.length === 0" class="no-contents-message">
-          <i class="pi pi-check-circle"></i>
-          <span>All files conform to Matter Spec.</span>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- Snapshot View Component -->
+  <app-snapshot-view *ngIf="isSnapshot()"></app-snapshot-view>
 
-  <div *ngIf="popupId.includes('IMAGE_')">
-    <img #imageView width="640" height="480" alt="No Image">
-  </div>
+  <!-- Push AV Player Component -->
+  <app-push-av-player *ngIf="isPushAV()"></app-push-av-player>
 
+  <!-- Input Items -->
   <div *ngFor="let inputItem of inputItems" class="input-items-div">
     <input *ngIf="inputItem.type === 'inputbox'" type="text" pInputText [(ngModel)]="inputItem.value"
       [placeholder]="inputItem.placeHolder" class="popup-inputbox" />
