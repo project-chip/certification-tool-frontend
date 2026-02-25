@@ -79,6 +79,10 @@ import { TestLogConsoleComponent } from './components/test/test-execution/test-l
 import { TestRunAPI } from './shared/core_apis/test-run';
 import { TestRunService } from './shared/test-run-utils';
 import { PopupModalComponent } from './components/shared/popup-modal/popup-modal.component';
+import { WebrtcStreamComponent } from './components/shared/popup-modal/webrtc-stream/webrtc-stream.component';
+import { SnapshotViewComponent } from './components/shared/popup-modal/snapshot-view/snapshot-view.component';
+import { PushAvPlayerComponent } from './components/shared/popup-modal/push-av-player/push-av-player.component';
+import { VideoStreamComponent } from './components/shared/popup-modal/video-stream/video-stream.component';
 import { SharedAPI } from './shared/core_apis/shared';
 import { TestExecutionHistoryComponent } from './components/test/test-execution-history/test-execution-history.component';
 import { DatePipe } from '@angular/common';
@@ -176,6 +180,10 @@ import { StreamSrcDirective } from './shared/streamsrc.directive';
     TestLogToolbarComponent,
     TestLogConsoleComponent,
     PopupModalComponent,
+    WebrtcStreamComponent,
+    SnapshotViewComponent,
+    PushAvPlayerComponent,
+    VideoStreamComponent,
     TestExecutionHistoryComponent,
     CreateNewTestRunComponent,
     UtilityComponent,
