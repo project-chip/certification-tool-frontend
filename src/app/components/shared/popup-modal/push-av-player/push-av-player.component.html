@@ -1,0 +1,113 @@
+<!--
+ *
+ * Copyright (c) 2026 Project CHIP Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<div class="push-av-container">
+  <button pButton type="button" [label]="'Refresh Streams'" [icon]="'pi pi-refresh'" (click)="refreshStreams()"
+    [disabled]="isLoading" class="refresh-button"></button>
+
+  <!-- Error Message Display -->
+  <div *ngIf="errorMessage" class="error-message">
+    <i class="pi pi-exclamation-triangle"></i>
+    <span>{{errorMessage}}</span>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="isLoading" class="loading-indicator">
+    <i class="pi pi-spin pi-spinner"></i>
+    <span>Loading streams...</span>
+  </div>
+
+  <!-- Streams List -->
+  <div *ngIf="!isLoading && !errorMessage">
+    <div class="streams-list-container">
+      <div class="streams-list-header">Available Streams</div>
+      <ul class="streams-list">
+        <li *ngFor="let stream of streams" class="stream-item">
+          <a href="#" (click)="updateStreamSrc(stream.id); $event.preventDefault()"
+            [class.active]="currentStream === stream.id" [attr.aria-label]="'Select Stream ' + stream.id">
+            <i class="pi pi-play-circle"></i>
+            Stream {{stream.id}}
+          </a>
+        </li>
+      </ul>
+
+      <!-- No Streams Message -->
+      <div *ngIf="streams.length === 0" class="no-streams-message">
+        <i class="pi pi-info-circle"></i>
+        <span>No streams available. Click "Refresh Streams" to check for new streams.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="video-player-container">
+    <div class="video-player-header">
+      <i class="pi pi-play-circle"></i>
+      <span>Video Player</span>
+    </div>
+    <div class="video-player-wrapper">
+      <video #videoPlayer width="640" height="480" controls class="video-player"
+        [class.live-stream]="isLiveStream"></video>
+      <div *ngIf="!currentStream" class="video-placeholder">
+        <i class="pi pi-video"></i>
+        <span>Select a stream to play video</span>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="currentStream" class="stream-contents-container">
+    <div class="stream-contents-header">
+      <i class="pi pi-file"></i>
+      <span>Stream {{currentStream}} Contents</span>
+    </div>
+    <div class="stream-contents-list">
+      <div *ngFor="let file of streamContents; let i = index" class="stream-content-item">
+        <div class="file-info">
+          <i class="pi pi-file-o"></i>
+          <span class="file-name">{{file}}</span>
+          <span class="file-index">#{{i + 1}}</span>
+        </div>
+      </div>
+      <div *ngIf="!streamContents || streamContents.length === 0" class="no-contents-message">
+        <i class="pi pi-info-circle"></i>
+        <span>No contents available for this stream</span>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="currentStream" class="stream-contents-container non-conforming-theme">
+    <div class="stream-contents-header">
+      <i class="pi pi-exclamation-triangle"></i>
+      <span>Non-Conforming Files</span>
+    </div>
+    <div class="stream-contents-list">
+      <div *ngFor="let file of nonConformingFiles; let i = index" class="stream-content-item">
+        <div class="file-info">
+          <i class="pi pi-file-o"></i>
+          <span class="file-name">{{file.file_path}}</span>
+          <span class="file-index">#{{i + 1}}</span>
+        </div>
+        <div *ngIf="file.validation_error_reason" class="validation-error">
+          <i class="pi pi-exclamation-circle"></i>
+          <span class="error-reason">{{file.validation_error_reason}}</span>
+        </div>
+      </div>
+      <div *ngIf="!nonConformingFiles || nonConformingFiles.length === 0" class="no-contents-message">
+        <i class="pi pi-check-circle"></i>
+        <span>All files conform to Matter Spec.</span>
+      </div>
+    </div>
+  </div>
+</div>
