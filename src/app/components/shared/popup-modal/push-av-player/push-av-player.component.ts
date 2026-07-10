@@ -18,7 +18,6 @@
 import { Component, ElementRef, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
 import { environment } from 'src/environments/environment';
-import shaka from 'shaka-player';
 import { Stream, NonConformingFile } from './push-av-player.model';
 
 @Component({
@@ -37,14 +36,14 @@ export class PushAvPlayerComponent implements OnDestroy, AfterViewInit {
   errorMessage: string | null = null;
   isLoading: boolean = false;
 
-  private player!: shaka.Player;
+  private player: any;
 
   constructor(private testRunAPI: TestRunAPI) {
     this.loadStreams();
-    this.initializeShakaPlayer();
   }
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit(): Promise<void> {
+    await this.initializeShakaPlayer();
     this.player.attach(this.videoPlayer.nativeElement);
   }
 
@@ -53,7 +52,7 @@ export class PushAvPlayerComponent implements OnDestroy, AfterViewInit {
       this.player
         .destroy()
         .then(() => console.log('Shaka player destroyed'))
-        .catch((e: shaka.util.Error) => console.error('Failed to destroy Shaka player', e));
+        .catch((e: any) => console.error('Failed to destroy Shaka player', e));
     }
   }
 
@@ -109,7 +108,7 @@ export class PushAvPlayerComponent implements OnDestroy, AfterViewInit {
           this.isLiveStream = this.player.isLive();
         }
       })
-      .catch((e: shaka.util.Error) => {
+      .catch((e: any) => {
         console.error(`Error loading stream: ${streamId}`, e);
         this.errorMessage = `Failed to load stream ${streamId}. Error: ${e.message || 'Unknown error occurred'}`;
         this.isLoading = false;
@@ -141,12 +140,15 @@ export class PushAvPlayerComponent implements OnDestroy, AfterViewInit {
     return m3u8s[0];
   }
 
-  private initializeShakaPlayer(): void {
+  private async initializeShakaPlayer(): Promise<void> {
+    const shakaModule = await import('shaka-player');
+    const shaka = shakaModule.default ?? shakaModule;
+
     this.player = new shaka.Player();
     this.player.configure({
       streaming: {
         bufferingGoal: 30,
-        failureCallback: (error: shaka.util.Error) => {
+        failureCallback: (error: any) => {
           console.error('Streaming error:', error);
         }
       }
