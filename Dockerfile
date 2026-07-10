@@ -30,7 +30,7 @@ ARG INSTALL_DEV=false
 RUN bash -c "if [ $INSTALL_DEV == 'true' ] ; then npm install -g @angular/cli ; fi"
 RUN if [ "$FRONTEND_ENV" = "dev" ]; then npm run build -- --configuration=development; else npm run build -- --configuration=production; fi
 
-FROM nginx:alpine
+FROM nginx:1.30-alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist/chip-cert-tool-frontend /usr/share/nginx/html
 EXPOSE 4200

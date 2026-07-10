@@ -18,6 +18,7 @@
 import { Component, ElementRef, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
 import { environment } from 'src/environments/environment';
+import type shaka from 'shaka-player';
 import { Stream, NonConformingFile } from './push-av-player.model';
 
 @Component({
@@ -36,15 +37,22 @@ export class PushAvPlayerComponent implements OnDestroy, AfterViewInit {
   errorMessage: string | null = null;
   isLoading: boolean = false;
 
-  private player: any;
+  private player!: shaka.Player;
 
   constructor(private testRunAPI: TestRunAPI) {
     this.loadStreams();
   }
 
   async ngAfterViewInit(): Promise<void> {
-    await this.initializeShakaPlayer();
-    this.player.attach(this.videoPlayer.nativeElement);
+    try {
+      await this.initializeShakaPlayer();
+      if (this.player) {
+        this.player.attach(this.videoPlayer.nativeElement);
+      }
+    } catch (error) {
+      console.error('Failed to initialize Shaka Player:', error);
+      this.errorMessage = 'Failed to load the video player. Please refresh and try again.';
+    }
   }
 
   ngOnDestroy(): void {
@@ -52,7 +60,7 @@ export class PushAvPlayerComponent implements OnDestroy, AfterViewInit {
       this.player
         .destroy()
         .then(() => console.log('Shaka player destroyed'))
-        .catch((e: any) => console.error('Failed to destroy Shaka player', e));
+        .catch((e: shaka.util.Error) => console.error('Failed to destroy Shaka player', e));
     }
   }
 
@@ -108,7 +116,7 @@ export class PushAvPlayerComponent implements OnDestroy, AfterViewInit {
           this.isLiveStream = this.player.isLive();
         }
       })
-      .catch((e: any) => {
+      .catch((e: shaka.util.Error) => {
         console.error(`Error loading stream: ${streamId}`, e);
         this.errorMessage = `Failed to load stream ${streamId}. Error: ${e.message || 'Unknown error occurred'}`;
         this.isLoading = false;
@@ -148,7 +156,7 @@ export class PushAvPlayerComponent implements OnDestroy, AfterViewInit {
     this.player.configure({
       streaming: {
         bufferingGoal: 30,
-        failureCallback: (error: any) => {
+        failureCallback: (error: shaka.util.Error) => {
           console.error('Streaming error:', error);
         }
       }
