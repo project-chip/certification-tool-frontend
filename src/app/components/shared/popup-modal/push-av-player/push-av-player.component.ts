@@ -108,11 +108,18 @@ export class PushAvPlayerComponent implements OnDestroy, AfterViewInit {
     }
 
     this.streamSrc = `${environment.testPushAVServerURL}streams/${streamId}/${streamPath}`;
+
+    if (!this.player) {
+      this.errorMessage = 'Video player is not ready yet. Please try again.';
+      this.isLoading = false;
+      return;
+    }
+
     this.player
       .load(this.streamSrc)
       .then(() => {
         this.isLoading = false;
-        if (this.player && typeof this.player.isLive === 'function') {
+        if (typeof this.player.isLive === 'function') {
           this.isLiveStream = this.player.isLive();
         }
       })
