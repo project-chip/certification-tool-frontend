@@ -18,7 +18,7 @@
 import { Component, ElementRef, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
 import { environment } from 'src/environments/environment';
-import shaka from 'shaka-player';
+import type shaka from 'shaka-player';
 import { Stream, NonConformingFile } from './push-av-player.model';
 
 @Component({
@@ -41,11 +41,18 @@ export class PushAvPlayerComponent implements OnDestroy, AfterViewInit {
 
   constructor(private testRunAPI: TestRunAPI) {
     this.loadStreams();
-    this.initializeShakaPlayer();
   }
 
-  ngAfterViewInit(): void {
-    this.player.attach(this.videoPlayer.nativeElement);
+  async ngAfterViewInit(): Promise<void> {
+    try {
+      await this.initializeShakaPlayer();
+      if (this.player) {
+        this.player.attach(this.videoPlayer.nativeElement);
+      }
+    } catch (error) {
+      console.error('Failed to initialize Shaka Player:', error);
+      this.errorMessage = 'Failed to load the video player. Please refresh and try again.';
+    }
   }
 
   ngOnDestroy(): void {
@@ -101,11 +108,18 @@ export class PushAvPlayerComponent implements OnDestroy, AfterViewInit {
     }
 
     this.streamSrc = `${environment.testPushAVServerURL}streams/${streamId}/${streamPath}`;
+
+    if (!this.player) {
+      this.errorMessage = 'Video player is not ready yet. Please try again.';
+      this.isLoading = false;
+      return;
+    }
+
     this.player
       .load(this.streamSrc)
       .then(() => {
         this.isLoading = false;
-        if (this.player && typeof this.player.isLive === 'function') {
+        if (typeof this.player.isLive === 'function') {
           this.isLiveStream = this.player.isLive();
         }
       })
@@ -141,7 +155,10 @@ export class PushAvPlayerComponent implements OnDestroy, AfterViewInit {
     return m3u8s[0];
   }
 
-  private initializeShakaPlayer(): void {
+  private async initializeShakaPlayer(): Promise<void> {
+    const shakaModule = await import('shaka-player');
+    const shaka = shakaModule.default ?? shakaModule;
+
     this.player = new shaka.Player();
     this.player.configure({
       streaming: {

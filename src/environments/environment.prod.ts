@@ -20,6 +20,9 @@ export const environment = {
   production: true,
   restBaseURL: 'http://' + hostName + '/api/v1/',
   webSocketBaseURL: 'ws://' + hostName + '/api/v1/ws',
+  webRTCWebSocketURL: 'ws://' + hostName + '/api/v1/ws/webrtc/peer',
+  testPushAVServerURL: 'http://' + hostName + '/pushav/',
+  streamBaseURL: 'ws://' + hostName + '/api/v1/ws/video',
   reconnectInterval: 2000,
   mockBaseURL: 'http://' + hostName + '/',
   isMockActive: false
