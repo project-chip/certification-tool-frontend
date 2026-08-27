@@ -82,7 +82,9 @@ export class TestExecutionHistoryComponent {
 
     if (filterData.length) {
       this.sharedAPI.setIsProjectTypeSelected(1);
-      return filterData.reverse();
+      // slice() prevents reverse() from mutating the stored array and the UI
+      // from flipping the displayed order (#1086).
+      return filterData.slice().reverse();
     } else {
       if (this.isSearch === false && this.testSandbox.getTestExecutionResult().length === 0 &&
         this.testSandbox.getArchivedTestResult().length === 0) {
