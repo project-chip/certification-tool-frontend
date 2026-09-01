@@ -23,6 +23,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { SharedAPI } from 'src/app/shared/core_apis/shared';
 import { SharedService } from 'src/app/shared/core_apis/shared-utils';
 import { TestRunAPI } from 'src/app/shared/core_apis/test-run';
+import { MainAreaSandbox } from 'src/app/components/main-area/main-area.sandbox';
 import { TestSandbox } from '../test.sandbox';
 import { TestExecutionHistoryComponent } from './test-execution-history.component';
 
@@ -45,12 +46,17 @@ class MockSharedAPI {
     return { id: 1 };
   };
   setIsProjectTypeSelected() { }
+  setCertificationMode() { }
+}
+class MockMainAreaSandbox {
+  isTestPanel = true;
+  isUtilityPanel = false;
 }
 class MockDialogService { }
 class MockTestRunAPI { }
 class MockSharedService { }
 describe('TestExecutionHistoryComponent', () => {
-  let component: TestExecutionHistoryComponent, testSandbox,
+  let component: TestExecutionHistoryComponent, testSandbox: TestSandbox,
     domSanitizer, sharedAPI, dialogService, testRunAPI;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -61,7 +67,8 @@ describe('TestExecutionHistoryComponent', () => {
         { provide: SharedAPI, useClass: MockSharedAPI },
         { provide: DialogService, useClass: MockDialogService },
         { provide: TestRunAPI, useClass: MockTestRunAPI },
-        { provide: SharedService, useClass: MockSharedService }
+        { provide: SharedService, useClass: MockSharedService },
+        { provide: MainAreaSandbox, useClass: MockMainAreaSandbox }
       ]
     }).compileComponents();
     component = TestBed.inject(TestExecutionHistoryComponent);
@@ -76,6 +83,13 @@ describe('TestExecutionHistoryComponent', () => {
   });
   it('it should match return', () => {
     expect(component.filterProjectId()).toEqual(testExecutionHistory.reverse());
+  });
+  it('should keep a stable order across calls without mutating the stored results', () => {
+    const storedOrder = testSandbox.getTestExecutionResult().map((run: any) => run.id);
+    const firstCall = component.filterProjectId().map((run: any) => run.id);
+    const secondCall = component.filterProjectId().map((run: any) => run.id);
+    expect(secondCall).toEqual(firstCall);
+    expect(testSandbox.getTestExecutionResult().map((run: any) => run.id)).toEqual(storedOrder);
   });
 });
 
