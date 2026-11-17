@@ -13,9 +13,9 @@ jobs:
     steps: 
     - uses: actions/checkout@v1
     - name: setup-node
-      uses: actions/setup-python@v1
+      uses: actions/setup-node@v4
       with:
-        node-version: 14.x
+        node-version: 24.x
     - name: Install Dependencies
       run: |
         npm install
